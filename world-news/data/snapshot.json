@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T02:01:21Z",
+ "generatedAt": "2026-11-13T03:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/13/how-medical-neglect-killed-alfredo-diaz-in-a-venezuelan-cell/",
+     "published": "2026-11-13T03:00:41Z",
+     "summary": "Despite government shifts, a UN report confirms Venezuela's repressive system remains active, documenting how medical neglect in state custody led to the death of regional leader and politician Alfredo Díaz.",
+     "stale": false,
+     "author": "Luis Carlos Diaz"
+    },
+    {
      "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -142,16 +152,6 @@
      "author": "Carolina Pichardo"
     },
     {
-     "title": "Venezuela welcomes opposition leader María Corina Machado home",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/11/06/venezuela-welcomes-opposition-leader-maria-corina-machado-home/",
-     "published": "2026-11-06T06:00:36Z",
-     "summary": "Venezuela’s Nobel laureate María Corina Machado returned to Caracas in a massive celebration after months in hiding and exile, sparking deep hope and sharp questions about the country’s political future.",
-     "stale": false,
-     "author": "Óscar Calles"
-    },
-    {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
      "source": "UN News",
      "feed": "un-americas",
@@ -197,6 +197,15 @@
      "author": "Rachel M Stein, Post Doctoral Fellow, Université de Sherbrooke"
     },
     {
+     "title": "Aid is the ‘only hope’ for millions in Sudan, WFP chief warns, as funding cuts deepen hunger crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168793",
+     "published": "2026-11-12T12:00:00Z",
+     "summary": "The World Food Programme’s (WFP) new Executive Director has warned that funding cuts are worsening Sudan’s hunger crisis following his first field mission to the country, where he met families displaced by conflict and…",
+     "stale": false
+    },
+    {
      "title": "Kenya begins countdown towards end of Ebola after last patient discharged",
      "source": "UN News",
      "feed": "un-africa",
@@ -235,15 +244,6 @@
      "stale": false
     },
     {
-     "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168774",
-     "published": "2026-11-10T12:00:00Z",
-     "summary": "With South Sudan just six weeks away from its first national elections since independence, the Security Council meets in New York Tuesday amid deepening political uncertainty and worsening violence. Ambassadors are…",
-     "stale": false
-    },
-    {
      "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168796",
+     "published": "2026-11-12T12:00:00Z",
+     "summary": "An Israeli airstrike on Gaza’s Nasser Hospital on Wednesday night killed six people, injured 27 others and caused extensive damage.",
+     "stale": false
+    },
     {
      "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
      "source": "UN News",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168740",
      "published": "2026-11-04T12:00:00Z",
      "summary": "Gunfire hit and damaged multiple tents at a displacement site in Gaza’s northern Rafah region on Tuesday, reportedly causing injuries and forcing a humanitarian partner to leave the area, the UN aid coordination office…",
-     "stale": false
-    },
-    {
-     "title": "Syria’s undocumented children ‘pay the price’ of war and a law that shuts out mothers",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168737",
-     "published": "2026-11-04T12:00:00Z",
-     "summary": "Many children born in Syria since the war began in 2011 have no legal identity because nationality passes only through fathers – many of whom are dead or missing – a member of the independent UN commission investigating…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/gps-are-now-prescribing-time-in-nature-is-it-likely-to-improve-your-health-296469",
+     "published": "2026-11-13T02:38:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lauren Ball, Professor of Community Health and Wellbeing, The University of Queensland"
+    },
+    {
      "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jackie O'Sullivan, Research Scientist, Terrestrial and Freshwater Ecosystems, CSIRO"
-    },
-    {
-     "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-clear-call-for-climate-action-bowen-defends-albanese-at-cop31-296545",
-     "published": "2026-11-13T00:32:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
     },
     {
      "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
+   "published": "2026-11-13 03:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
    "published": "2026-11-12 20:25 UTC"
@@ -750,12 +756,6 @@
   },
   {
    "region": "Americas",
-   "source": "Global Voices",
-   "title": "Venezuela welcomes opposition leader María Corina Machado home",
-   "published": "2026-11-06 06:00 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "UN News",
    "title": "Higher Ground: How New York is raising a park to hold back the sea",
    "published": "2026-10-28 12:00 UTC"
@@ -777,6 +777,12 @@
    "source": "The Conversation",
    "title": "Black rhinos are mostly loners, but not always: why this matters for saving the species",
    "published": "2026-11-12 14:48 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Aid is the ‘only hope’ for millions in Sudan, WFP chief warns, as funding cuts deepen hunger crisis",
+   "published": "2026-11-12 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -804,15 +810,15 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
-   "published": "2026-11-10 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
    "published": "2026-11-09 07:34 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
+   "published": "2026-11-12 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -836,12 +842,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Gunfire damages tents at Rafah displacement site in Gaza, as aid teams prepare for winter storms",
-   "published": "2026-11-04 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Syria’s undocumented children ‘pay the price’ of war and a law that shuts out mothers",
    "published": "2026-11-04 12:00 UTC"
   },
   {
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
+   "published": "2026-11-13 02:38 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
    "published": "2026-11-13 01:26 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "A quarter of the world’s reptiles use rocky habitats. So why aren’t we protecting them?",
    "published": "2026-11-13 00:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
-   "published": "2026-11-13 00:32 UTC"
   },
   {
    "region": "Oceania",
