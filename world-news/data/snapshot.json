@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T04:01:19Z",
+ "generatedAt": "2026-11-13T05:02:01Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Avoiding the ‘F word’: Australia and Turkey dance around fossil fuels at COP31 summit",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/avoiding-the-f-word-australia-and-turkey-dance-around-fossil-fuels-at-cop31-summit-296418",
+     "published": "2026-11-13T04:21:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matt McDonald, Professor of International Relations, The University of Queensland"
+    },
+    {
+     "title": "What’s missing from election promises in Victoria’s rural health debate? A long-term vision",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/whats-missing-from-election-promises-in-victorias-rural-health-debate-a-long-term-vision-294358",
+     "published": "2026-11-13T04:15:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Belinda O'Sullivan, Professor and Director of Research, Monash Rural Health, Monash University"
+    },
+    {
      "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
-    },
-    {
-     "title": "A quarter of the world’s reptiles use rocky habitats. So why aren’t we protecting them?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-quarter-of-the-worlds-reptiles-use-rocky-habitats-so-why-arent-we-protecting-them-295159",
-     "published": "2026-11-13T00:45:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jackie O'Sullivan, Research Scientist, Terrestrial and Freshwater Ecosystems, CSIRO"
-    },
-    {
-     "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-clear-call-for-climate-action-bowen-defends-albanese-at-cop31-296545",
-     "published": "2026-11-13T00:32:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
     },
     {
      "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Avoiding the ‘F word’: Australia and Turkey dance around fossil fuels at COP31 summit",
+   "published": "2026-11-13 04:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What’s missing from election promises in Victoria’s rural health debate? A long-term vision",
+   "published": "2026-11-13 04:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
    "published": "2026-11-13 02:38 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
    "published": "2026-11-13 01:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A quarter of the world’s reptiles use rocky habitats. So why aren’t we protecting them?",
-   "published": "2026-11-13 00:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
-   "published": "2026-11-13 00:32 UTC"
   },
   {
    "region": "Oceania",
