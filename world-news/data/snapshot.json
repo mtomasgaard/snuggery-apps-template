@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T07:01:39Z",
+ "generatedAt": "2026-11-13T08:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "There are new caps for uni places in 2027. What does this mean for domestic students?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/there-are-new-caps-for-uni-places-in-2027-what-does-this-mean-for-domestic-students-296592",
+     "published": "2026-11-13T07:42:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Norton, Professor of Higher Education Policy, Monash University"
+    },
+    {
      "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Matt McDonald, Professor of International Relations, The University of Queensland"
-    },
-    {
-     "title": "What’s missing from election promises in Victoria’s rural health debate? A long-term vision",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/whats-missing-from-election-promises-in-victorias-rural-health-debate-a-long-term-vision-294358",
-     "published": "2026-11-13T04:15:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Belinda O'Sullivan, Professor and Director of Research, Monash Rural Health, Monash University"
     },
     {
      "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "There are new caps for uni places in 2027. What does this mean for domestic students?",
+   "published": "2026-11-13 07:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
    "published": "2026-11-13 06:02 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Avoiding the ‘F word’: Australia and Turkey dance around fossil fuels at COP31 summit",
    "published": "2026-11-13 04:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What’s missing from election promises in Victoria’s rural health debate? A long-term vision",
-   "published": "2026-11-13 04:15 UTC"
   },
   {
    "region": "Oceania",
