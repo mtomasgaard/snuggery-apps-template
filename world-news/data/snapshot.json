@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T20:01:19Z",
+ "generatedAt": "2026-11-13T21:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-the-microsoft-365-outage-is-different-and-why-it-takes-so-long-to-restore-email-services-296628",
+     "published": "2026-11-13T19:45:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
+    },
+    {
      "title": "Oceans and forests have absorbed roughly half our carbon emissions for decades, slowing climate change – but can they keep it up?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Andrew C. Manning, Visiting Professor of Carbon Cycle Science, Rochester Institute of Technology"
-    },
-    {
-     "title": "To get Americans to care about climate change, just call it climate change",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/to-get-americans-to-care-about-climate-change-just-call-it-climate-change-296481",
-     "published": "2026-11-13T15:05:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Wändi Bruine de Bruin, Director of Behavioral Science & Policy Initiative, Schaeffer Institute of Public Policy & Government Service, USC Price School of…"
     },
     {
      "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Oceans and forests have absorbed roughly half our carbon emissions for decades, slowing climate change – but can they keep it up?",
-   "published": "2026-11-13 17:43 UTC"
+   "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
+   "published": "2026-11-13 19:45 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "To get Americans to care about climate change, just call it climate change",
-   "published": "2026-11-13 15:05 UTC"
+   "title": "Oceans and forests have absorbed roughly half our carbon emissions for decades, slowing climate change – but can they keep it up?",
+   "published": "2026-11-13 17:43 UTC"
   },
   {
    "region": "Americas",
