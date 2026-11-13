@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T15:01:57Z",
+ "generatedAt": "2026-11-13T16:01:58Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "To get Americans to care about climate change, just call it climate change",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/to-get-americans-to-care-about-climate-change-just-call-it-climate-change-296481",
+     "published": "2026-11-13T15:05:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Wändi Bruine de Bruin, Director of Behavioral Science & Policy Initiative, Schaeffer Institute of Public Policy & Government Service, USC Price School of…"
+    },
+    {
      "title": "Debate in New York City over city-run groceries is not just about food, but something bigger",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Nevin Cohen, Chair of the Department of Health Policy and Management, CUNY Graduate School of Public Health and Public Policy"
-    },
-    {
-     "title": "MAHA suffered heavy losses in the 2026 midterms, but the movement is far from dead",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/maha-suffered-heavy-losses-in-the-2026-midterms-but-the-movement-is-far-from-dead-296093",
-     "published": "2026-11-13T13:37:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert Brehm, PhD Candidate in Politics, University of Virginia"
     },
     {
      "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Debate in New York City over city-run groceries is not just about food, but something bigger",
-   "published": "2026-11-13 13:38 UTC"
+   "title": "To get Americans to care about climate change, just call it climate change",
+   "published": "2026-11-13 15:05 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "MAHA suffered heavy losses in the 2026 midterms, but the movement is far from dead",
-   "published": "2026-11-13 13:37 UTC"
+   "title": "Debate in New York City over city-run groceries is not just about food, but something bigger",
+   "published": "2026-11-13 13:38 UTC"
   },
   {
    "region": "Americas",
