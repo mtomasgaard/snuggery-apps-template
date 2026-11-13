@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T01:01:49Z",
+ "generatedAt": "2026-11-13T02:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/microsoft-has-suffered-a-global-outage-a-tech-expert-explains-what-went-wrong-296588",
+     "published": "2026-11-13T01:26:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
+    },
+    {
+     "title": "A quarter of the world’s reptiles use rocky habitats. So why aren’t we protecting them?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-quarter-of-the-worlds-reptiles-use-rocky-habitats-so-why-arent-we-protecting-them-295159",
+     "published": "2026-11-13T00:45:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jackie O'Sullivan, Research Scientist, Terrestrial and Freshwater Ecosystems, CSIRO"
+    },
+    {
      "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
-    },
-    {
-     "title": "Becoming a Man has good advice – but as a manosphere expert, I wish it wasn’t so gendered",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/becoming-a-man-has-good-advice-but-as-a-manosphere-expert-i-wish-it-wasnt-so-gendered-294246",
-     "published": "2026-11-12T23:52:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Simon Copland, Honorary Fellow in Sociology, Australian National University"
-    },
-    {
-     "title": "Being Heumaan is no ‘inspirational cripple’ tale. It’s a story of ordinary people taking on impossible odds",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/being-heumaan-is-no-inspirational-cripple-tale-its-a-story-of-ordinary-people-taking-on-impossible-odds-295962",
-     "published": "2026-11-12T23:48:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shane Clifton, Associate Professor and Director of the Centre for Disability Research and Policy, University of Sydney"
     },
     {
      "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
+   "published": "2026-11-13 01:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "A quarter of the world’s reptiles use rocky habitats. So why aren’t we protecting them?",
+   "published": "2026-11-13 00:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
    "published": "2026-11-13 00:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Becoming a Man has good advice – but as a manosphere expert, I wish it wasn’t so gendered",
-   "published": "2026-11-12 23:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Being Heumaan is no ‘inspirational cripple’ tale. It’s a story of ordinary people taking on impossible odds",
-   "published": "2026-11-12 23:48 UTC"
   },
   {
    "region": "Oceania",
