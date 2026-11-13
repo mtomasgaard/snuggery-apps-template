@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T13:14:15Z",
+ "generatedAt": "2026-11-13T14:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Debate in New York City over city-run groceries is not just about food, but something bigger",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/debate-in-new-york-city-over-city-run-groceries-is-not-just-about-food-but-something-bigger-291749",
+     "published": "2026-11-13T13:38:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nevin Cohen, Chair of the Department of Health Policy and Management, CUNY Graduate School of Public Health and Public Policy"
+    },
+    {
+     "title": "MAHA suffered heavy losses in the 2026 midterms, but the movement is far from dead",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/maha-suffered-heavy-losses-in-the-2026-midterms-but-the-movement-is-far-from-dead-296093",
+     "published": "2026-11-13T13:37:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert Brehm, PhD Candidate in Politics, University of Virginia"
+    },
+    {
      "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "Despite government shifts, a UN report confirms Venezuela's repressive system remains active, documenting how medical neglect in state custody led to the death of regional leader and politician Alfredo Díaz.",
      "stale": false,
      "author": "Luis Carlos Diaz"
-    },
-    {
-     "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/from-ancient-asia-to-the-ai-age-has-chinas-beauty-stratagem-found-a-new-victim-in-nvidias-jensen-huang-296393",
-     "published": "2026-11-12T20:25:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Linggong Kong, Ph.D. Candidate in Political Science, Auburn University"
-    },
-    {
-     "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/far-from-farms-and-cities-dry-climates-are-boosting-river-nitrate-pollution-294558",
-     "published": "2026-11-12T19:04:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Li Li (李黎), Professor of Civil and Environmental Engineering, Penn State"
     },
     {
      "title": "Ecuadorian youth unite against neoliberal models and state violence",
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Debate in New York City over city-run groceries is not just about food, but something bigger",
+   "published": "2026-11-13 13:38 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "MAHA suffered heavy losses in the 2026 midterms, but the movement is far from dead",
+   "published": "2026-11-13 13:37 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
    "published": "2026-11-13 03:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
-   "published": "2026-11-12 20:25 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
-   "published": "2026-11-12 19:04 UTC"
   },
   {
    "region": "Americas",
