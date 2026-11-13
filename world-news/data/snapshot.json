@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T14:01:23Z",
+ "generatedAt": "2026-11-13T15:01:57Z",
  "regions": [
   {
    "key": "europe",
@@ -177,33 +177,33 @@
    "stale": false,
    "items": [
     {
-     "title": "DR Congo Ebola outbreak: armed groups unrest hold back response",
+     "title": "South Africa’s diabetes crisis calls for people at risk to be identified earlier",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-diabetes-crisis-calls-for-people-at-risk-to-be-identified-earlier-296171",
+     "published": "2026-11-13T14:39:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Glenda Mary Davison, Associate Professor, Cape Peninsula University of Technology"
+    },
+    {
+     "title": "South African vineyards are showing how conservation and farming can thrive together",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-african-vineyards-are-showing-how-conservation-and-farming-can-thrive-together-290543",
+     "published": "2026-11-13T13:36:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Hannah V. Herrero, Associate Professor of Geography & Sustainability; Director of Sustainability, University of Tennessee"
+    },
+    {
+     "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
      "source": "UN News",
      "feed": "un-africa",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168797",
      "published": "2026-11-13T12:00:00Z",
      "summary": "The Ebola outbreak in the Democratic Republic of the Congo (DRC) continues to spread amid repeated and ongoing deadly attacks on civilians and frontline health workers by armed groups that are obstructing efforts to…",
      "stale": false
-    },
-    {
-     "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/does-your-culture-shape-how-you-look-at-art-what-an-eye-tracking-study-in-sudan-revealed-293476",
-     "published": "2026-11-12T14:48:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tomasz Michalik, Assistant Professor, University of Szczecin"
-    },
-    {
-     "title": "Black rhinos are mostly loners, but not always: why this matters for saving the species",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/black-rhinos-are-mostly-loners-but-not-always-why-this-matters-for-saving-the-species-294251",
-     "published": "2026-11-12T14:48:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachel M Stein, Post Doctoral Fellow, Université de Sherbrooke"
     },
     {
      "title": "Aid is the ‘only hope’ for millions in Sudan, WFP chief warns, as funding cuts deepen hunger crisis",
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s diabetes crisis calls for people at risk to be identified earlier",
+   "published": "2026-11-13 14:39 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "South African vineyards are showing how conservation and farming can thrive together",
+   "published": "2026-11-13 13:36 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
-   "title": "DR Congo Ebola outbreak: armed groups unrest hold back response",
+   "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
    "published": "2026-11-13 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
-   "published": "2026-11-12 14:48 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Black rhinos are mostly loners, but not always: why this matters for saving the species",
-   "published": "2026-11-12 14:48 UTC"
   },
   {
    "region": "Africa",
