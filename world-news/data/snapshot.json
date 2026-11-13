@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T06:01:19Z",
+ "generatedAt": "2026-11-13T07:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/more-than-half-of-those-aligned-with-sovereign-citizen-movement-think-violence-may-be-needed-296270",
+     "published": "2026-11-13T06:02:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Avoiding the ‘F word’: Australia and Turkey dance around fossil fuels at COP31 summit",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Belinda O'Sullivan, Professor and Director of Research, Monash Rural Health, Monash University"
-    },
-    {
-     "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/gps-are-now-prescribing-time-in-nature-is-it-likely-to-improve-your-health-296469",
-     "published": "2026-11-13T02:38:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lauren Ball, Professor of Community Health and Wellbeing, The University of Queensland"
     },
     {
      "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
+   "published": "2026-11-13 06:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Avoiding the ‘F word’: Australia and Turkey dance around fossil fuels at COP31 summit",
    "published": "2026-11-13 04:21 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What’s missing from election promises in Victoria’s rural health debate? A long-term vision",
    "published": "2026-11-13 04:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "GPs are now ‘prescribing’ time in nature. Is it likely to improve your health?",
-   "published": "2026-11-13 02:38 UTC"
   },
   {
    "region": "Oceania",
