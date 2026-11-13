@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T19:01:22Z",
+ "generatedAt": "2026-11-13T20:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Lives are at stake’: Humanitarians call for swift entry of winter supplies in Gaza",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168799",
+     "published": "2026-11-13T12:00:00Z",
+     "summary": "Winter supplies must enter the Gaza Strip where “lives are at stake”, the UN and partners said in an urgent appeal on Friday, in the wake of deadly rainfall this past weekend.",
+     "stale": false
+    },
+    {
      "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -296,15 +305,6 @@
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
      "stale": false,
      "author": "Rebecca MacKinnon"
-    },
-    {
-     "title": "Gunfire damages tents at Rafah displacement site in Gaza, as aid teams prepare for winter storms",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168740",
-     "published": "2026-11-04T12:00:00Z",
-     "summary": "Gunfire hit and damaged multiple tents at a displacement site in Gaza’s northern Rafah region on Tuesday, reportedly causing injuries and forcing a humanitarian partner to leave the area, the UN aid coordination office…",
-     "stale": false
     },
     {
      "title": "Egypt’s crackdown on independent media reaches Mada Masr as editor faces trial",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "‘Lives are at stake’: Humanitarians call for swift entry of winter supplies in Gaza",
+   "published": "2026-11-13 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
    "published": "2026-11-12 12:00 UTC"
   },
@@ -837,12 +843,6 @@
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Gunfire damages tents at Rafah displacement site in Gaza, as aid teams prepare for winter storms",
-   "published": "2026-11-04 12:00 UTC"
   },
   {
    "region": "Middle East",
