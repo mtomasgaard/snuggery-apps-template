@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T12:01:25Z",
+ "generatedAt": "2026-11-13T13:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "DR Congo Ebola outbreak: armed groups unrest hold back response",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168797",
+     "published": "2026-11-13T12:00:00Z",
+     "summary": "The Ebola outbreak in the Democratic Republic of the Congo (DRC) continues to spread amid repeated and ongoing deadly attacks on civilians and frontline health workers by armed groups that are obstructing efforts to…",
+     "stale": false
+    },
+    {
      "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -233,15 +242,6 @@
      "summary": "After more than eight months, Gabon has restored its social media access. But it has come at a cost.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Nearly 64,000 flee Nigeria for Niger where a humanitarian crisis is deepening",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168779",
-     "published": "2026-11-10T12:00:00Z",
-     "summary": "Violence in northern Nigeria is fueling a growing humanitarian crisis across the whole region: 64,000 have fled to neighbouring Niger and several hundred have left for Benin since the start of the year, as host…",
-     "stale": false
     },
     {
      "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "DR Congo Ebola outbreak: armed groups unrest hold back response",
+   "published": "2026-11-13 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
    "published": "2026-11-12 14:48 UTC"
@@ -801,12 +807,6 @@
    "source": "Global Voices",
    "title": "Restoring social media access comes at a cost in Gabon",
    "published": "2026-11-11 00:14 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Nearly 64,000 flee Nigeria for Niger where a humanitarian crisis is deepening",
-   "published": "2026-11-10 12:00 UTC"
   },
   {
    "region": "Africa",
