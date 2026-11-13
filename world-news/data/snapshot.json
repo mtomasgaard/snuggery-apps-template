@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T03:01:22Z",
+ "generatedAt": "2026-11-13T04:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -441,7 +441,7 @@
     {
      "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/microsoft-has-suffered-a-global-outage-a-tech-expert-explains-what-went-wrong-296588",
      "published": "2026-11-13T01:26:45Z",
      "summary": "",
@@ -459,6 +459,16 @@
      "author": "Jackie O'Sullivan, Research Scientist, Terrestrial and Freshwater Ecosystems, CSIRO"
     },
     {
+     "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-clear-call-for-climate-action-bowen-defends-albanese-at-cop31-296545",
+     "published": "2026-11-13T00:32:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
+    },
+    {
      "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Peter Thompson, Associate Professor in Media and Communication, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/friday-essay-to-tackle-the-dreadful-rise-in-antisemitism-we-must-speak-the-truth-about-israels-war-crimes-296263",
-     "published": "2026-11-12T19:03:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert Manne, Emeritus Professor of Politics, La Trobe University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
-   "published": "2026-11-12 20:33 UTC"
+   "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
+   "published": "2026-11-13 00:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
-   "published": "2026-11-12 19:03 UTC"
+   "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+   "published": "2026-11-12 20:33 UTC"
   },
   {
    "region": "Oceania",
