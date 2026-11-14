@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-14T19:01:16Z",
+ "generatedAt": "2026-11-14T20:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "National ground stop response highlights critical errors in public reassurance – saying ‘nothing nefarious’ did the opposite of quelling public concern",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/national-ground-stop-response-highlights-critical-errors-in-public-reassurance-saying-nothing-nefarious-did-the-opposite-of-quelling-public-concern-296663",
+     "published": "2026-11-14T18:46:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shannon A. Bowen, Professor of Journalism and Mass Communications, University of South Carolina"
+    },
+    {
      "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
-    },
-    {
-     "title": "Oceans and forests have absorbed roughly half our carbon emissions for decades, slowing climate change – but can they keep it up?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/oceans-and-forests-have-absorbed-roughly-half-our-carbon-emissions-for-decades-slowing-climate-change-but-can-they-keep-it-up-296498",
-     "published": "2026-11-13T17:43:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew C. Manning, Visiting Professor of Carbon Cycle Science, Rochester Institute of Technology"
     },
     {
      "title": "How medical neglect killed Alfredo Díaz in a Venezuelan cell",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
-   "published": "2026-11-13 19:45 UTC"
+   "title": "National ground stop response highlights critical errors in public reassurance – saying ‘nothing nefarious’ did the opposite of quelling public concern",
+   "published": "2026-11-14 18:46 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Oceans and forests have absorbed roughly half our carbon emissions for decades, slowing climate change – but can they keep it up?",
-   "published": "2026-11-13 17:43 UTC"
+   "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
+   "published": "2026-11-13 19:45 UTC"
   },
   {
    "region": "Americas",
