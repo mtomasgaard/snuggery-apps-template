@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-14T13:01:23Z",
+ "generatedAt": "2026-11-14T14:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168804",
+     "published": "2026-11-13T12:00:00Z",
+     "summary": "Nearly nine months after Israeli and US strikes on Iran set off a regional war, the Gulf remains on a knife edge. Iran has all but closed the Strait of Hormuz, which carried a fifth of the world’s oil before the…",
+     "stale": false
+    },
+    {
      "title": "‘Lives are at stake’: Humanitarians call for swift entry of winter supplies in Gaza",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168784",
      "published": "2026-11-11T12:00:00Z",
      "summary": "The situation in southern Lebanon remains volatile and extremely difficult for communities trying to rebuild their lives, UN peacekeepers based there report, despite a significant decrease in hostilities following an…",
-     "stale": false
-    },
-    {
-     "title": "‘For the first time I have my own chair’: Gaza siblings find new freedom",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168759",
-     "published": "2026-11-07T12:00:00Z",
-     "summary": "In Gaza, 10-year-old Anas is one of three siblings born without legs and with only two fingers on each of their hands. They struggle to move around and perform daily activities like eating and writing independently.",
      "stale": false
     },
     {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
+   "published": "2026-11-13 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "‘Lives are at stake’: Humanitarians call for swift entry of winter supplies in Gaza",
    "published": "2026-11-13 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
    "published": "2026-11-11 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘For the first time I have my own chair’: Gaza siblings find new freedom",
-   "published": "2026-11-07 12:00 UTC"
   },
   {
    "region": "Middle East",
