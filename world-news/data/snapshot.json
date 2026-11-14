@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-14T22:01:17Z",
+ "generatedAt": "2026-11-14T23:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -103,6 +103,15 @@
      "author": "Shannon A. Bowen, Professor of Journalism and Mass Communications, University of South Carolina"
     },
     {
+     "title": "When the rains fail: Preparing for drought in Central America",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168776",
+     "published": "2026-11-14T12:00:00Z",
+     "summary": "Across Central America’s so-called Dry Corridor, farming families live at the mercy of the rains. In southwestern Honduras, Anastacio Martínez Gómez has spent most of his 73 years learning to work the land. But…",
+     "stale": false
+    },
+    {
      "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,15 +167,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168679",
      "published": "2026-10-28T12:00:00Z",
      "summary": "On 29 October 2012, Hurricane Sandy slammed into New York City, unleashing a devastating storm surge that flooded homes, subways and tunnels, knocked out power and sparked deadly fires.",
-     "stale": false
-    },
-    {
-     "title": "Backing for UN call to end Cuba embargo falls to 20-year low",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168694",
-     "published": "2026-10-28T12:00:00Z",
-     "summary": "The UN General Assembly on Wednesday called for the 34th time for an end to the US economic, commercial and financial embargo on Cuba – but with the weakest backing for the resolution in two decades.",
      "stale": false
     }
    ]
@@ -726,6 +726,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "When the rains fail: Preparing for drought in Central America",
+   "published": "2026-11-14 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Why the Microsoft 365 outage is different and why it takes so long to restore email services",
    "published": "2026-11-13 19:45 UTC"
@@ -758,12 +764,6 @@
    "region": "Americas",
    "source": "UN News",
    "title": "Higher Ground: How New York is raising a park to hold back the sea",
-   "published": "2026-10-28 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Backing for UN call to end Cuba embargo falls to 20-year low",
    "published": "2026-10-28 12:00 UTC"
   },
   {
