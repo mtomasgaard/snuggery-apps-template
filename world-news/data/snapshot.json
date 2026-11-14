@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-14T14:01:26Z",
+ "generatedAt": "2026-11-14T15:01:18Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "‘Here, you can eat until you’re full’: Oleshky evacuees savour first proper meals in years",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168803",
+     "published": "2026-11-13T12:00:00Z",
+     "summary": "In a quiet hospital corridor in Kyiv, staff and volunteers push carts carrying steaming pots of chicken soup, bread and buckwheat porridge to patients recently evacuated from Russian-occupied Oleshky, in Ukraine’s…",
+     "stale": false
+    },
     {
      "title": "In Ukraine, youth are finding their voices in the digital democracy",
      "source": "Global Voices",
@@ -55,15 +64,6 @@
      "summary": "We stand in solidarity with Faktoje following a series of coordinated attacks that have weaponized its transparent financial data to undermine its vital work exposing misinformation around local protests.",
      "stale": false,
      "author": "Global Voices"
-    },
-    {
-     "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168724",
-     "published": "2026-11-03T12:00:00Z",
-     "summary": "Ukraine has sustained almost 2,000 attacks on education since the full-scale Russian invasion in 2022, with some 270 this year alone, the UN Children’s Fund (UNICEF) said on Tuesday, a day after a strike at a school…",
-     "stale": false
     },
     {
      "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "‘Here, you can eat until you’re full’: Oleshky evacuees savour first proper meals in years",
+   "published": "2026-11-13 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "In Ukraine, youth are finding their voices in the digital democracy",
    "published": "2026-11-10 19:49 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
    "published": "2026-11-06 01:38 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
-   "published": "2026-11-03 12:00 UTC"
   },
   {
    "region": "Europe",
