@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T20:01:20Z",
+ "generatedAt": "2026-11-15T21:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
+     "title": "Your say: week beginning November 16",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-november-16-296676",
+     "published": "2026-11-15T20:30:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Judy Ingham, Newsletter Producer, The Conversation"
+    },
+    {
+     "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/what-makes-food-organic-for-many-consumers-the-answer-isnt-always-on-the-label-293818",
      "published": "2026-11-15T17:27:08Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Chad Habel, Senior Lecturer, Academic Development, Adelaide University"
-    },
-    {
-     "title": "How did ‘wire replacements’ ground planes across the entire US?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-did-wire-replacements-ground-planes-across-the-entire-us-296658",
-     "published": "2026-11-15T03:40:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Graham Wild, Aviation Coordinator, Australian Defence Force Academy; UNSW"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning November 16",
+   "published": "2026-11-15 20:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
    "published": "2026-11-15 17:27 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "How GTA 6 became a global phenomenon we can’t ignore",
    "published": "2026-11-15 17:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How did ‘wire replacements’ ground planes across the entire US?",
-   "published": "2026-11-15 03:40 UTC"
   },
   {
    "region": "Oceania",
