@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T10:01:32Z",
+ "generatedAt": "2026-11-15T11:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/mass-protests-that-led-to-regime-change-had-their-heyday-between-1980-and-2011-what-happened-296166",
+     "published": "2026-11-15T09:22:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ida Rudolfsen, Senior researcher, Peace Research Institute Oslo (PRIO)"
+    },
+    {
+     "title": "Super El Niño could leave South Africa short of grazing. Timing of livestock fodder crops is crucial",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/super-el-nino-could-leave-south-africa-short-of-grazing-timing-of-livestock-fodder-crops-is-crucial-294630",
+     "published": "2026-11-15T09:21:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lusanda Ncisana, Lecturer, University of Limpopo"
+    },
+    {
      "title": "Madagascar aims to support biodiversity by protecting marine areas",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,26 +215,6 @@
      "summary": "Mozambique faces an educational paradox: While the use of artificial intelligence is being debated, thousands of students still learn outdoors, without basic infrastructure or internet access.",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "South Africa’s diabetes crisis calls for people at risk to be identified earlier",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-diabetes-crisis-calls-for-people-at-risk-to-be-identified-earlier-296171",
-     "published": "2026-11-13T14:39:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Glenda Mary Davison, Associate Professor, Cape Peninsula University of Technology"
-    },
-    {
-     "title": "South African vineyards are showing how conservation and farming can thrive together",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-african-vineyards-are-showing-how-conservation-and-farming-can-thrive-together-290543",
-     "published": "2026-11-13T13:36:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hannah V. Herrero, Associate Professor of Geography & Sustainability; Director of Sustainability, University of Tennessee"
     },
     {
      "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
+   "published": "2026-11-15 09:22 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Super El Niño could leave South Africa short of grazing. Timing of livestock fodder crops is crucial",
+   "published": "2026-11-15 09:21 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Madagascar aims to support biodiversity by protecting marine areas",
    "published": "2026-11-15 08:11 UTC"
@@ -777,18 +789,6 @@
    "source": "Global Voices",
    "title": "Learning under trees in the era of AI: The paradox of education in Mozambique",
    "published": "2026-11-14 18:39 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South Africa’s diabetes crisis calls for people at risk to be identified earlier",
-   "published": "2026-11-13 14:39 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South African vineyards are showing how conservation and farming can thrive together",
-   "published": "2026-11-13 13:36 UTC"
   },
   {
    "region": "Africa",
