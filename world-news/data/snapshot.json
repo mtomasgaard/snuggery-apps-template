@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T08:01:18Z",
+ "generatedAt": "2026-11-15T09:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Madagascar aims to support biodiversity by protecting marine areas",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/15/madagascar-aims-to-support-biodiversity-by-protecting-marine-areas/",
+     "published": "2026-11-15T08:11:47Z",
+     "summary": "At the annual COP17 on biodiversity, Madagascar confirmed its commitment to the 30x30 Global Target and the conservation of its natural heritage.",
+     "stale": false,
+     "author": "Rebecca Cluett"
+    },
+    {
      "title": "Learning under trees in the era of AI: The paradox of education in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -242,16 +252,6 @@
      "summary": "Students in Cameroon’s North West Region are managing school gardens and growing food using regenerative practices such as minimal tillage, composting, organic manure and fruit-tree grafting.",
      "stale": false,
      "author": "Sandra Tuombouh"
-    },
-    {
-     "title": "Restoring social media access comes at a cost in Gabon",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/11/estoring-social-media-access-comes-at-a-cost-in-gabon/",
-     "published": "2026-11-11T00:14:49Z",
-     "summary": "After more than eight months, Gabon has restored its social media access. But it has come at a cost.",
-     "stale": false,
-     "author": "Laura"
     }
    ]
   },
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "Global Voices",
+   "title": "Madagascar aims to support biodiversity by protecting marine areas",
+   "published": "2026-11-15 08:11 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
    "title": "Learning under trees in the era of AI: The paradox of education in Mozambique",
    "published": "2026-11-14 18:39 UTC"
   },
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Can regenerative school gardens strengthen food security in Cameroon?",
    "published": "2026-11-12 07:27 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Restoring social media access comes at a cost in Gabon",
-   "published": "2026-11-11 00:14 UTC"
   },
   {
    "region": "Middle East",
