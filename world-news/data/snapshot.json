@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T16:01:24Z",
+ "generatedAt": "2026-11-15T17:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Nadia Murad: ‘Day by day, I took my story back’",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168801",
+     "published": "2026-11-15T12:00:00Z",
+     "summary": "Nobel Peace Prize laureate Nadia Murad has spent years telling the world about the atrocities committed against her and the Yazidi community by militants from the terrorist group, ISIL.",
+     "stale": false
+    },
+    {
      "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168796",
      "published": "2026-11-12T12:00:00Z",
      "summary": "An Israeli airstrike on Gaza’s Nasser Hospital on Wednesday night killed six people, injured 27 others and caused extensive damage.",
-     "stale": false
-    },
-    {
-     "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168784",
-     "published": "2026-11-11T12:00:00Z",
-     "summary": "The situation in southern Lebanon remains volatile and extremely difficult for communities trying to rebuild their lives, UN peacekeepers based there report, despite a significant decrease in hostilities following an…",
      "stale": false
     },
     {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Nadia Murad: ‘Day by day, I took my story back’",
+   "published": "2026-11-15 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
    "published": "2026-11-13 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
    "published": "2026-11-12 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
-   "published": "2026-11-11 12:00 UTC"
   },
   {
    "region": "Middle East",
