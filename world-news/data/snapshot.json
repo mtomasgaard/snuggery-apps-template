@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T19:01:23Z",
+ "generatedAt": "2026-11-15T20:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -459,24 +459,24 @@
      "author": "Padraig Parkhurst, Sessional Lecturer/Tutor in Popular Music, The University of Melbourne"
     },
     {
-     "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
+     "title": "How GTA 6 became a global phenomenon we can’t ignore",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/microsoft-has-suffered-a-global-outage-a-tech-expert-explains-what-went-wrong-296588",
-     "published": "2026-11-13T01:26:45Z",
+     "link": "https://theconversation.com/how-gta-6-became-a-global-phenomenon-we-cant-ignore-291043",
+     "published": "2026-11-15T17:26:13Z",
      "summary": "",
      "stale": false,
-     "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
+     "author": "Chad Habel, Senior Lecturer, Academic Development, Adelaide University"
     },
     {
-     "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+     "title": "How did ‘wire replacements’ ground planes across the entire US?",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/rnzs-budget-crisis-threatens-its-core-purpose-but-theres-an-obvious-solution-296293",
-     "published": "2026-11-12T20:33:56Z",
+     "link": "https://theconversation.com/how-did-wire-replacements-ground-planes-across-the-entire-us-296658",
+     "published": "2026-11-15T03:40:05Z",
      "summary": "",
      "stale": false,
-     "author": "Peter Thompson, Associate Professor in Media and Communication, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Graham Wild, Aviation Coordinator, Australian Defence Force Academy; UNSW"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
-   "published": "2026-11-13 01:26 UTC"
+   "title": "How GTA 6 became a global phenomenon we can’t ignore",
+   "published": "2026-11-15 17:26 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
-   "published": "2026-11-12 20:33 UTC"
+   "title": "How did ‘wire replacements’ ground planes across the entire US?",
+   "published": "2026-11-15 03:40 UTC"
   },
   {
    "region": "Oceania",
