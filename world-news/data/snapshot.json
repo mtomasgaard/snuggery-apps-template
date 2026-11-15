@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T17:01:24Z",
+ "generatedAt": "2026-11-15T18:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "How did ‘wire replacements’ ground planes across the entire US?",
+     "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/how-did-wire-replacements-ground-planes-across-the-entire-us-296658",
-     "published": "2026-11-15T03:40:05Z",
+     "link": "https://theconversation.com/what-makes-food-organic-for-many-consumers-the-answer-isnt-always-on-the-label-293818",
+     "published": "2026-11-15T17:27:08Z",
      "summary": "",
      "stale": false,
-     "author": "Graham Wild, Aviation Coordinator, Australian Defence Force Academy; UNSW"
+     "author": "Xiaoxi Zhu, Doctoral Candidate, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "There are new caps for uni places in 2027. What does this mean for domestic students?",
+     "title": "Nearly two thirds of remote First Nations households lack free-to-air TV access",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/there-are-new-caps-for-uni-places-in-2027-what-does-this-mean-for-domestic-students-296592",
-     "published": "2026-11-13T07:42:26Z",
+     "link": "https://theconversation.com/nearly-two-thirds-of-remote-first-nations-households-lack-free-to-air-tv-access-296153",
+     "published": "2026-11-15T17:26:54Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Norton, Professor of Higher Education Policy, Monash University"
+     "author": "Daniel Featherstone, Principal Research Fellow, School of Media and Communication, RMIT University"
     },
     {
-     "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
+     "title": "East Germany exiled singer Wolf Biermann. They only made his message louder",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/more-than-half-of-those-aligned-with-sovereign-citizen-movement-think-violence-may-be-needed-296270",
-     "published": "2026-11-13T06:02:22Z",
+     "link": "https://theconversation.com/east-germany-exiled-singer-wolf-biermann-they-only-made-his-message-louder-295247",
+     "published": "2026-11-15T17:26:41Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Padraig Parkhurst, Sessional Lecturer/Tutor in Popular Music, The University of Melbourne"
     },
     {
      "title": "Microsoft has suffered a global outage. A tech expert explains what went wrong",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How did ‘wire replacements’ ground planes across the entire US?",
-   "published": "2026-11-15 03:40 UTC"
+   "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
+   "published": "2026-11-15 17:27 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "There are new caps for uni places in 2027. What does this mean for domestic students?",
-   "published": "2026-11-13 07:42 UTC"
+   "title": "Nearly two thirds of remote First Nations households lack free-to-air TV access",
+   "published": "2026-11-15 17:26 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "More than half of those aligned with sovereign citizen movement think violence may be needed",
-   "published": "2026-11-13 06:02 UTC"
+   "title": "East Germany exiled singer Wolf Biermann. They only made his message louder",
+   "published": "2026-11-15 17:26 UTC"
   },
   {
    "region": "Oceania",
