@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T21:01:46Z",
+ "generatedAt": "2026-11-16T22:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How the US elections and Iran war are influencing the UN’s COP31 climate talks – and discussions around fossil fuels",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/how-the-us-elections-and-iran-war-are-influencing-the-uns-cop31-climate-talks-and-discussions-around-fossil-fuels-296682",
+     "published": "2026-11-16T20:31:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jennifer Morgan, Senior Fellow, Center for International Environment and Resource Policy and Climate Policy Lab, Tufts University"
+    },
+    {
      "title": "New England’s first Bible, published in an Indigenous language, had one aim: Converting Native Americans",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Peter C. Mancall, Distinguished Professor and Professor of the Humanities, USC Dornsife College of Letters, Arts and Sciences"
-    },
-    {
-     "title": "US loses measles elimination status – an epidemiologist explains what it will take to regain it",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/us-loses-measles-elimination-status-an-epidemiologist-explains-what-it-will-take-to-regain-it-296664",
-     "published": "2026-11-16T13:37:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katrine L. Wallace, Assistant Professor of Epidemiology and Biostatistics, University of Illinois Chicago"
     },
     {
      "title": "When the rains fail: Preparing for drought in Central America",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "New England’s first Bible, published in an Indigenous language, had one aim: Converting Native Americans",
-   "published": "2026-11-16 13:38 UTC"
+   "title": "How the US elections and Iran war are influencing the UN’s COP31 climate talks – and discussions around fossil fuels",
+   "published": "2026-11-16 20:31 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US loses measles elimination status – an epidemiologist explains what it will take to regain it",
-   "published": "2026-11-16 13:37 UTC"
+   "title": "New England’s first Bible, published in an Indigenous language, had one aim: Converting Native Americans",
+   "published": "2026-11-16 13:38 UTC"
   },
   {
    "region": "Americas",
