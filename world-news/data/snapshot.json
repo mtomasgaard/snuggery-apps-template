@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T09:01:25Z",
+ "generatedAt": "2026-11-16T10:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Que deviennent les familles des dirigeants autoritaires après leur départ ? Six études de cas en Afrique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/que-deviennent-les-familles-des-dirigeants-autoritaires-apres-leur-depart-six-etudes-de-cas-en-afrique-296337",
+     "published": "2026-11-16T08:50:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael Asiedu, Researcher, University of St.Gallen"
+    },
+    {
      "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Ida Rudolfsen, Senior researcher, Peace Research Institute Oslo (PRIO)"
-    },
-    {
-     "title": "Super El Niño could leave South Africa short of grazing. Timing of livestock fodder crops is crucial",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/super-el-nino-could-leave-south-africa-short-of-grazing-timing-of-livestock-fodder-crops-is-crucial-294630",
-     "published": "2026-11-15T09:21:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lusanda Ncisana, Lecturer, University of Limpopo"
     },
     {
      "title": "Madagascar aims to support biodiversity by protecting marine areas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Que deviennent les familles des dirigeants autoritaires après leur départ ? Six études de cas en Afrique",
+   "published": "2026-11-16 08:50 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
    "published": "2026-11-16 08:38 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
    "published": "2026-11-15 09:22 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Super El Niño could leave South Africa short of grazing. Timing of livestock fodder crops is crucial",
-   "published": "2026-11-15 09:21 UTC"
   },
   {
    "region": "Africa",
