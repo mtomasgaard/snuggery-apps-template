@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T18:01:25Z",
+ "generatedAt": "2026-11-16T19:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Sentinels is an urgent call to action on bird flu, and capitalism gone wild. It’s also a joy to read",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/sentinels-is-an-urgent-call-to-action-on-bird-flu-and-capitalism-gone-wild-its-also-a-joy-to-read-293348",
+     "published": "2026-11-16T18:24:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
+    },
+    {
+     "title": "Holding the line: how transmission lines became an election flashpoint in Victoria",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/holding-the-line-how-transmission-lines-became-an-election-flashpoint-in-victoria-296502",
+     "published": "2026-11-16T18:24:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jonathan Pickering, Associate Professor, Canberra School of Government, University of Canberra"
+    },
+    {
+     "title": "Don’s Party at 50 remains a biting examination of Australia’s left-leaning middle class",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/dons-party-at-50-remains-a-biting-examination-of-australias-left-leaning-middle-class-293944",
+     "published": "2026-11-16T18:24:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gregory Ferris, Senior Lecturer, Media Arts & Production, University of Technology Sydney"
+    },
+    {
      "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "James Chapman, Professor of Film Studies, University of Leicester"
-    },
-    {
-     "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/should-australia-change-its-age-of-consent-laws-protecting-young-people-requires-more-than-legal-reform-296685",
-     "published": "2026-11-16T06:03:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Vrankovich, Research Fellow, Australian Research Centre in Sex, Health and Society, La Trobe University"
-    },
-    {
-     "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/eurovision-asia-a-diverse-and-spectacular-showcase-of-asian-pop-294346",
-     "published": "2026-11-16T04:44:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jess Carniel, Associate Professor in Humanities, University of Southern Queensland"
-    },
-    {
-     "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/do-youth-boot-camps-reduce-crime-what-the-evidence-says-about-tough-love-for-troubled-youths-296681",
-     "published": "2026-11-16T03:52:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Joel Robert McGregor, Senior Lecturer, Criminology, Swinburne University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Sentinels is an urgent call to action on bird flu, and capitalism gone wild. It’s also a joy to read",
+   "published": "2026-11-16 18:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Holding the line: how transmission lines became an election flashpoint in Victoria",
+   "published": "2026-11-16 18:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Don’s Party at 50 remains a biting examination of Australia’s left-leaning middle class",
+   "published": "2026-11-16 18:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
    "published": "2026-11-16 17:44 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Robert Pattinson is James Bond – an unexpected choice that bodes well for the next era of 007",
    "published": "2026-11-16 17:14 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
-   "published": "2026-11-16 06:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
-   "published": "2026-11-16 04:44 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
-   "published": "2026-11-16 03:52 UTC"
   },
   {
    "region": "Oceania",
