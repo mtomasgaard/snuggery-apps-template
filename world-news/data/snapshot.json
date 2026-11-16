@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T04:01:24Z",
+ "generatedAt": "2026-11-16T05:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/eurovision-asia-a-diverse-and-spectacular-showcase-of-asian-pop-294346",
+     "published": "2026-11-16T04:44:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jess Carniel, Associate Professor in Humanities, University of Southern Queensland"
+    },
+    {
+     "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/do-youth-boot-camps-reduce-crime-what-the-evidence-says-about-tough-love-for-troubled-youths-296681",
+     "published": "2026-11-16T03:52:15Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joel Robert McGregor, Senior Lecturer, Criminology, Swinburne University of Technology"
+    },
+    {
      "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jason Tian, Senior Lecturer, Finance School of Business, Law and Entrepreneurship, Swinburne University of Technology"
-    },
-    {
-     "title": "Women behind bars are giving birth in shackles and handcuffs. It’s legal – but it shouldn’t be",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/women-behind-bars-are-giving-birth-in-shackles-and-handcuffs-its-legal-but-it-shouldnt-be-294952",
-     "published": "2026-11-16T03:11:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tatiana Corrales, Senior Research Fellow, Law and Justice Hub, Jumbunna Institute for Indigenous Education and Research, University of Technology Sydney"
-    },
-    {
-     "title": "Foggy days are becoming more common across southern Australia: new study",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/foggy-days-are-becoming-more-common-across-southern-australia-new-study-295545",
-     "published": "2026-11-16T02:46:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kimberley Reid, Postdoctoral Research Fellow in Atmospheric Sciences, The University of Melbourne"
     },
     {
      "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
+   "published": "2026-11-16 04:44 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
+   "published": "2026-11-16 03:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
    "published": "2026-11-16 03:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Women behind bars are giving birth in shackles and handcuffs. It’s legal – but it shouldn’t be",
-   "published": "2026-11-16 03:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Foggy days are becoming more common across southern Australia: new study",
-   "published": "2026-11-16 02:46 UTC"
   },
   {
    "region": "Oceania",
