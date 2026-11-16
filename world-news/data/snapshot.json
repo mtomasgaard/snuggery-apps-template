@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T19:01:27Z",
+ "generatedAt": "2026-11-16T20:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Syria: Progress ‘real’ but fragile, as remnants of war wreck young lives",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168814",
+     "published": "2026-11-16T12:00:00Z",
+     "summary": "Syria is showing “undeniable signs of progress” nearly two years after the fall of the Assad regime, but explosive ordnance, the approaching winter and severe funding shortfalls threaten those fragile gains, senior UN…",
+     "stale": false
+    },
+    {
      "title": "Making injustice legal: How Israeli law legitimizes apartheid, genocide and impunity",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168799",
      "published": "2026-11-13T12:00:00Z",
      "summary": "Winter supplies must enter the Gaza Strip where “lives are at stake”, the UN and partners said in an urgent appeal on Friday, in the wake of deadly rainfall this past weekend.",
-     "stale": false
-    },
-    {
-     "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168796",
-     "published": "2026-11-12T12:00:00Z",
-     "summary": "An Israeli airstrike on Gaza’s Nasser Hospital on Wednesday night killed six people, injured 27 others and caused extensive damage.",
      "stale": false
     },
     {
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Syria: Progress ‘real’ but fragile, as remnants of war wreck young lives",
+   "published": "2026-11-16 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "Making injustice legal: How Israeli law legitimizes apartheid, genocide and impunity",
    "published": "2026-11-16 00:00 UTC"
@@ -837,12 +843,6 @@
    "source": "UN News",
    "title": "‘Lives are at stake’: Humanitarians call for swift entry of winter supplies in Gaza",
    "published": "2026-11-13 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Six killed in Israeli airstrike on Gaza’s Nasser Hospital",
-   "published": "2026-11-12 12:00 UTC"
   },
   {
    "region": "Middle East",
