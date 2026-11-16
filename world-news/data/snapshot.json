@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-15T23:01:27Z",
+ "generatedAt": "2026-11-16T00:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-would-world-collapse-look-like-these-six-post-apocalyptic-novels-imagine-it-very-differently-295078",
+     "published": "2026-11-15T23:39:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Seth Robinson, Senior Lecturer in Creative Practice and Public Humanities, The University of Melbourne"
+    },
+    {
+     "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/kiwisaver-hardship-withdrawals-are-spiking-are-there-better-ways-to-deal-with-debt-296583",
+     "published": "2026-11-15T23:19:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Victoria Stace, Senior Lecturer, Faculty of Law, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "US Democrats win final two Senate seats; Coalition likely to easily win Victorian election",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/us-democrats-win-final-two-senate-seats-coalition-likely-to-easily-win-victorian-election-296423",
+     "published": "2026-11-15T23:05:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Your say: week beginning November 16",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Xiaoxi Zhu, Doctoral Candidate, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Nearly two thirds of remote First Nations households lack free-to-air TV access",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/nearly-two-thirds-of-remote-first-nations-households-lack-free-to-air-tv-access-296153",
-     "published": "2026-11-15T17:26:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel Featherstone, Principal Research Fellow, School of Media and Communication, RMIT University"
-    },
-    {
-     "title": "East Germany exiled singer Wolf Biermann. They only made his message louder",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/east-germany-exiled-singer-wolf-biermann-they-only-made-his-message-louder-295247",
-     "published": "2026-11-15T17:26:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Padraig Parkhurst, Sessional Lecturer/Tutor in Popular Music, The University of Melbourne"
-    },
-    {
-     "title": "How GTA 6 became a global phenomenon we can’t ignore",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-gta-6-became-a-global-phenomenon-we-cant-ignore-291043",
-     "published": "2026-11-15T17:26:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chad Habel, Senior Lecturer, Academic Development, Adelaide University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
+   "published": "2026-11-15 23:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
+   "published": "2026-11-15 23:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "US Democrats win final two Senate seats; Coalition likely to easily win Victorian election",
+   "published": "2026-11-15 23:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning November 16",
    "published": "2026-11-15 20:30 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
    "published": "2026-11-15 17:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Nearly two thirds of remote First Nations households lack free-to-air TV access",
-   "published": "2026-11-15 17:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "East Germany exiled singer Wolf Biermann. They only made his message louder",
-   "published": "2026-11-15 17:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How GTA 6 became a global phenomenon we can’t ignore",
-   "published": "2026-11-15 17:26 UTC"
   },
   {
    "region": "Oceania",
