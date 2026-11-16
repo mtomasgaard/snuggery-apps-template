@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T01:01:20Z",
+ "generatedAt": "2026-11-16T02:01:45Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Microsoft outage shows that big tech can’t be treated as too big to fail",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/microsoft-outage-shows-that-big-tech-cant-be-treated-as-too-big-to-fail-296599",
+     "published": "2026-11-16T01:27:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
+    },
+    {
      "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Your say: week beginning November 16",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-november-16-296676",
-     "published": "2026-11-15T20:30:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Microsoft outage shows that big tech can’t be treated as too big to fail",
+   "published": "2026-11-16 01:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
    "published": "2026-11-15 23:39 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "US Democrats win final two Senate seats; Coalition likely to easily win Victorian election",
    "published": "2026-11-15 23:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning November 16",
-   "published": "2026-11-15 20:30 UTC"
   },
   {
    "region": "Oceania",
