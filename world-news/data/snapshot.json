@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T06:01:24Z",
+ "generatedAt": "2026-11-16T07:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/should-australia-change-its-age-of-consent-laws-protecting-young-people-requires-more-than-legal-reform-296685",
+     "published": "2026-11-16T06:03:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sarah Vrankovich, Research Fellow, Australian Research Centre in Sex, Health and Society, La Trobe University"
+    },
+    {
      "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Joel Robert McGregor, Senior Lecturer, Criminology, Swinburne University of Technology"
-    },
-    {
-     "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/anthropics-trillion-dollar-ipo-is-open-to-australians-theres-a-catch-for-small-investors-296603",
-     "published": "2026-11-16T03:24:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jason Tian, Senior Lecturer, Finance School of Business, Law and Entrepreneurship, Swinburne University of Technology"
     },
     {
      "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
+   "published": "2026-11-16 06:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Eurovision Asia: a diverse and spectacular showcase of Asian pop",
    "published": "2026-11-16 04:44 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
    "published": "2026-11-16 03:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
-   "published": "2026-11-16 03:24 UTC"
   },
   {
    "region": "Oceania",
