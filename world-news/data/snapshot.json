@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T08:01:34Z",
+ "generatedAt": "2026-11-16T09:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/16/civil-society-questions-decree-that-could-block-access-to-telecommunications-networks-in-mozambique/",
+     "published": "2026-11-16T08:38:21Z",
+     "summary": "The telecommunications decree in Mozambique raises serious concerns regarding potential restrictions on fundamental rights, including freedom of expression and access to information during periods of political tension.",
+     "stale": false,
+     "author": "Masudul Zarif"
+    },
+    {
      "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "published": "2026-11-12T12:00:00Z",
      "summary": "Kenya began a 42-day countdown to the end of its Ebola outbreak on Thursday, a day after the last patient being treated for the disease went home and 11 people were released from quarantine.",
      "stale": false
-    },
-    {
-     "title": "Can regenerative school gardens strengthen food security in Cameroon?",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/12/can-regenerative-school-gardens-strengthen-food-security-in-cameroon/",
-     "published": "2026-11-12T07:27:40Z",
-     "summary": "Students in Cameroon’s North West Region are managing school gardens and growing food using regenerative practices such as minimal tillage, composting, organic manure and fruit-tree grafting.",
-     "stale": false,
-     "author": "Sandra Tuombouh"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
+   "published": "2026-11-16 08:38 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
    "published": "2026-11-15 09:22 UTC"
@@ -807,12 +813,6 @@
    "source": "UN News",
    "title": "Kenya begins countdown towards end of Ebola after last patient discharged",
    "published": "2026-11-12 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Can regenerative school gardens strengthen food security in Cameroon?",
-   "published": "2026-11-12 07:27 UTC"
   },
   {
    "region": "Middle East",
