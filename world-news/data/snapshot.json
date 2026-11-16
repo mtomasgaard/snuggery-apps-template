@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T03:01:28Z",
+ "generatedAt": "2026-11-16T04:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Microsoft outage shows that big tech can’t be treated as too big to fail",
+     "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/microsoft-outage-shows-that-big-tech-cant-be-treated-as-too-big-to-fail-296599",
-     "published": "2026-11-16T01:27:20Z",
+     "link": "https://theconversation.com/anthropics-trillion-dollar-ipo-is-open-to-australians-theres-a-catch-for-small-investors-296603",
+     "published": "2026-11-16T03:24:46Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
+     "author": "Jason Tian, Senior Lecturer, Finance School of Business, Law and Entrepreneurship, Swinburne University of Technology"
     },
     {
-     "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
+     "title": "Women behind bars are giving birth in shackles and handcuffs. It’s legal – but it shouldn’t be",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/what-would-world-collapse-look-like-these-six-post-apocalyptic-novels-imagine-it-very-differently-295078",
-     "published": "2026-11-15T23:39:36Z",
+     "link": "https://theconversation.com/women-behind-bars-are-giving-birth-in-shackles-and-handcuffs-its-legal-but-it-shouldnt-be-294952",
+     "published": "2026-11-16T03:11:25Z",
      "summary": "",
      "stale": false,
-     "author": "Seth Robinson, Senior Lecturer in Creative Practice and Public Humanities, The University of Melbourne"
+     "author": "Tatiana Corrales, Senior Research Fellow, Law and Justice Hub, Jumbunna Institute for Indigenous Education and Research, University of Technology Sydney"
+    },
+    {
+     "title": "Foggy days are becoming more common across southern Australia: new study",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/foggy-days-are-becoming-more-common-across-southern-australia-new-study-295545",
+     "published": "2026-11-16T02:46:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kimberley Reid, Postdoctoral Research Fellow in Atmospheric Sciences, The University of Melbourne"
     },
     {
      "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Victoria Stace, Senior Lecturer, Faculty of Law, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "US Democrats win final two Senate seats; Coalition likely to easily win Victorian election",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/us-democrats-win-final-two-senate-seats-coalition-likely-to-easily-win-victorian-election-296423",
-     "published": "2026-11-15T23:05:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Microsoft outage shows that big tech can’t be treated as too big to fail",
-   "published": "2026-11-16 01:27 UTC"
+   "title": "Anthropic’s trillion-dollar IPO is open to Australians. There’s a catch for small investors",
+   "published": "2026-11-16 03:24 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What would world collapse look like? These six post-apocalyptic novels imagine it very differently",
-   "published": "2026-11-15 23:39 UTC"
+   "title": "Women behind bars are giving birth in shackles and handcuffs. It’s legal – but it shouldn’t be",
+   "published": "2026-11-16 03:11 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Foggy days are becoming more common across southern Australia: new study",
+   "published": "2026-11-16 02:46 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
    "published": "2026-11-15 23:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "US Democrats win final two Senate seats; Coalition likely to easily win Victorian election",
-   "published": "2026-11-15 23:05 UTC"
   },
   {
    "region": "Oceania",
