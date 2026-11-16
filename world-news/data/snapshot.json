@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T13:01:43Z",
+ "generatedAt": "2026-11-16T13:48:09Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Prostate cancer testing now urged for men in their 50s and 60s – a lead author of the new screening guidelines explains why",
+     "title": "New England’s first Bible, published in an Indigenous language, had one aim: Converting Native Americans",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/prostate-cancer-testing-now-urged-for-men-in-their-50s-and-60s-a-lead-author-of-the-new-screening-guidelines-explains-why-296645",
-     "published": "2026-11-15T14:00:41Z",
+     "link": "https://theconversation.com/new-englands-first-bible-published-in-an-indigenous-language-had-one-aim-converting-native-americans-295848",
+     "published": "2026-11-16T13:38:34Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Wolf, Professor Emeritus of Medicine, University of Virginia"
+     "author": "Peter C. Mancall, Distinguished Professor and Professor of the Humanities, USC Dornsife College of Letters, Arts and Sciences"
     },
     {
-     "title": "National ground stop response highlights critical errors in public reassurance – saying ‘nothing nefarious’ did the opposite of quelling public concern",
+     "title": "US loses measles elimination status – an epidemiologist explains what it will take to regain it",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/national-ground-stop-response-highlights-critical-errors-in-public-reassurance-saying-nothing-nefarious-did-the-opposite-of-quelling-public-concern-296663",
-     "published": "2026-11-14T18:46:42Z",
+     "link": "https://theconversation.com/us-loses-measles-elimination-status-an-epidemiologist-explains-what-it-will-take-to-regain-it-296664",
+     "published": "2026-11-16T13:37:50Z",
      "summary": "",
      "stale": false,
-     "author": "Shannon A. Bowen, Professor of Journalism and Mass Communications, University of South Carolina"
+     "author": "Katrine L. Wallace, Assistant Professor of Epidemiology and Biostatistics, University of Illinois Chicago"
     },
     {
      "title": "When the rains fail: Preparing for drought in Central America",
@@ -177,14 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Que deviennent les familles des dirigeants autoritaires après leur départ ? Six études de cas en Afrique",
+     "title": "Free trade across Africa? Why policy needs to catch up with small-scale cross-border traders",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/que-deviennent-les-familles-des-dirigeants-autoritaires-apres-leur-depart-six-etudes-de-cas-en-afrique-296337",
-     "published": "2026-11-16T08:50:05Z",
+     "link": "https://theconversation.com/free-trade-across-africa-why-policy-needs-to-catch-up-with-small-scale-cross-border-traders-296065",
+     "published": "2026-11-16T13:15:24Z",
      "summary": "",
      "stale": false,
-     "author": "Michael Asiedu, Researcher, University of St.Gallen"
+     "author": "Samppa Kamara, Lecturer (Assistant Professor), University of Sheffield"
+    },
+    {
+     "title": "Hormuz block hit Africa in 4 places: what the continent must do to prevent future shocks",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/hormuz-block-hit-africa-in-4-places-what-the-continent-must-do-to-prevent-future-shocks-295587",
+     "published": "2026-11-16T13:15:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Olugbenga Onafowora, Professor of Economics, Susquehanna University"
     },
     {
      "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
@@ -195,16 +205,6 @@
      "summary": "The telecommunications decree in Mozambique raises serious concerns regarding potential restrictions on fundamental rights, including freedom of expression and access to information during periods of political tension.",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/mass-protests-that-led-to-regime-change-had-their-heyday-between-1980-and-2011-what-happened-296166",
-     "published": "2026-11-15T09:22:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ida Rudolfsen, Senior researcher, Peace Research Institute Oslo (PRIO)"
     },
     {
      "title": "Madagascar aims to support biodiversity by protecting marine areas",
@@ -344,7 +344,7 @@
    "stale": false,
    "items": [
     {
-     "title": "At final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
+     "title": "At his final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
      "source": "UN News",
      "feed": "un-asia-pacific",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168809",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Prostate cancer testing now urged for men in their 50s and 60s – a lead author of the new screening guidelines explains why",
-   "published": "2026-11-15 14:00 UTC"
+   "title": "New England’s first Bible, published in an Indigenous language, had one aim: Converting Native Americans",
+   "published": "2026-11-16 13:38 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "National ground stop response highlights critical errors in public reassurance – saying ‘nothing nefarious’ did the opposite of quelling public concern",
-   "published": "2026-11-14 18:46 UTC"
+   "title": "US loses measles elimination status – an epidemiologist explains what it will take to regain it",
+   "published": "2026-11-16 13:37 UTC"
   },
   {
    "region": "Americas",
@@ -769,20 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Que deviennent les familles des dirigeants autoritaires après leur départ ? Six études de cas en Afrique",
-   "published": "2026-11-16 08:50 UTC"
+   "title": "Free trade across Africa? Why policy needs to catch up with small-scale cross-border traders",
+   "published": "2026-11-16 13:15 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Hormuz block hit Africa in 4 places: what the continent must do to prevent future shocks",
+   "published": "2026-11-16 13:15 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
    "published": "2026-11-16 08:38 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Mass protests that led to regime change had their heyday between 1980 and 2011: what happened?",
-   "published": "2026-11-15 09:22 UTC"
   },
   {
    "region": "Africa",
@@ -865,7 +865,7 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "At final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
+   "title": "At his final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
    "published": "2026-11-16 12:00 UTC"
   },
   {
