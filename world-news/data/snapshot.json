@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T17:01:34Z",
+ "generatedAt": "2026-11-16T18:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Making injustice legal: How Israeli law legitimizes apartheid, genocide and impunity",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/11/16/making-injustice-legal-how-israeli-law-legitimizes-apartheid-genocide-and-impunity/",
+     "published": "2026-11-16T00:00:00Z",
+     "summary": "From military courts to closed investigations, Israeli law enforces two systems to maintain an apartheid, and international accountability is being dismantled by sanctions against the courts that uphold international…",
+     "stale": false,
+     "author": "Walid El Houri"
+    },
+    {
      "title": "Nadia Murad: ‘Day by day, I took my story back’",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "“For the relatives of people in prison, as well as for national and international human rights organizations and agencies, the information provided by the Prison Agenda publication can be vital.”",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "What telecoms leave behind when they exit a country",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
-     "published": "2026-10-22T12:20:06Z",
-     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
-     "author": "Ranking Digital Rights"
     }
    ]
   },
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/el-nino-is-nudging-the-pacifics-cyclone-risk-east-what-does-that-mean-for-new-zealand-296680",
+     "published": "2026-11-16T17:44:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "James Renwick, Professor of Physical Geography (Climate Science), Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "Robert Pattinson is James Bond – an unexpected choice that bodes well for the next era of 007",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/robert-pattinson-is-james-bond-an-unexpected-choice-that-bodes-well-for-the-next-era-of-007-296780",
+     "published": "2026-11-16T17:14:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "James Chapman, Professor of Film Studies, University of Leicester"
+    },
+    {
      "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Joel Robert McGregor, Senior Lecturer, Criminology, Swinburne University of Technology"
-    },
-    {
-     "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/kiwisaver-hardship-withdrawals-are-spiking-are-there-better-ways-to-deal-with-debt-296583",
-     "published": "2026-11-15T23:19:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Victoria Stace, Senior Lecturer, Faculty of Law, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/what-makes-food-organic-for-many-consumers-the-answer-isnt-always-on-the-label-293818",
-     "published": "2026-11-15T17:27:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Xiaoxi Zhu, Doctoral Candidate, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Making injustice legal: How Israeli law legitimizes apartheid, genocide and impunity",
+   "published": "2026-11-16 00:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Nadia Murad: ‘Day by day, I took my story back’",
    "published": "2026-11-15 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "A digital publication sheds light on Turkey’s prison system",
    "published": "2026-10-29 23:06 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "What telecoms leave behind when they exit a country",
-   "published": "2026-10-22 12:20 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
+   "published": "2026-11-16 17:44 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Robert Pattinson is James Bond – an unexpected choice that bodes well for the next era of 007",
+   "published": "2026-11-16 17:14 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Should Australia change its age-of-consent laws? Protecting young people requires more than legal reform",
    "published": "2026-11-16 06:03 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Do youth boot camps reduce crime? What the evidence says about ‘tough love’ for troubled youths",
    "published": "2026-11-16 03:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "KiwiSaver hardship withdrawals are spiking – are there better ways to deal with debt?",
-   "published": "2026-11-15 23:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What makes food ‘organic’? For many consumers, the answer isn’t always on the label",
-   "published": "2026-11-15 17:27 UTC"
   },
   {
    "region": "Oceania",
