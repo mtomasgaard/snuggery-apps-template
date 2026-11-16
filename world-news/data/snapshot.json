@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-16T13:48:09Z",
+ "generatedAt": "2026-11-16T14:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -344,7 +344,7 @@
    "stale": false,
    "items": [
     {
-     "title": "At his final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
+     "title": "At final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
      "source": "UN News",
      "feed": "un-asia-pacific",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168809",
@@ -865,7 +865,7 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "At his final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
+   "title": "At final ASEAN-UN Summit, Guterres upholds cooperation and action on Myanmar",
    "published": "2026-11-16 12:00 UTC"
   },
   {
