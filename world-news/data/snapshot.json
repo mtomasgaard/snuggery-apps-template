@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T03:01:21Z",
+ "generatedAt": "2026-11-17T04:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/renting-through-an-agent-youre-more-than-twice-as-likely-to-report-slow-repairs-and-unfair-rent-hikes-296678",
+     "published": "2026-11-17T03:53:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amy Clair, Associate Professor of Housing Policy, Adelaide University, and Research Associate, ESRC Research Centre on Micro-Social Change, University of Essex"
+    },
+    {
      "title": "Could James Bond ever be anything other than a white, British man?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kristian Ramsden, PhD Candidate in English, Creative Writing and Film, Adelaide University"
-    },
-    {
-     "title": "What’s the new advice about puberty blockers for trans and gender-diverse children?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/whats-the-new-advice-about-puberty-blockers-for-trans-and-gender-diverse-children-296699",
-     "published": "2026-11-17T02:47:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Mitchell, Lecturer in the School of Humanities and Social Sciences, Deakin University"
     },
     {
      "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
+   "published": "2026-11-17 03:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Could James Bond ever be anything other than a white, British man?",
    "published": "2026-11-17 02:59 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "‘Noirvember is the perfect excuse to discover film critics’ favourite style",
    "published": "2026-11-17 02:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What’s the new advice about puberty blockers for trans and gender-diverse children?",
-   "published": "2026-11-17 02:47 UTC"
   },
   {
    "region": "Oceania",
