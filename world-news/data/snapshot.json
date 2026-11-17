@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T05:01:53Z",
+ "generatedAt": "2026-11-17T06:02:05Z",
  "regions": [
   {
    "key": "europe",
@@ -128,7 +128,7 @@
      "link": "https://globalvoices.org/2026/11/13/how-medical-neglect-killed-alfredo-diaz-in-a-venezuelan-cell/",
      "published": "2026-11-13T03:00:41Z",
      "summary": "Despite government shifts, a UN report confirms Venezuela's repressive system remains active, documenting how medical neglect in state custody led to the death of regional leader and politician Alfredo Díaz.",
-     "stale": false,
+     "stale": true,
      "author": "Luis Carlos Diaz"
     },
     {
@@ -138,7 +138,7 @@
      "link": "https://globalvoices.org/2026/11/12/ecuadorian-youth-unite-against-neoliberal-models-and-state-violence/",
      "published": "2026-11-12T14:00:33Z",
      "summary": "Thousands of Ecuadorian students have taken to the streets to reject President Noboa’s temporary job plans, demanding permanent solutions for public healthcare, education funding, and rising insecurity.",
-     "stale": false,
+     "stale": true,
      "author": "Gina Yauri"
     },
     {
@@ -157,7 +157,7 @@
      "link": "https://globalvoices.org/2026/11/08/beyond-the-beaches-the-dominican-republic-and-the-global-debate-over-deep-sea-mining/",
      "published": "2026-11-08T14:12:02Z",
      "summary": "The DR wanted science to keep advancing and the International Seabed Authority to finish building the regulatory framework that the UN Convention had mandated it to develop.",
-     "stale": false,
+     "stale": true,
      "author": "Carolina Pichardo"
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/can-the-police-monitor-a-suspects-brain-during-interrogation-a-new-report-issues-a-stark-warning-295555",
+     "published": "2026-11-17T05:03:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Allan McCay, Academic Fellow, School of Law, University of Sydney"
+    },
+    {
      "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Benjamin D. Muir, Casual Academic, School of Humanities and Communication Arts, Western Sydney University"
-    },
-    {
-     "title": "‘Noirvember is the perfect excuse to discover film critics’ favourite style",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/noirvember-is-the-perfect-excuse-to-discover-film-critics-favourite-style-296058",
-     "published": "2026-11-17T02:56:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kristian Ramsden, PhD Candidate in English, Creative Writing and Film, Adelaide University"
     },
     {
      "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
+   "published": "2026-11-17 05:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
    "published": "2026-11-17 03:53 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Could James Bond ever be anything other than a white, British man?",
    "published": "2026-11-17 02:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘Noirvember is the perfect excuse to discover film critics’ favourite style",
-   "published": "2026-11-17 02:56 UTC"
   },
   {
    "region": "Oceania",
