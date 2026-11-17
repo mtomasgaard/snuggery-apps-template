@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T15:01:36Z",
+ "generatedAt": "2026-11-17T16:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Informal and formal economies: lessons from COVID on how supply chains can connect the two worlds",
+     "title": "Burundi’s refugees are under pressure to return: why some choose silence when they do",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/informal-and-formal-economies-lessons-from-covid-on-how-supply-chains-can-connect-the-two-worlds-295230",
-     "published": "2026-11-17T09:09:47Z",
+     "link": "https://theconversation.com/burundis-refugees-are-under-pressure-to-return-why-some-choose-silence-when-they-do-293225",
+     "published": "2026-11-17T14:49:06Z",
      "summary": "",
      "stale": false,
-     "author": "Ralph Hamann, Professor, University of Cape Town"
+     "author": "Nina Soudan, PhD researcher, Centre for Research on Peace and Development, KU Leuven"
     },
     {
-     "title": "Pourquoi les avancées scientifiques ne suffisent pas à vaincre le paludisme en Afrique",
+     "title": "Smarter healthcare, unequal outcomes? The risks of AI in southern Africa",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/pourquoi-les-avancees-scientifiques-ne-suffisent-pas-a-vaincre-le-paludisme-en-afrique-296376",
-     "published": "2026-11-17T09:08:49Z",
+     "link": "https://theconversation.com/smarter-healthcare-unequal-outcomes-the-risks-of-ai-in-southern-africa-295757",
+     "published": "2026-11-17T14:48:54Z",
      "summary": "",
      "stale": false,
-     "author": "Taneshka Kruger, UP ISMC: Project Manager and Coordinator, University of Pretoria"
+     "author": "Rennie Naidoo, Professor of Information Systems, University of the Witwatersrand"
     },
     {
      "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Informal and formal economies: lessons from COVID on how supply chains can connect the two worlds",
-   "published": "2026-11-17 09:09 UTC"
+   "title": "Burundi’s refugees are under pressure to return: why some choose silence when they do",
+   "published": "2026-11-17 14:49 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Pourquoi les avancées scientifiques ne suffisent pas à vaincre le paludisme en Afrique",
-   "published": "2026-11-17 09:08 UTC"
+   "title": "Smarter healthcare, unequal outcomes? The risks of AI in southern Africa",
+   "published": "2026-11-17 14:48 UTC"
   },
   {
    "region": "Africa",
