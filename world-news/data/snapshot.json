@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T22:01:18Z",
+ "generatedAt": "2026-11-17T23:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/while-the-term-friendsgiving-is-new-the-tradition-has-been-around-for-decades-found-family-and-experimental-freedom-make-this-holiday-special-296586",
+     "published": "2026-11-17T22:23:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kirsten Chervenak, Research Associate for the Center for Regional Agriculture, Food, and Transformation, Chatham University"
+    },
+    {
      "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Vanessa Bohns, Braunstein Family Professor and Chair of Organizational Behavior, Cornell University"
-    },
-    {
-     "title": "Fighting in Yemen has made crossing the Bab el-Mandeb even more dangerous – jeopardizing aid and refuge for millions",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/fighting-in-yemen-has-made-crossing-the-bab-el-mandeb-even-more-dangerous-jeopardizing-aid-and-refuge-for-millions-295106",
-     "published": "2026-11-17T19:48:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lauren Carruth, Associate Professor of International Service, American University School of International Service"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
-   "published": "2026-11-17 19:53 UTC"
+   "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
+   "published": "2026-11-17 22:23 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Fighting in Yemen has made crossing the Bab el-Mandeb even more dangerous – jeopardizing aid and refuge for millions",
-   "published": "2026-11-17 19:48 UTC"
+   "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
+   "published": "2026-11-17 19:53 UTC"
   },
   {
    "region": "Americas",
