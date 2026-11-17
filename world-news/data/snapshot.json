@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T14:01:30Z",
+ "generatedAt": "2026-11-17T14:40:31Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Winter rains deepen Gaza crisis amid restricted access and aid cuts",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168821",
+     "published": "2026-11-17T12:00:00Z",
+     "summary": "Gaza is facing a deepening shelter, sanitation and food security crisis as winter rains flood makeshift shelters, destroy scarce food supplies and leave displaced families struggling to stay warm and fed.",
+     "stale": false
+    },
+    {
      "title": "Lebanon leading the way in mental health support",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168801",
      "published": "2026-11-15T12:00:00Z",
      "summary": "Nobel Peace Prize laureate Nadia Murad has spent years telling the world about the atrocities committed against her and the Yazidi community by militants from the terrorist group, ISIL.",
-     "stale": false
-    },
-    {
-     "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168804",
-     "published": "2026-11-13T12:00:00Z",
-     "summary": "Nearly nine months after Israeli and US strikes on Iran set off a regional war, the Gulf remains on a knife edge. Iran has all but closed the Strait of Hormuz, which carried a fifth of the world’s oil before the…",
      "stale": false
     },
     {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Winter rains deepen Gaza crisis amid restricted access and aid cuts",
+   "published": "2026-11-17 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Lebanon leading the way in mental health support",
    "published": "2026-11-16 12:00 UTC"
   },
@@ -837,12 +843,6 @@
    "source": "UN News",
    "title": "Nadia Murad: ‘Day by day, I took my story back’",
    "published": "2026-11-15 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount",
-   "published": "2026-11-13 12:00 UTC"
   },
   {
    "region": "Middle East",
