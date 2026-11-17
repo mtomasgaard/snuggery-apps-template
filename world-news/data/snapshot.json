@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T19:01:40Z",
+ "generatedAt": "2026-11-17T20:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Zheng Kuang, Associate Professor of Biological Sciences, Carnegie Mellon University"
     },
     {
+     "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168823",
+     "published": "2026-11-17T12:00:00Z",
+     "summary": "The UN human rights office, OHCHR has urged greater protection for civilians in Haiti amid ongoing “atrocious abuses” committed by gangs and intensified security operations.",
+     "stale": false
+    },
+    {
      "title": "When the rains fail: Preparing for drought in Central America",
      "source": "UN News",
      "feed": "un-americas",
@@ -159,15 +168,6 @@
      "summary": "The DR wanted science to keep advancing and the International Seabed Authority to finish building the regulatory framework that the UN Convention had mandated it to develop.",
      "stale": false,
      "author": "Carolina Pichardo"
-    },
-    {
-     "title": "Higher Ground: How New York is raising a park to hold back the sea",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168679",
-     "published": "2026-10-28T12:00:00Z",
-     "summary": "On 29 October 2012, Hurricane Sandy slammed into New York City, unleashing a devastating storm surge that flooded homes, subways and tunnels, knocked out power and sparked deadly fires.",
-     "stale": false
     }
    ]
   },
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "A Melbourne Cup runner in a skip bin is shocking – but a lot of dead horses end up at the tip",
+     "title": "Foley artists are rarer than astronauts, yet cinema wouldn’t be possible without them",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/a-melbourne-cup-runner-in-a-skip-bin-is-shocking-but-a-lot-of-dead-horses-end-up-at-the-tip-296828",
-     "published": "2026-11-17T08:41:53Z",
+     "link": "https://theconversation.com/foley-artists-are-rarer-than-astronauts-yet-cinema-wouldnt-be-possible-without-them-294347",
+     "published": "2026-11-17T19:11:44Z",
      "summary": "",
      "stale": false,
-     "author": "Cathrynne Henshall, Post-doctoral Fellow, School of Agricultural, Environmental and Veterinary Sciences, Charles Sturt University"
+     "author": "Christopher Boyd, Senior Teaching Fellow, School of Film, Screen and Creative Media, Bond University"
     },
     {
-     "title": "View from The Hill: backpacker compromise another example of Albanese government ‘folding its cards’",
+     "title": "For millennia, Aboriginal astronomers have explained the movement of stars, planets, eclipses and tides",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-backpacker-compromise-another-example-of-albanese-government-folding-its-cards-296271",
-     "published": "2026-11-17T08:13:20Z",
+     "link": "https://theconversation.com/for-millennia-aboriginal-astronomers-have-explained-the-movement-of-stars-planets-eclipses-and-tides-289990",
+     "published": "2026-11-17T19:11:30Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Ray Norris, Honorary Fellow, Space and Astronomy, CSIRO; Western Sydney University"
     },
     {
-     "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australias-backpacker-visa-rules-are-changing-again-heres-how-the-new-system-will-work-296812",
-     "published": "2026-11-17T06:19:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Louisa Jones, Lecturer and Discipline Lead (Migration), Thomas More Law School, Australian Catholic University"
-    },
-    {
-     "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
+     "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/stable-government-is-parliaments-first-priority-a-fresh-election-isnt-the-answer-296669",
-     "published": "2026-11-17T00:08:57Z",
+     "link": "https://theconversation.com/in-antarcticas-ice-free-areas-even-footprints-can-damage-rare-microscopic-ecosystems-296045",
+     "published": "2026-11-17T19:10:18Z",
      "summary": "",
      "stale": false,
-     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
+     "author": "Angela McGaughran, Senior Lecturer in Population Genomics, University of Waikato"
     },
     {
-     "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
+     "title": "Ghostwriters for celebrities like Dustin Hoffman are now selling points, not secrets. Is AI a factor?",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/el-nino-is-nudging-the-pacifics-cyclone-risk-east-what-does-that-mean-for-new-zealand-296680",
-     "published": "2026-11-16T17:44:28Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/ghostwriters-for-celebrities-like-dustin-hoffman-are-now-selling-points-not-secrets-is-ai-a-factor-296514",
+     "published": "2026-11-17T19:09:29Z",
      "summary": "",
      "stale": false,
-     "author": "James Renwick, Professor of Physical Geography (Climate Science), Te Herenga Waka — Victoria University of Wellington"
+     "author": "Jane Frank, Lecturer in Communication, University of the Sunshine Coast"
+    },
+    {
+     "title": "Robert Pattinson is the first Bond with a strong franchise history – it makes him a safe choice",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/robert-pattinson-is-the-first-bond-with-a-strong-franchise-history-it-makes-him-a-safe-choice-296872",
+     "published": "2026-11-17T15:25:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yannis Tzioumakis, Professor of Film and Media Industries, University of Liverpool"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
+   "published": "2026-11-17 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "When the rains fail: Preparing for drought in Central America",
    "published": "2026-11-14 12:00 UTC"
   },
@@ -759,12 +765,6 @@
    "source": "Global Voices",
    "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
    "published": "2026-11-08 14:12 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Higher Ground: How New York is raising a park to hold back the sea",
-   "published": "2026-10-28 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "A Melbourne Cup runner in a skip bin is shocking – but a lot of dead horses end up at the tip",
-   "published": "2026-11-17 08:41 UTC"
+   "title": "Foley artists are rarer than astronauts, yet cinema wouldn’t be possible without them",
+   "published": "2026-11-17 19:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: backpacker compromise another example of Albanese government ‘folding its cards’",
-   "published": "2026-11-17 08:13 UTC"
+   "title": "For millennia, Aboriginal astronomers have explained the movement of stars, planets, eclipses and tides",
+   "published": "2026-11-17 19:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
-   "published": "2026-11-17 06:19 UTC"
+   "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
+   "published": "2026-11-17 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
-   "published": "2026-11-17 00:08 UTC"
+   "title": "Ghostwriters for celebrities like Dustin Hoffman are now selling points, not secrets. Is AI a factor?",
+   "published": "2026-11-17 19:09 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "El Niño is nudging the Pacific’s cyclone risk east. What does that mean for New Zealand?",
-   "published": "2026-11-16 17:44 UTC"
+   "title": "Robert Pattinson is the first Bond with a strong franchise history – it makes him a safe choice",
+   "published": "2026-11-17 15:25 UTC"
   },
   {
    "region": "Oceania",
