@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T08:01:30Z",
+ "generatedAt": "2026-11-17T09:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "A Melbourne Cup runner in a skip bin is shocking – but a lot of dead horses end up at the tip",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-melbourne-cup-runner-in-a-skip-bin-is-shocking-but-a-lot-of-dead-horses-end-up-at-the-tip-296828",
+     "published": "2026-11-17T08:41:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cathrynne Henshall, Post-doctoral Fellow, School of Agricultural, Environmental and Veterinary Sciences, Charles Sturt University"
+    },
+    {
+     "title": "View from The Hill: backpacker compromise another example of Albanese government ‘folding its cards’",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-backpacker-compromise-another-example-of-albanese-government-folding-its-cards-296271",
+     "published": "2026-11-17T08:13:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Louisa Jones, Lecturer and Discipline Lead (Migration), Thomas More Law School, Australian Catholic University"
-    },
-    {
-     "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/can-the-police-monitor-a-suspects-brain-during-interrogation-a-new-report-issues-a-stark-warning-295555",
-     "published": "2026-11-17T05:03:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Allan McCay, Academic Fellow, School of Law, University of Sydney"
-    },
-    {
-     "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/renting-through-an-agent-youre-more-than-twice-as-likely-to-report-slow-repairs-and-unfair-rent-hikes-296678",
-     "published": "2026-11-17T03:53:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Amy Clair, Associate Professor of Housing Policy, Adelaide University; University of Essex"
     },
     {
      "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A Melbourne Cup runner in a skip bin is shocking – but a lot of dead horses end up at the tip",
+   "published": "2026-11-17 08:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "View from The Hill: backpacker compromise another example of Albanese government ‘folding its cards’",
+   "published": "2026-11-17 08:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
    "published": "2026-11-17 06:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
-   "published": "2026-11-17 05:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
-   "published": "2026-11-17 03:53 UTC"
   },
   {
    "region": "Oceania",
