@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T20:01:23Z",
+ "generatedAt": "2026-11-17T21:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Why Americans are losing confidence in public education",
+     "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/why-americans-are-losing-confidence-in-public-education-293797",
-     "published": "2026-11-17T13:41:59Z",
+     "link": "https://theconversation.com/jensen-huang-scandal-illustrates-why-human-nature-is-cybersecuritys-weakest-link-296763",
+     "published": "2026-11-17T19:53:14Z",
      "summary": "",
      "stale": false,
-     "author": "Michael P. Evans, Associate Professor of Family, School & Community Connections, Miami University"
+     "author": "Vanessa Bohns, Braunstein Family Professor and Chair of Organizational Behavior, Cornell University"
     },
     {
-     "title": "Your gut bacteria helps your body keep track of time, and when you eat influences how much nutrition you get from food",
+     "title": "Fighting in Yemen has made crossing the Bab el-Mandeb even more dangerous – jeopardizing aid and refuge for millions",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/your-gut-bacteria-helps-your-body-keep-track-of-time-and-when-you-eat-influences-how-much-nutrition-you-get-from-food-295323",
-     "published": "2026-11-17T13:41:39Z",
+     "link": "https://theconversation.com/fighting-in-yemen-has-made-crossing-the-bab-el-mandeb-even-more-dangerous-jeopardizing-aid-and-refuge-for-millions-295106",
+     "published": "2026-11-17T19:48:54Z",
      "summary": "",
      "stale": false,
-     "author": "Zheng Kuang, Associate Professor of Biological Sciences, Carnegie Mellon University"
+     "author": "Lauren Carruth, Associate Professor of International Service, American University School of International Service"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why Americans are losing confidence in public education",
-   "published": "2026-11-17 13:41 UTC"
+   "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
+   "published": "2026-11-17 19:53 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Your gut bacteria helps your body keep track of time, and when you eat influences how much nutrition you get from food",
-   "published": "2026-11-17 13:41 UTC"
+   "title": "Fighting in Yemen has made crossing the Bab el-Mandeb even more dangerous – jeopardizing aid and refuge for millions",
+   "published": "2026-11-17 19:48 UTC"
   },
   {
    "region": "Americas",
