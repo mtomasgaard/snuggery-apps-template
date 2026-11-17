@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T06:02:05Z",
+ "generatedAt": "2026-11-17T07:02:08Z",
  "regions": [
   {
    "key": "europe",
@@ -128,7 +128,7 @@
      "link": "https://globalvoices.org/2026/11/13/how-medical-neglect-killed-alfredo-diaz-in-a-venezuelan-cell/",
      "published": "2026-11-13T03:00:41Z",
      "summary": "Despite government shifts, a UN report confirms Venezuela's repressive system remains active, documenting how medical neglect in state custody led to the death of regional leader and politician Alfredo Díaz.",
-     "stale": true,
+     "stale": false,
      "author": "Luis Carlos Diaz"
     },
     {
@@ -138,7 +138,7 @@
      "link": "https://globalvoices.org/2026/11/12/ecuadorian-youth-unite-against-neoliberal-models-and-state-violence/",
      "published": "2026-11-12T14:00:33Z",
      "summary": "Thousands of Ecuadorian students have taken to the streets to reject President Noboa’s temporary job plans, demanding permanent solutions for public healthcare, education funding, and rising insecurity.",
-     "stale": true,
+     "stale": false,
      "author": "Gina Yauri"
     },
     {
@@ -157,7 +157,7 @@
      "link": "https://globalvoices.org/2026/11/08/beyond-the-beaches-the-dominican-republic-and-the-global-debate-over-deep-sea-mining/",
      "published": "2026-11-08T14:12:02Z",
      "summary": "The DR wanted science to keep advancing and the International Seabed Authority to finish building the regulatory framework that the UN Convention had mandated it to develop.",
-     "stale": true,
+     "stale": false,
      "author": "Carolina Pichardo"
     },
     {
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/17/in-win-against-impunity-indonesian-court-orders-the-reform-of-military-justice-law/",
+     "published": "2026-11-17T06:55:29Z",
+     "summary": "\"Justice for civilian victims of military abuses shouldn’t be blocked by an unfair military court system.\"",
+     "stale": false,
+     "author": "Mong Palatino"
+    },
+    {
      "title": "At his final ASEAN Summit, Guterres upholds cooperation and action on Myanmar",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -383,16 +393,6 @@
      "author": "Rebecca MacKinnon"
     },
     {
-     "title": "Unmarried Chinese women are rewriting the marriage script",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/05/unmarried-chinese-women-are-rewriting-the-marriage-script/",
-     "published": "2026-11-05T06:03:41Z",
-     "summary": "Some unmarried Chinese women are actively challenging the social stigma associated with being “leftover women” by questioning family pressure, sharing ways to escape it, or reframing the discussion altogether.",
-     "stale": false,
-     "author": "Lina Ma"
-    },
-    {
      "title": "Afghan children face narrowing path to education, UN agencies report",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australias-backpacker-visa-rules-are-changing-again-heres-how-the-new-system-will-work-296812",
+     "published": "2026-11-17T06:19:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Louisa Jones, Lecturer and Discipline Lead (Migration), Thomas More Law School, Australian Catholic University"
+    },
+    {
      "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Amy Clair, Associate Professor of Housing Policy, Adelaide University; University of Essex"
-    },
-    {
-     "title": "Could James Bond ever be anything other than a white, British man?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/could-james-bond-ever-be-anything-other-than-a-white-british-man-296483",
-     "published": "2026-11-17T02:59:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Benjamin D. Muir, Casual Academic, School of Humanities and Communication Arts, Western Sydney University"
     },
     {
      "title": "Stable government is parliament’s first priority – a fresh election isn’t the answer",
@@ -485,7 +485,7 @@
      "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
      "published": "2026-10-06T08:05:24Z",
      "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -495,7 +495,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     },
     {
@@ -505,7 +505,7 @@
      "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
      "published": "2026-09-14T18:56:04Z",
      "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
-     "stale": false,
+     "stale": true,
      "author": "Kevin Rennie"
     }
    ]
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -648,9 +648,9 @@
    "id": "gv-oceania",
    "source": "Global Voices",
    "region": "Oceania",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "tc-au",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
+   "published": "2026-11-17 06:55 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "At his final ASEAN Summit, Guterres upholds cooperation and action on Myanmar",
    "published": "2026-11-16 12:00 UTC"
@@ -888,12 +894,6 @@
   },
   {
    "region": "Asia",
-   "source": "Global Voices",
-   "title": "Unmarried Chinese women are rewriting the marriage script",
-   "published": "2026-11-05 06:03 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "UN News",
    "title": "Afghan children face narrowing path to education, UN agencies report",
    "published": "2026-11-04 12:00 UTC"
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia’s backpacker visa rules are changing again. Here’s how the new system will work",
+   "published": "2026-11-17 06:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Can the police monitor a suspect’s brain during interrogation? A new report issues a stark warning",
    "published": "2026-11-17 05:03 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Renting through an agent? You’re more than twice as likely to report slow repairs and unfair rent hikes",
    "published": "2026-11-17 03:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Could James Bond ever be anything other than a white, British man?",
-   "published": "2026-11-17 02:59 UTC"
   },
   {
    "region": "Oceania",
