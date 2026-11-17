@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T09:01:43Z",
+ "generatedAt": "2026-11-17T10:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Free trade across Africa? Why policy needs to catch up with small-scale cross-border traders",
+     "title": "Informal and formal economies: lessons from COVID on how supply chains can connect the two worlds",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/free-trade-across-africa-why-policy-needs-to-catch-up-with-small-scale-cross-border-traders-296065",
-     "published": "2026-11-16T13:15:24Z",
+     "link": "https://theconversation.com/informal-and-formal-economies-lessons-from-covid-on-how-supply-chains-can-connect-the-two-worlds-295230",
+     "published": "2026-11-17T09:09:47Z",
      "summary": "",
      "stale": false,
-     "author": "Samppa Kamara, Lecturer (Assistant Professor), University of Sheffield"
+     "author": "Ralph Hamann, Professor, University of Cape Town"
     },
     {
-     "title": "Hormuz block hit Africa in 4 places: what the continent must do to prevent future shocks",
+     "title": "Pourquoi les avancées scientifiques ne suffisent pas à vaincre le paludisme en Afrique",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/hormuz-block-hit-africa-in-4-places-what-the-continent-must-do-to-prevent-future-shocks-295587",
-     "published": "2026-11-16T13:15:09Z",
+     "link": "https://theconversation.com/pourquoi-les-avancees-scientifiques-ne-suffisent-pas-a-vaincre-le-paludisme-en-afrique-296376",
+     "published": "2026-11-17T09:08:49Z",
      "summary": "",
      "stale": false,
-     "author": "Olugbenga Onafowora, Professor of Economics, Susquehanna University"
+     "author": "Taneshka Kruger, UP ISMC: Project Manager and Coordinator, University of Pretoria"
     },
     {
      "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Free trade across Africa? Why policy needs to catch up with small-scale cross-border traders",
-   "published": "2026-11-16 13:15 UTC"
+   "title": "Informal and formal economies: lessons from COVID on how supply chains can connect the two worlds",
+   "published": "2026-11-17 09:09 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Hormuz block hit Africa in 4 places: what the continent must do to prevent future shocks",
-   "published": "2026-11-16 13:15 UTC"
+   "title": "Pourquoi les avancées scientifiques ne suffisent pas à vaincre le paludisme en Afrique",
+   "published": "2026-11-17 09:08 UTC"
   },
   {
    "region": "Africa",
