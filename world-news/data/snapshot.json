@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T18:01:41Z",
+ "generatedAt": "2026-11-18T19:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-last-bird-to-go-extinct-in-nz-has-lessons-for-saving-other-species-new-study-292112",
+     "published": "2026-11-18T18:56:04Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
+    },
+    {
+     "title": "Beijing has three priorities at the Shenzhen summit – a China expert explains",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/beijing-has-three-priorities-at-the-shenzhen-summit-a-china-expert-explains-296734",
+     "published": "2026-11-18T11:39:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tom Harper, Lecturer in International Relations, University of East London"
+    },
+    {
      "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Allison Craven, Associate Professor, College of Arts, Society and Education, James Cook University"
-    },
-    {
-     "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-election-was-an-mmp-special-nows-the-time-to-tune-the-system-not-scapegoat-it-296909",
-     "published": "2026-11-18T00:45:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sylvia Nissen, Senior Lecturer, Lincoln University, New Zealand"
-    },
-    {
-     "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/in-antarcticas-ice-free-areas-even-footprints-can-damage-rare-microscopic-ecosystems-296045",
-     "published": "2026-11-17T19:10:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Angela McGaughran, Senior Lecturer in Population Genomics, University of Waikato"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
+   "published": "2026-11-18 18:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Beijing has three priorities at the Shenzhen summit – a China expert explains",
+   "published": "2026-11-18 11:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
    "published": "2026-11-18 04:28 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
    "published": "2026-11-18 03:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
-   "published": "2026-11-18 00:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
-   "published": "2026-11-17 19:10 UTC"
   },
   {
    "region": "Oceania",
