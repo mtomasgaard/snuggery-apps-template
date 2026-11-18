@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T00:01:39Z",
+ "generatedAt": "2026-11-18T01:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "Foley artists are rarer than astronauts, yet cinema wouldn’t be possible without them",
+     "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
      "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/foley-artists-are-rarer-than-astronauts-yet-cinema-wouldnt-be-possible-without-them-294347",
-     "published": "2026-11-17T19:11:44Z",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-election-was-an-mmp-special-nows-the-time-to-tune-the-system-not-scapegoat-it-296909",
+     "published": "2026-11-18T00:45:44Z",
      "summary": "",
      "stale": false,
-     "author": "Christopher Boyd, Senior Teaching Fellow, School of Film, Screen and Creative Media, Bond University"
+     "author": "Sylvia Nissen, Senior Lecturer, Lincoln University, New Zealand"
     },
     {
-     "title": "For millennia, Aboriginal astronomers have explained the movement of stars, planets, eclipses and tides",
+     "title": "Politics with Michelle Grattan: Allegra Spender on community anger and politicians’ bad behaviour",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/for-millennia-aboriginal-astronomers-have-explained-the-movement-of-stars-planets-eclipses-and-tides-289990",
-     "published": "2026-11-17T19:11:30Z",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-allegra-spender-on-community-anger-and-politicians-bad-behaviour-296820",
+     "published": "2026-11-18T00:22:55Z",
      "summary": "",
      "stale": false,
-     "author": "Ray Norris, Honorary Fellow, Space and Astronomy, CSIRO; Western Sydney University"
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "Your nature strip could be a haven for native plants and insects: new research",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-nature-strip-could-be-a-haven-for-native-plants-and-insects-new-research-293929",
+     "published": "2026-11-18T00:16:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Philippa Bell, Urban Ecologist and Research Fellow, Interdisciplinary Conservation Science Research Group, The University of Melbourne"
+    },
+    {
+     "title": "Why does the same perfume smell different on different people? ‘Skin chemistry’ explained",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-does-the-same-perfume-smell-different-on-different-people-skin-chemistry-explained-295254",
+     "published": "2026-11-17T23:54:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Magdalena Wajrak, Senior Lecturer in Chemistry, Edith Cowan University"
     },
     {
      "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Angela McGaughran, Senior Lecturer in Population Genomics, University of Waikato"
-    },
-    {
-     "title": "Celebrity ghostwriters are now selling points, not secrets. Is AI a factor?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/celebrity-ghostwriters-are-now-selling-points-not-secrets-is-ai-a-factor-296514",
-     "published": "2026-11-17T19:09:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jane Frank, Lecturer in Communication, University of the Sunshine Coast"
-    },
-    {
-     "title": "Robert Pattinson is the first Bond with a strong franchise history – it makes him a safe choice",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/robert-pattinson-is-the-first-bond-with-a-strong-franchise-history-it-makes-him-a-safe-choice-296872",
-     "published": "2026-11-17T15:25:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yannis Tzioumakis, Professor of Film and Media Industries, University of Liverpool"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Foley artists are rarer than astronauts, yet cinema wouldn’t be possible without them",
-   "published": "2026-11-17 19:11 UTC"
+   "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
+   "published": "2026-11-18 00:45 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "For millennia, Aboriginal astronomers have explained the movement of stars, planets, eclipses and tides",
-   "published": "2026-11-17 19:11 UTC"
+   "title": "Politics with Michelle Grattan: Allegra Spender on community anger and politicians’ bad behaviour",
+   "published": "2026-11-18 00:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Your nature strip could be a haven for native plants and insects: new research",
+   "published": "2026-11-18 00:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why does the same perfume smell different on different people? ‘Skin chemistry’ explained",
+   "published": "2026-11-17 23:54 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
    "published": "2026-11-17 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Celebrity ghostwriters are now selling points, not secrets. Is AI a factor?",
-   "published": "2026-11-17 19:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Robert Pattinson is the first Bond with a strong franchise history – it makes him a safe choice",
-   "published": "2026-11-17 15:25 UTC"
   },
   {
    "region": "Oceania",
