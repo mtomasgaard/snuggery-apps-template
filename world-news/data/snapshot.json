@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T04:01:26Z",
+ "generatedAt": "2026-11-18T05:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/queensland-nt-economic-growth-beats-the-rest-of-the-nation-led-by-mining-296503",
+     "published": "2026-11-18T04:28:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
+    },
+    {
      "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Allison Craven, Associate Professor, College of Arts, Society and Education, James Cook University"
-    },
-    {
-     "title": "Yes, men and boys should be shamed for misogyny. It’s part of how we stamp it out",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/yes-men-and-boys-should-be-shamed-for-misogyny-its-part-of-how-we-stamp-it-out-296485",
-     "published": "2026-11-18T03:21:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Steven Roberts, Professor of Sociology, School of Social Sciences, Monash University"
     },
     {
      "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
+   "published": "2026-11-18 04:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
    "published": "2026-11-18 03:25 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
    "published": "2026-11-18 03:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Yes, men and boys should be shamed for misogyny. It’s part of how we stamp it out",
-   "published": "2026-11-18 03:21 UTC"
   },
   {
    "region": "Oceania",
