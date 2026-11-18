@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T19:01:26Z",
+ "generatedAt": "2026-11-18T20:01:59Z",
  "regions": [
   {
    "key": "europe",
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": false,
+     "stale": true,
      "author": "Global Voices East Asia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
+     "stale": true,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/a-convincing-vegan-meat-alternative-needs-both-taste-and-texture-heres-how-food-scientists-manufacture-them-296038",
+     "published": "2026-11-18T19:31:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rohit Singh, Postdoctoral Researcher in Food Materials Science, West Virginia University"
+    },
+    {
      "title": "Today’s Thanksgiving holiday was invented amid the Civil War to unite a divided country",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Samira Mehta, Professor of Women and Gender Studies & Jewish Studies, University of Colorado Boulder"
-    },
-    {
-     "title": "How the US power rivalry with Russia and China is turning outer space into the next battlefront",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/how-the-us-power-rivalry-with-russia-and-china-is-turning-outer-space-into-the-next-battlefront-293414",
-     "published": "2026-11-18T13:36:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Scott Shackelford, Professor of Business Law and Ethics, Indiana University"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/oil-100-years-ago-upton-sinclair-wrote-the-great-american-anti-capitalist-epic-277491",
+     "published": "2026-11-18T19:11:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tamlyn Avery, Senior Lecturer in English Literature, Adelaide University"
+    },
+    {
+     "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-secret-lives-of-our-early-ancestors-revealed-in-fossil-teeth-from-china-294055",
+     "published": "2026-11-18T19:11:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kira Westaway, Professor in Geochronology, School of Natural Sciences, Macquarie University"
+    },
+    {
+     "title": "This year’s humpback whale migration was missing something vital – the calves and their mothers",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/this-years-humpback-whale-migration-was-missing-something-vital-the-calves-and-their-mothers-295343",
+     "published": "2026-11-18T19:11:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Susan Bengtson Nash, Professor, Planetary Health, Griffith University"
+    },
+    {
      "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Tom Harper, Lecturer in International Relations, University of East London"
-    },
-    {
-     "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/queensland-nt-economic-growth-beats-the-rest-of-the-nation-led-by-mining-296503",
-     "published": "2026-11-18T04:28:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
-    },
-    {
-     "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/xi-trump-putin-summit-when-great-powers-want-to-call-all-the-shots-what-does-it-mean-for-everyone-else-296811",
-     "published": "2026-11-18T03:25:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alexander Korolev, Associate Professor in Politics and International Relations, UNSW"
-    },
-    {
-     "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/storm-boy-at-50-south-australias-stunning-coastal-landscape-is-key-to-this-beloved-films-success-296262",
-     "published": "2026-11-18T03:23:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Allison Craven, Associate Professor, College of Arts, Society and Education, James Cook University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "URLError: <urlopen error timed out>; kept 3 cached"
   },
   {
    "id": "gv-eastern-europe",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Today’s Thanksgiving holiday was invented amid the Civil War to unite a divided country",
-   "published": "2026-11-18 13:38 UTC"
+   "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
+   "published": "2026-11-18 19:31 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "How the US power rivalry with Russia and China is turning outer space into the next battlefront",
-   "published": "2026-11-18 13:36 UTC"
+   "title": "Today’s Thanksgiving holiday was invented amid the Civil War to unite a divided country",
+   "published": "2026-11-18 13:38 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
+   "published": "2026-11-18 19:11 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
+   "published": "2026-11-18 19:11 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "This year’s humpback whale migration was missing something vital – the calves and their mothers",
+   "published": "2026-11-18 19:11 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
    "published": "2026-11-18 18:56 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Beijing has three priorities at the Shenzhen summit – a China expert explains",
    "published": "2026-11-18 11:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Queensland, NT economic growth beats the rest of the nation, led by mining",
-   "published": "2026-11-18 04:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
-   "published": "2026-11-18 03:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
-   "published": "2026-11-18 03:23 UTC"
   },
   {
    "region": "Oceania",
