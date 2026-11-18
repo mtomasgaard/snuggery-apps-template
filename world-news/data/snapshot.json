@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T03:01:25Z",
+ "generatedAt": "2026-11-18T04:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,14 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Freezing leftovers? Why some foods thaw well but others turn to goo",
+     "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/freezing-leftovers-why-some-foods-thaw-well-but-others-turn-to-goo-291982",
-     "published": "2026-11-18T00:56:52Z",
+     "link": "https://theconversation.com/xi-trump-putin-summit-when-great-powers-want-to-call-all-the-shots-what-does-it-mean-for-everyone-else-296811",
+     "published": "2026-11-18T03:25:58Z",
      "summary": "",
      "stale": false,
-     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
+     "author": "Alexander Korolev, Associate Professor in Politics and International Relations, UNSW"
+    },
+    {
+     "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/storm-boy-at-50-south-australias-stunning-coastal-landscape-is-key-to-this-beloved-films-success-296262",
+     "published": "2026-11-18T03:23:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Allison Craven, Associate Professor, College of Arts, Society and Education, James Cook University"
+    },
+    {
+     "title": "Yes, men and boys should be shamed for misogyny. It’s part of how we stamp it out",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/yes-men-and-boys-should-be-shamed-for-misogyny-its-part-of-how-we-stamp-it-out-296485",
+     "published": "2026-11-18T03:21:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Steven Roberts, Professor of Sociology, School of Social Sciences, Monash University"
     },
     {
      "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Sylvia Nissen, Senior Lecturer, Lincoln University, New Zealand"
-    },
-    {
-     "title": "Politics with Michelle Grattan: Allegra Spender on community anger and politicians’ bad behaviour",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-allegra-spender-on-community-anger-and-politicians-bad-behaviour-296820",
-     "published": "2026-11-18T00:22:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Your nature strip could be a haven for native plants and insects: new research",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-nature-strip-could-be-a-haven-for-native-plants-and-insects-new-research-293929",
-     "published": "2026-11-18T00:16:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Philippa Bell, Urban Ecologist and Research Fellow, Interdisciplinary Conservation Science Research Group, The University of Melbourne"
     },
     {
      "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Freezing leftovers? Why some foods thaw well but others turn to goo",
-   "published": "2026-11-18 00:56 UTC"
+   "title": "Xi-Trump-Putin summit: when great powers want to call all the shots, what does it mean for everyone else?",
+   "published": "2026-11-18 03:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Storm Boy at 50: South Australia’s stunning coastal landscape is key to this beloved film’s success",
+   "published": "2026-11-18 03:23 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Yes, men and boys should be shamed for misogyny. It’s part of how we stamp it out",
+   "published": "2026-11-18 03:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
    "published": "2026-11-18 00:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Allegra Spender on community anger and politicians’ bad behaviour",
-   "published": "2026-11-18 00:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your nature strip could be a haven for native plants and insects: new research",
-   "published": "2026-11-18 00:16 UTC"
   },
   {
    "region": "Oceania",
