@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T02:01:21Z",
+ "generatedAt": "2026-11-18T03:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Thanksgiving dinner is likely to be served with a side of political disagreement",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/thanksgiving-dinner-is-likely-to-be-served-with-a-side-of-political-disagreement-296642",
+     "published": "2026-11-18T01:38:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew W. Kreuter, Kahn Family Professor of Public Health, Washington University in St. Louis"
+    },
+    {
      "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Kirsten Chervenak, Research Associate for the Center for Regional Agriculture, Food, and Transformation, Chatham University"
-    },
-    {
-     "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/jensen-huang-scandal-illustrates-why-human-nature-is-cybersecuritys-weakest-link-296763",
-     "published": "2026-11-17T19:53:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vanessa Bohns, Braunstein Family Professor and Chair of Organizational Behavior, Cornell University"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
-   "published": "2026-11-17 22:23 UTC"
+   "title": "Thanksgiving dinner is likely to be served with a side of political disagreement",
+   "published": "2026-11-18 01:38 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Jensen Huang scandal illustrates why human nature is cybersecurity’s weakest link",
-   "published": "2026-11-17 19:53 UTC"
+   "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
+   "published": "2026-11-17 22:23 UTC"
   },
   {
    "region": "Americas",
