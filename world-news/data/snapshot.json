@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T08:01:24Z",
+ "generatedAt": "2026-11-18T09:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Super El Niño : quand le calendrier des semis devient un atout pour nourrir le bétail",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/super-el-nino-quand-le-calendrier-des-semis-devient-un-atout-pour-nourrir-le-betail-296716",
+     "published": "2026-11-18T08:38:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lusanda Ncisana, Lecturer, University of Limpopo"
+    },
+    {
      "title": "Burundi’s refugees are under pressure to return: why some choose silence when they do",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Nina Soudan, PhD researcher, Centre for Research on Peace and Development, KU Leuven"
-    },
-    {
-     "title": "Smarter healthcare, unequal outcomes? The risks of AI in southern Africa",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/smarter-healthcare-unequal-outcomes-the-risks-of-ai-in-southern-africa-295757",
-     "published": "2026-11-17T14:48:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rennie Naidoo, Professor of Information Systems, University of the Witwatersrand"
     },
     {
      "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Burundi’s refugees are under pressure to return: why some choose silence when they do",
-   "published": "2026-11-17 14:49 UTC"
+   "title": "Super El Niño : quand le calendrier des semis devient un atout pour nourrir le bétail",
+   "published": "2026-11-18 08:38 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Smarter healthcare, unequal outcomes? The risks of AI in southern Africa",
-   "published": "2026-11-17 14:48 UTC"
+   "title": "Burundi’s refugees are under pressure to return: why some choose silence when they do",
+   "published": "2026-11-17 14:49 UTC"
   },
   {
    "region": "Africa",
