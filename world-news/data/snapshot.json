@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T13:01:43Z",
+ "generatedAt": "2026-11-18T14:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Thanksgiving dinner is likely to be served with a side of political disagreement",
+     "title": "How the US power rivalry with Russia and China is turning outer space into the next battlefront",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/thanksgiving-dinner-is-likely-to-be-served-with-a-side-of-political-disagreement-296642",
-     "published": "2026-11-18T01:38:09Z",
+     "link": "https://theconversation.com/how-the-us-power-rivalry-with-russia-and-china-is-turning-outer-space-into-the-next-battlefront-293414",
+     "published": "2026-11-18T13:36:29Z",
      "summary": "",
      "stale": false,
-     "author": "Matthew W. Kreuter, Kahn Family Professor of Public Health, Washington University in St. Louis"
+     "author": "Scott Shackelford, Professor of Business Law and Ethics, Indiana University"
     },
     {
-     "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
+     "title": "The stunning transformation of the Southern Democratic Party, in one lifetime",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/while-the-term-friendsgiving-is-new-the-tradition-has-been-around-for-decades-found-family-and-experimental-freedom-make-this-holiday-special-296586",
-     "published": "2026-11-17T22:23:56Z",
+     "link": "https://theconversation.com/the-stunning-transformation-of-the-southern-democratic-party-in-one-lifetime-296566",
+     "published": "2026-11-18T13:35:40Z",
      "summary": "",
      "stale": false,
-     "author": "Kirsten Chervenak, Research Associate for the Center for Regional Agriculture, Food, and Transformation, Chatham University"
+     "author": "Gibbs Knotts, Professor of Political Science, Coastal Carolina University"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Thanksgiving dinner is likely to be served with a side of political disagreement",
-   "published": "2026-11-18 01:38 UTC"
+   "title": "How the US power rivalry with Russia and China is turning outer space into the next battlefront",
+   "published": "2026-11-18 13:36 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "While the term ‘Friendsgiving’ is new, the tradition has been around for decades – found family and experimental freedom make this holiday special",
-   "published": "2026-11-17 22:23 UTC"
+   "title": "The stunning transformation of the Southern Democratic Party, in one lifetime",
+   "published": "2026-11-18 13:35 UTC"
   },
   {
    "region": "Americas",
