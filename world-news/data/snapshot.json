@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T01:01:35Z",
+ "generatedAt": "2026-11-18T02:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Freezing leftovers? Why some foods thaw well but others turn to goo",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/freezing-leftovers-why-some-foods-thaw-well-but-others-turn-to-goo-291982",
+     "published": "2026-11-18T00:56:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
+    },
+    {
      "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Philippa Bell, Urban Ecologist and Research Fellow, Interdisciplinary Conservation Science Research Group, The University of Melbourne"
-    },
-    {
-     "title": "Why does the same perfume smell different on different people? ‘Skin chemistry’ explained",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-does-the-same-perfume-smell-different-on-different-people-skin-chemistry-explained-295254",
-     "published": "2026-11-17T23:54:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Magdalena Wajrak, Senior Lecturer in Chemistry, Edith Cowan University"
     },
     {
      "title": "In Antarctica’s ice-free areas, even footprints can damage rare microscopic ecosystems",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Freezing leftovers? Why some foods thaw well but others turn to goo",
+   "published": "2026-11-18 00:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The election was an ‘MMP special’ – now’s the time to tune the system, not scapegoat it",
    "published": "2026-11-18 00:45 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Your nature strip could be a haven for native plants and insects: new research",
    "published": "2026-11-18 00:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why does the same perfume smell different on different people? ‘Skin chemistry’ explained",
-   "published": "2026-11-17 23:54 UTC"
   },
   {
    "region": "Oceania",
