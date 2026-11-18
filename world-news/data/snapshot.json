@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T11:01:32Z",
+ "generatedAt": "2026-11-18T12:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/18/who-will-respond-jailed-hong-kong-pro-democracy-activist-joshua-wong-fears-being-forgotten-amid-10-year-sentence/",
+     "published": "2026-11-18T11:48:15Z",
+     "summary": "The 30-year-old pro-democracy activist has spent almost six years behind bars and was set for release in January 2026, until authorities charged him with conspiring to foreign collusion last year.",
+     "stale": false,
+     "author": "Hong Kong Free Press"
+    },
+    {
      "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -381,16 +391,6 @@
      "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries and connect readers across borders through cultural exchange.",
      "stale": false,
      "author": "Sangita Swechcha"
-    },
-    {
-     "title": "What comes after networked authoritarianism?",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/05/what-comes-after-networked-authoritarianism/",
-     "published": "2026-11-05T16:17:00Z",
-     "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
-     "stale": false,
-     "author": "Rebecca MacKinnon"
     },
     {
      "title": "Afghan children face narrowing path to education, UN agencies report",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
+   "published": "2026-11-18 11:48 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
    "published": "2026-11-17 06:55 UTC"
   },
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "The dreamer who wants the world to read Nepali literature",
    "published": "2026-11-09 05:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "What comes after networked authoritarianism?",
-   "published": "2026-11-05 16:17 UTC"
   },
   {
    "region": "Asia",
