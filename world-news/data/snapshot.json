@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T22:01:27Z",
+ "generatedAt": "2026-11-18T23:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "AI helps uncover critical flaw in ubiquitous internet software",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/ai-helps-uncover-critical-flaw-in-ubiquitous-internet-software-296930",
+     "published": "2026-11-18T21:43:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
+    },
+    {
      "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Smitha Rao, Associate Professor of Social Work, The Ohio State University"
-    },
-    {
-     "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/a-convincing-vegan-meat-alternative-needs-both-taste-and-texture-heres-how-food-scientists-manufacture-them-296038",
-     "published": "2026-11-18T19:31:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rohit Singh, Postdoctoral Researcher in Food Materials Science, West Virginia University"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/westpacs-new-hazard-risk-reports-should-sound-a-warning-for-nz-homeowners-296695",
+     "published": "2026-11-18T22:39:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rohan Havelock, Lecturer, Faculty of Law, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
      "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -441,7 +451,7 @@
     {
      "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/the-secret-lives-of-our-early-ancestors-revealed-in-fossil-teeth-from-china-294055",
      "published": "2026-11-18T19:11:19Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
-    },
-    {
-     "title": "Beijing has three priorities at the Shenzhen summit – a China expert explains",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/beijing-has-three-priorities-at-the-shenzhen-summit-a-china-expert-explains-296734",
-     "published": "2026-11-18T11:39:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tom Harper, Lecturer in International Relations, University of East London"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
-   "published": "2026-11-18 20:12 UTC"
+   "title": "AI helps uncover critical flaw in ubiquitous internet software",
+   "published": "2026-11-18 21:43 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
-   "published": "2026-11-18 19:31 UTC"
+   "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
+   "published": "2026-11-18 20:12 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
+   "published": "2026-11-18 22:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
    "published": "2026-11-18 19:11 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
    "published": "2026-11-18 18:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Beijing has three priorities at the Shenzhen summit – a China expert explains",
-   "published": "2026-11-18 11:39 UTC"
   },
   {
    "region": "Oceania",
