@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-17T23:01:35Z",
+ "generatedAt": "2026-11-18T00:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -459,10 +459,10 @@
      "author": "Angela McGaughran, Senior Lecturer in Population Genomics, University of Waikato"
     },
     {
-     "title": "Ghostwriters for celebrities like Dustin Hoffman are now selling points, not secrets. Is AI a factor?",
+     "title": "Celebrity ghostwriters are now selling points, not secrets. Is AI a factor?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/ghostwriters-for-celebrities-like-dustin-hoffman-are-now-selling-points-not-secrets-is-ai-a-factor-296514",
+     "link": "https://theconversation.com/celebrity-ghostwriters-are-now-selling-points-not-secrets-is-ai-a-factor-296514",
      "published": "2026-11-17T19:09:29Z",
      "summary": "",
      "stale": false,
@@ -931,7 +931,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Ghostwriters for celebrities like Dustin Hoffman are now selling points, not secrets. Is AI a factor?",
+   "title": "Celebrity ghostwriters are now selling points, not secrets. Is AI a factor?",
    "published": "2026-11-17 19:09 UTC"
   },
   {
