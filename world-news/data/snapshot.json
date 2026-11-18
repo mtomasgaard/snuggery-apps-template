@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T14:18:21Z",
+ "generatedAt": "2026-11-18T15:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Dozens more children killed in Yemen amid escalating hostilities",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168830",
+     "published": "2026-11-18T12:00:00Z",
+     "summary": "The UN child rights agency, UNICEF, on Wednesday called for warring parties in Yemen to protect children as renewed conflict between Houthi rebels and Government forces approaches the three-month mark.",
+     "stale": false
+    },
+    {
      "title": "Winter rains deepen Gaza crisis amid restricted access and aid cuts",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -296,15 +305,6 @@
      "summary": "From military courts to closed investigations, Israeli law enforces two systems to maintain an apartheid, and international accountability is being dismantled by sanctions against the courts that uphold international…",
      "stale": false,
      "author": "Walid El Houri"
-    },
-    {
-     "title": "Nadia Murad: ‘Day by day, I took my story back’",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168801",
-     "published": "2026-11-15T12:00:00Z",
-     "summary": "Nobel Peace Prize laureate Nadia Murad has spent years telling the world about the atrocities committed against her and the Yazidi community by militants from the terrorist group, ISIL.",
-     "stale": false
     },
     {
      "title": "What comes after networked authoritarianism?",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Dozens more children killed in Yemen amid escalating hostilities",
+   "published": "2026-11-18 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Winter rains deepen Gaza crisis amid restricted access and aid cuts",
    "published": "2026-11-17 12:00 UTC"
   },
@@ -837,12 +843,6 @@
    "source": "Global Voices",
    "title": "Making injustice legal: How Israeli law legitimizes apartheid, genocide and impunity",
    "published": "2026-11-16 00:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Nadia Murad: ‘Day by day, I took my story back’",
-   "published": "2026-11-15 12:00 UTC"
   },
   {
    "region": "Middle East",
