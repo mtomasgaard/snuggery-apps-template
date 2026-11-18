@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T20:01:59Z",
+ "generatedAt": "2026-11-18T21:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -8,21 +8,21 @@
    "stale": false,
    "items": [
     {
+     "title": "Patients running out of options as antibiotics stop working against common infections",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168832",
+     "published": "2026-11-18T12:00:00Z",
+     "summary": "Common bacteria are becoming highly resistant to front-line and even “last-resort” antibiotics, the UN World Health Organization (WHO) said on Wednesday, warning that the situation today is worse than it was in 2019.",
+     "stale": false
+    },
+    {
      "title": "First Person: Managing risk on Ukraine’s frontline",
      "source": "UN News",
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168807",
      "published": "2026-11-15T12:00:00Z",
      "summary": "Humanitarian workers providing support to communities on the frontline of the war between Ukraine and Russia must balance remaining close to those in need with the heightened risks of operating in a conflict zone…",
-     "stale": false
-    },
-    {
-     "title": "‘Here, you can eat until you’re full’: Oleshky evacuees savour first proper meals in years",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168803",
-     "published": "2026-11-13T12:00:00Z",
-     "summary": "In a quiet hospital corridor in Kyiv, staff and volunteers push carts carrying steaming pots of chicken soup, bread and buckwheat porridge to patients recently evacuated from Russian-occupied Oleshky, in Ukraine’s…",
      "stale": false
     },
     {
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": true,
+     "stale": false,
      "author": "Global Voices East Asia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": true,
+     "stale": false,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/floridas-flooding-deja-vu-is-a-sign-of-things-to-come-so-who-is-most-at-risk-and-how-can-they-prepare-297006",
+     "published": "2026-11-18T20:12:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Smitha Rao, Associate Professor of Social Work, The Ohio State University"
+    },
+    {
      "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Rohit Singh, Postdoctoral Researcher in Food Materials Science, West Virginia University"
-    },
-    {
-     "title": "Today’s Thanksgiving holiday was invented amid the Civil War to unite a divided country",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/todays-thanksgiving-holiday-was-invented-amid-the-civil-war-to-unite-a-divided-country-289016",
-     "published": "2026-11-18T13:38:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Samira Mehta, Professor of Women and Gender Studies & Jewish Studies, University of Colorado Boulder"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -673,14 +673,14 @@
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "First Person: Managing risk on Ukraine’s frontline",
-   "published": "2026-11-15 12:00 UTC"
+   "title": "Patients running out of options as antibiotics stop working against common infections",
+   "published": "2026-11-18 12:00 UTC"
   },
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "‘Here, you can eat until you’re full’: Oleshky evacuees savour first proper meals in years",
-   "published": "2026-11-13 12:00 UTC"
+   "title": "First Person: Managing risk on Ukraine’s frontline",
+   "published": "2026-11-15 12:00 UTC"
   },
   {
    "region": "Europe",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
-   "published": "2026-11-18 19:31 UTC"
+   "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
+   "published": "2026-11-18 20:12 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Today’s Thanksgiving holiday was invented amid the Civil War to unite a divided country",
-   "published": "2026-11-18 13:38 UTC"
+   "title": "A convincing vegan meat alternative needs both taste and texture – here’s how food scientists manufacture them",
+   "published": "2026-11-18 19:31 UTC"
   },
   {
    "region": "Americas",
