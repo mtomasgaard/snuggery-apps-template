@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T21:01:28Z",
+ "generatedAt": "2026-11-19T22:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-pay-equity-law-has-been-found-to-breach-womens-rights-how-can-it-stand-297057",
+     "published": "2026-11-19T21:25:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
+    },
+    {
      "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Chris F. Wright, Professor of Work and Labour Market Policy, University of Sydney"
-    },
-    {
-     "title": "Friday essay: nostalgia or neoliberal collapse? – John Birmingham investigates Pauline Hanson’s appeal",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/friday-essay-nostalgia-or-neoliberal-collapse-john-birmingham-investigates-pauline-hansons-appeal-295662",
-     "published": "2026-11-19T19:05:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
     },
     {
      "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
+   "published": "2026-11-19 21:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
    "published": "2026-11-19 19:05 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "With AI blamed for mass layoffs, here’s how we can ensure workers get a fairer go",
-   "published": "2026-11-19 19:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Friday essay: nostalgia or neoliberal collapse? – John Birmingham investigates Pauline Hanson’s appeal",
    "published": "2026-11-19 19:05 UTC"
   },
   {
