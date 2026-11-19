@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T07:01:44Z",
+ "generatedAt": "2026-11-19T08:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-almost-a-year-after-bondi-is-our-social-cohesion-a-boiling-frog-296272",
+     "published": "2026-11-19T07:08:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Peyman Akhgar, Lecturer in Architecture, Griffith University"
-    },
-    {
-     "title": "Seven major tech incidents in a week – what’s going on, and what can we do?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/seven-major-tech-incidents-in-a-week-whats-going-on-and-what-can-we-do-296918",
-     "published": "2026-11-19T03:44:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
     },
     {
      "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
+   "published": "2026-11-19 07:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
    "published": "2026-11-19 03:55 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Second-hand solar, tiny houses, no bills – we found how Australians are going off-grid and if it’s worth it",
    "published": "2026-11-19 03:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Seven major tech incidents in a week – what’s going on, and what can we do?",
-   "published": "2026-11-19 03:44 UTC"
   },
   {
    "region": "Oceania",
