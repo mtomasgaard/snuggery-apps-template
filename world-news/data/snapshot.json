@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-18T23:01:44Z",
+ "generatedAt": "2026-11-19T00:01:39Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "In Moldova, teens are learning about democracy and elections through an app",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/19/in-moldova-teens-are-learning-about-democracy-and-elections-through-an-app/",
+     "published": "2026-11-19T00:00:14Z",
+     "summary": "VotEDU started off as a civic-education project to help young people understand democracy before they vote for the first time.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Patients running out of options as antibiotics stop working against common infections",
      "source": "UN News",
@@ -54,16 +64,6 @@
      "summary": "While Montenegro works to align its waste management with EU directives, ordinary citizens are taking practical steps to improve the situation now.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/11/06/global-voices-condemns-the-attacks-on-albanian-fact-checking-service-faktoje/",
-     "published": "2026-11-06T01:38:56Z",
-     "summary": "We stand in solidarity with Faktoje following a series of coordinated attacks that have weaponized its transparent financial data to undermine its vital work exposing misinformation around local protests.",
-     "stale": false,
-     "author": "Global Voices"
     },
     {
      "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
+     "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/victoria-has-long-dominated-the-afl-draft-landscape-other-regions-are-catching-up-295548",
+     "published": "2026-11-18T23:20:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paul Larkin, Senior Researcher in Youth Athlete Development, Victoria University"
+    },
+    {
+     "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/westpacs-new-hazard-risk-reports-should-sound-a-warning-for-nz-homeowners-296695",
      "published": "2026-11-18T22:39:57Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Susan Bengtson Nash, Professor, Planetary Health, Griffith University"
-    },
-    {
-     "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-last-bird-to-go-extinct-in-nz-has-lessons-for-saving-other-species-new-study-292112",
-     "published": "2026-11-18T18:56:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "In Moldova, teens are learning about democracy and elections through an app",
+   "published": "2026-11-19 00:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Patients running out of options as antibiotics stop working against common infections",
    "published": "2026-11-18 12:00 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "How people in Montenegro are making their country cleaner",
    "published": "2026-11-07 08:09 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
-   "published": "2026-11-06 01:38 UTC"
   },
   {
    "region": "Europe",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
+   "published": "2026-11-18 23:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
    "published": "2026-11-18 22:39 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "This year’s humpback whale migration was missing something vital – the calves and their mothers",
    "published": "2026-11-18 19:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The last bird to go extinct in NZ has lessons for saving other species – new study",
-   "published": "2026-11-18 18:56 UTC"
   },
   {
    "region": "Oceania",
