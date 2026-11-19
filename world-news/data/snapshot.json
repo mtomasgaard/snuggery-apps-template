@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T14:01:41Z",
+ "generatedAt": "2026-11-19T14:31:19Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Des soins de santé plus intelligents, mais des résultats inégaux ? Les risques de l'IA en Afrique australe",
+     "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/des-soins-de-sante-plus-intelligents-mais-des-resultats-inegaux-les-risques-de-lia-en-afrique-australe-296722",
-     "published": "2026-11-19T09:52:50Z",
+     "link": "https://theconversation.com/african-glamour-the-bold-women-who-styled-wrote-and-read-drum-magazine-294183",
+     "published": "2026-11-19T13:44:13Z",
      "summary": "",
      "stale": false,
-     "author": "Rennie Naidoo, Professor of Information Systems, University of the Witwatersrand"
+     "author": "Wanjirũ G. Mbure, Associate Professor of English and Film & Media Studies and Senior Associate Dean, William & Mary"
     },
     {
-     "title": "Curious Kids: What if the Earth stopped spinning?",
+     "title": "South Africa recycles only about one-fifth of its plastic waste. What’s holding it back?",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/curious-kids-what-if-the-earth-stopped-spinning-290873",
-     "published": "2026-11-18T13:39:38Z",
+     "link": "https://theconversation.com/south-africa-recycles-only-about-one-fifth-of-its-plastic-waste-whats-holding-it-back-294328",
+     "published": "2026-11-19T13:44:02Z",
      "summary": "",
      "stale": false,
-     "author": "Nikhita Ramkilowan, Astronomer and the Project Coordinator for the Transient Array Radio Telescope (TART) Africa project, Rhodes University"
+     "author": "Stephanie Giselle Nicolaides, PhD Candidate, University of the Western Cape"
     },
     {
      "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Des soins de santé plus intelligents, mais des résultats inégaux ? Les risques de l'IA en Afrique australe",
-   "published": "2026-11-19 09:52 UTC"
+   "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
+   "published": "2026-11-19 13:44 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Curious Kids: What if the Earth stopped spinning?",
-   "published": "2026-11-18 13:39 UTC"
+   "title": "South Africa recycles only about one-fifth of its plastic waste. What’s holding it back?",
+   "published": "2026-11-19 13:44 UTC"
   },
   {
    "region": "Africa",
