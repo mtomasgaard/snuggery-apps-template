@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T01:01:40Z",
+ "generatedAt": "2026-11-19T02:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Coalition takes primary vote lead in a federal Morgan poll",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/coalition-takes-primary-vote-lead-in-a-federal-morgan-poll-296805",
+     "published": "2026-11-19T00:59:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
+     "title": "An attempt to tax US billionaires has failed. It says a lot about wealth and power in America",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/an-attempt-to-tax-us-billionaires-has-failed-it-says-a-lot-about-wealth-and-power-in-america-296594",
+     "published": "2026-11-19T00:52:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Henry Maher, Lecturer in Politics, Department of Government and International Relations, University of Sydney"
+    },
+    {
      "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,16 +469,6 @@
      "author": "Rohan Havelock, Lecturer, Faculty of Law, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/oil-100-years-ago-upton-sinclair-wrote-the-great-american-anti-capitalist-epic-277491",
-     "published": "2026-11-18T19:11:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tamlyn Avery, Senior Lecturer in English Literature, Adelaide University"
-    },
-    {
      "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Kira Westaway, Professor in Geochronology, School of Natural Sciences, Macquarie University"
-    },
-    {
-     "title": "This year’s humpback whale migration was missing something vital – the calves and their mothers",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/this-years-humpback-whale-migration-was-missing-something-vital-the-calves-and-their-mothers-295343",
-     "published": "2026-11-18T19:11:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Susan Bengtson Nash, Professor, Planetary Health, Griffith University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Coalition takes primary vote lead in a federal Morgan poll",
+   "published": "2026-11-19 00:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "An attempt to tax US billionaires has failed. It says a lot about wealth and power in America",
+   "published": "2026-11-19 00:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
    "published": "2026-11-18 23:20 UTC"
   },
@@ -925,19 +937,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Oil! – 100 years ago, Upton Sinclair wrote the great American anti-capitalist epic",
-   "published": "2026-11-18 19:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
-   "published": "2026-11-18 19:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "This year’s humpback whale migration was missing something vital – the calves and their mothers",
    "published": "2026-11-18 19:11 UTC"
   },
   {
