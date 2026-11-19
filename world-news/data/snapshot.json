@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T13:01:28Z",
+ "generatedAt": "2026-11-19T14:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "AI helps uncover critical flaw in ubiquitous internet software",
+     "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/ai-helps-uncover-critical-flaw-in-ubiquitous-internet-software-296930",
-     "published": "2026-11-18T21:43:47Z",
+     "link": "https://theconversation.com/us-and-iran-once-practiced-diplomacy-through-archaeology-that-legacy-need-not-lie-in-ruins-292886",
+     "published": "2026-11-19T13:42:48Z",
      "summary": "",
      "stale": false,
-     "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
+     "author": "Kyle Olson, Lecturer in Archaeology, Washington University in St. Louis"
     },
     {
-     "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
+     "title": "Nvidia isn’t the first company to dump a misbehaving CEO – history shows it’s in the interest of corporate boards to act",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/floridas-flooding-deja-vu-is-a-sign-of-things-to-come-so-who-is-most-at-risk-and-how-can-they-prepare-297006",
-     "published": "2026-11-18T20:12:23Z",
+     "link": "https://theconversation.com/nvidia-isnt-the-first-company-to-dump-a-misbehaving-ceo-history-shows-its-in-the-interest-of-corporate-boards-to-act-296800",
+     "published": "2026-11-19T13:42:38Z",
      "summary": "",
      "stale": false,
-     "author": "Smitha Rao, Associate Professor of Social Work, The Ohio State University"
+     "author": "Michael Nalick, Assistant Professor of Management, University of Denver"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "AI helps uncover critical flaw in ubiquitous internet software",
-   "published": "2026-11-18 21:43 UTC"
+   "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
+   "published": "2026-11-19 13:42 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Florida’s flooding déjà vu is a sign of things to come – so, who is most at risk and how can they prepare?",
-   "published": "2026-11-18 20:12 UTC"
+   "title": "Nvidia isn’t the first company to dump a misbehaving CEO – history shows it’s in the interest of corporate boards to act",
+   "published": "2026-11-19 13:42 UTC"
   },
   {
    "region": "Americas",
