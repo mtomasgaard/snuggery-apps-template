@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T19:01:32Z",
+ "generatedAt": "2026-11-19T20:01:47Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Myanmar genocide ruling is a watershed moment in international justice – with huge ramifications for other cases",
+     "title": "A doctor’s guide to surviving — and enjoying — holiday feasting while on GLP-1 medication",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/myanmar-genocide-ruling-is-a-watershed-moment-in-international-justice-with-huge-ramifications-for-other-cases-296987",
-     "published": "2026-11-19T17:06:27Z",
+     "link": "https://theconversation.com/a-doctors-guide-to-surviving-and-enjoying-holiday-feasting-while-on-glp-1-medication-295301",
+     "published": "2026-11-19T19:09:59Z",
      "summary": "",
      "stale": false,
-     "author": "Max Pensky, Co-Director, Institute for Genocide and Mass Atrocity Prevention, Binghamton University, State University of New York"
+     "author": "Reed Berger-Fleishman, Associate Clinical Professor of Medicine and Surgery, University of Illinois Chicago"
     },
     {
-     "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
+     "title": "Xi-Putin-Trump summit was heavy on symbolism, light on substance – and not exactly a Yalta II",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/us-and-iran-once-practiced-diplomacy-through-archaeology-that-legacy-need-not-lie-in-ruins-292886",
-     "published": "2026-11-19T13:42:48Z",
+     "link": "https://theconversation.com/xi-putin-trump-summit-was-heavy-on-symbolism-light-on-substance-and-not-exactly-a-yalta-ii-297087",
+     "published": "2026-11-19T18:43:22Z",
      "summary": "",
      "stale": false,
-     "author": "Kyle Olson, Lecturer in Archaeology, Washington University in St. Louis"
+     "author": "Rana Mitter, Professor of U.S.-Asia Relations, Harvard Kennedy School"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
+     "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/rocky-at-50-the-most-iconic-sports-film-of-all-time-taught-us-winning-isnt-everything-276876",
+     "published": "2026-11-19T19:05:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lisa J. Hackett, Senior Lecturer, Cultural History, University of New England"
+    },
+    {
+     "title": "With AI blamed for mass layoffs, here’s how we can ensure workers get a fairer go",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/with-ai-blamed-for-mass-layoffs-heres-how-we-can-ensure-workers-get-a-fairer-go-296948",
+     "published": "2026-11-19T19:05:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Chris F. Wright, Professor of Work and Labour Market Policy, University of Sydney"
+    },
+    {
+     "title": "Friday essay: nostalgia or neoliberal collapse? – John Birmingham investigates Pauline Hanson’s appeal",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/friday-essay-nostalgia-or-neoliberal-collapse-john-birmingham-investigates-pauline-hansons-appeal-295662",
+     "published": "2026-11-19T19:05:04Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
+    },
+    {
+     "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/new-cancer-frontiers-could-covid-vaccines-help-make-treatments-more-effective-290627",
      "published": "2026-11-19T18:20:16Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Martin Wählisch, Associate Professor in the School of Government, University of Birmingham"
-    },
-    {
-     "title": "Cop31: the world is heading for climate ‘overshoot’ – the UN summit must start planning for what comes next",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/cop31-the-world-is-heading-for-climate-overshoot-the-un-summit-must-start-planning-for-what-comes-next-296769",
-     "published": "2026-11-19T12:21:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael Jacobs, Professor of Political Economy, University of Sheffield"
-    },
-    {
-     "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-almost-a-year-after-bondi-is-our-social-cohesion-a-boiling-frog-296272",
-     "published": "2026-11-19T07:08:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/fossil-fuel-lobbyists-are-trying-to-derail-climate-action-once-again-at-cop31-can-they-be-stopped-294668",
-     "published": "2026-11-19T03:55:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christian Downie, Professor of Political Science, School of Regulation and Global Governance, Australian National University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Myanmar genocide ruling is a watershed moment in international justice – with huge ramifications for other cases",
-   "published": "2026-11-19 17:06 UTC"
+   "title": "A doctor’s guide to surviving — and enjoying — holiday feasting while on GLP-1 medication",
+   "published": "2026-11-19 19:09 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
-   "published": "2026-11-19 13:42 UTC"
+   "title": "Xi-Putin-Trump summit was heavy on symbolism, light on substance – and not exactly a Yalta II",
+   "published": "2026-11-19 18:43 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
+   "published": "2026-11-19 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "With AI blamed for mass layoffs, here’s how we can ensure workers get a fairer go",
+   "published": "2026-11-19 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Friday essay: nostalgia or neoliberal collapse? – John Birmingham investigates Pauline Hanson’s appeal",
+   "published": "2026-11-19 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
    "published": "2026-11-19 18:20 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Shenzhen summit shows the power the US, China and Russia wield – and their limits",
    "published": "2026-11-19 15:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Cop31: the world is heading for climate ‘overshoot’ – the UN summit must start planning for what comes next",
-   "published": "2026-11-19 12:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
-   "published": "2026-11-19 07:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
-   "published": "2026-11-19 03:55 UTC"
   },
   {
    "region": "Oceania",
