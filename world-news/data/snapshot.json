@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T18:01:28Z",
+ "generatedAt": "2026-11-19T19:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/new-cancer-frontiers-could-covid-vaccines-help-make-treatments-more-effective-290627",
+     "published": "2026-11-19T18:20:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Fraser, Dean, Faculty of Medical and Health Sciences, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "Shenzhen summit shows the power the US, China and Russia wield – and their limits",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/shenzhen-summit-shows-the-power-the-us-china-and-russia-wield-and-their-limits-296866",
+     "published": "2026-11-19T15:31:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Martin Wählisch, Associate Professor in the School of Government, University of Birmingham"
+    },
+    {
+     "title": "Cop31: the world is heading for climate ‘overshoot’ – the UN summit must start planning for what comes next",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/cop31-the-world-is-heading-for-climate-overshoot-the-un-summit-must-start-planning-for-what-comes-next-296769",
+     "published": "2026-11-19T12:21:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael Jacobs, Professor of Political Economy, University of Sheffield"
+    },
+    {
      "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Christian Downie, Professor of Political Science, School of Regulation and Global Governance, Australian National University"
-    },
-    {
-     "title": "Second-hand solar, tiny houses, no bills – we found how Australians are going off-grid and if it’s worth it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/second-hand-solar-tiny-houses-no-bills-we-found-how-australians-are-going-off-grid-and-if-its-worth-it-296397",
-     "published": "2026-11-19T03:51:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peyman Akhgar, Lecturer in Architecture, Griffith University"
-    },
-    {
-     "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/westpacs-new-hazard-risk-reports-should-sound-a-warning-for-nz-homeowners-296695",
-     "published": "2026-11-18T22:39:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rohan Havelock, Lecturer, Faculty of Law, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-secret-lives-of-our-early-ancestors-revealed-in-fossil-teeth-from-china-294055",
-     "published": "2026-11-18T19:11:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kira Westaway, Professor in Geochronology, School of Natural Sciences, Macquarie University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
+   "published": "2026-11-19 18:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Shenzhen summit shows the power the US, China and Russia wield – and their limits",
+   "published": "2026-11-19 15:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Cop31: the world is heading for climate ‘overshoot’ – the UN summit must start planning for what comes next",
+   "published": "2026-11-19 12:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grattan on Friday: Almost a year after Bondi, is our social cohesion a boiling frog?",
    "published": "2026-11-19 07:08 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
    "published": "2026-11-19 03:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Second-hand solar, tiny houses, no bills – we found how Australians are going off-grid and if it’s worth it",
-   "published": "2026-11-19 03:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
-   "published": "2026-11-18 22:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The secret lives of our early ancestors revealed in fossil teeth from China",
-   "published": "2026-11-18 19:11 UTC"
   },
   {
    "region": "Oceania",
