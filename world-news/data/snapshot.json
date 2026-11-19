@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T03:01:23Z",
+ "generatedAt": "2026-11-19T04:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "When’s a new organ not really new? Two anatomists explain",
+     "title": "Why using a chatbot as your lawyer is a risky move – and ties up our court system",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/whens-a-new-organ-not-really-new-two-anatomists-explain-292684",
-     "published": "2026-11-19T01:53:33Z",
+     "link": "https://theconversation.com/why-using-a-chatbot-as-your-lawyer-is-a-risky-move-and-ties-up-our-court-system-296255",
+     "published": "2026-11-19T03:21:10Z",
      "summary": "",
      "stale": false,
-     "author": "Amanda Meyer, Senior Lecturer, Anatomy and Pathology in the College of Medicine and Dentistry, James Cook University"
+     "author": "Felicity Bell, Deputy Director, Centre for the Future of the Legal Profession, UNSW"
     },
     {
-     "title": "Coalition takes primary vote lead in a federal Morgan poll",
+     "title": "This sneaky CAPTCHA scam tricks you into installing malware. Here’s what you need to know",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/coalition-takes-primary-vote-lead-in-a-federal-morgan-poll-296805",
-     "published": "2026-11-19T00:59:30Z",
+     "link": "https://theconversation.com/this-sneaky-captcha-scam-tricks-you-into-installing-malware-heres-what-you-need-to-know-296919",
+     "published": "2026-11-19T03:14:20Z",
      "summary": "",
      "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+     "author": "Abu Barkat ullah (Barkat), Associate Professor of Cyber Security, University of Canberra"
     },
     {
-     "title": "An attempt to tax US billionaires has failed. It says a lot about wealth and power in America",
+     "title": "How can Cricket Australia move on from its greatest controversy? The ‘underarm incident’ may offer lessons",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/an-attempt-to-tax-us-billionaires-has-failed-it-says-a-lot-about-wealth-and-power-in-america-296594",
-     "published": "2026-11-19T00:52:10Z",
+     "link": "https://theconversation.com/how-can-cricket-australia-move-on-from-its-greatest-controversy-the-underarm-incident-may-offer-lessons-297037",
+     "published": "2026-11-19T02:49:07Z",
      "summary": "",
      "stale": false,
-     "author": "Henry Maher, Lecturer in Politics, Department of Government and International Relations, University of Sydney"
+     "author": "Steve Georgakis, Senior Lecturer of Pedagogy and Sports Studies, University of Sydney"
     },
     {
      "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "When’s a new organ not really new? Two anatomists explain",
-   "published": "2026-11-19 01:53 UTC"
+   "title": "Why using a chatbot as your lawyer is a risky move – and ties up our court system",
+   "published": "2026-11-19 03:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Coalition takes primary vote lead in a federal Morgan poll",
-   "published": "2026-11-19 00:59 UTC"
+   "title": "This sneaky CAPTCHA scam tricks you into installing malware. Here’s what you need to know",
+   "published": "2026-11-19 03:14 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "An attempt to tax US billionaires has failed. It says a lot about wealth and power in America",
-   "published": "2026-11-19 00:52 UTC"
+   "title": "How can Cricket Australia move on from its greatest controversy? The ‘underarm incident’ may offer lessons",
+   "published": "2026-11-19 02:49 UTC"
   },
   {
    "region": "Oceania",
