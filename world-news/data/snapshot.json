@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T22:01:29Z",
+ "generatedAt": "2026-11-19T23:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
+     "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/we-found-a-seaweed-that-hadnt-been-spotted-in-90-years-and-discovered-vast-underwater-forests-291975",
+     "published": "2026-11-19T22:30:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Rees, Honorary Fellow and Research Scientist in Marine Ecology, University of Wollongong"
+    },
+    {
+     "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-pay-equity-law-has-been-found-to-breach-womens-rights-how-can-it-stand-297057",
      "published": "2026-11-19T21:25:55Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "John Fraser, Dean, Faculty of Medical and Health Sciences, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Shenzhen summit shows the power the US, China and Russia wield – and their limits",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/shenzhen-summit-shows-the-power-the-us-china-and-russia-wield-and-their-limits-296866",
-     "published": "2026-11-19T15:31:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Martin Wählisch, Associate Professor in the School of Government, University of Birmingham"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
+   "published": "2026-11-19 22:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
    "published": "2026-11-19 21:25 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
    "published": "2026-11-19 18:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Shenzhen summit shows the power the US, China and Russia wield – and their limits",
-   "published": "2026-11-19 15:31 UTC"
   },
   {
    "region": "Oceania",
