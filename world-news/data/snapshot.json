@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T04:01:24Z",
+ "generatedAt": "2026-11-19T05:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Why using a chatbot as your lawyer is a risky move – and ties up our court system",
+     "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-using-a-chatbot-as-your-lawyer-is-a-risky-move-and-ties-up-our-court-system-296255",
-     "published": "2026-11-19T03:21:10Z",
+     "link": "https://theconversation.com/fossil-fuel-lobbyists-are-trying-to-derail-climate-action-once-again-at-cop31-can-they-be-stopped-294668",
+     "published": "2026-11-19T03:55:07Z",
      "summary": "",
      "stale": false,
-     "author": "Felicity Bell, Deputy Director, Centre for the Future of the Legal Profession, UNSW"
+     "author": "Christian Downie, Professor of Political Science, School of Regulation and Global Governance, Australian National University"
     },
     {
-     "title": "This sneaky CAPTCHA scam tricks you into installing malware. Here’s what you need to know",
+     "title": "Second-hand solar, tiny houses, no bills – we found how Australians are going off-grid and if it’s worth it",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/this-sneaky-captcha-scam-tricks-you-into-installing-malware-heres-what-you-need-to-know-296919",
-     "published": "2026-11-19T03:14:20Z",
+     "link": "https://theconversation.com/second-hand-solar-tiny-houses-no-bills-we-found-how-australians-are-going-off-grid-and-if-its-worth-it-296397",
+     "published": "2026-11-19T03:51:27Z",
      "summary": "",
      "stale": false,
-     "author": "Abu Barkat ullah (Barkat), Associate Professor of Cyber Security, University of Canberra"
+     "author": "Peyman Akhgar, Lecturer in Architecture, Griffith University"
     },
     {
-     "title": "How can Cricket Australia move on from its greatest controversy? The ‘underarm incident’ may offer lessons",
+     "title": "Seven major tech incidents in a week – what’s going on, and what can we do?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/how-can-cricket-australia-move-on-from-its-greatest-controversy-the-underarm-incident-may-offer-lessons-297037",
-     "published": "2026-11-19T02:49:07Z",
+     "link": "https://theconversation.com/seven-major-tech-incidents-in-a-week-whats-going-on-and-what-can-we-do-296918",
+     "published": "2026-11-19T03:44:19Z",
      "summary": "",
      "stale": false,
-     "author": "Steve Georgakis, Senior Lecturer of Pedagogy and Sports Studies, University of Sydney"
+     "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
     },
     {
      "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why using a chatbot as your lawyer is a risky move – and ties up our court system",
-   "published": "2026-11-19 03:21 UTC"
+   "title": "Fossil fuel lobbyists are trying to derail climate action once again at COP31. Can they be stopped?",
+   "published": "2026-11-19 03:55 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "This sneaky CAPTCHA scam tricks you into installing malware. Here’s what you need to know",
-   "published": "2026-11-19 03:14 UTC"
+   "title": "Second-hand solar, tiny houses, no bills – we found how Australians are going off-grid and if it’s worth it",
+   "published": "2026-11-19 03:51 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How can Cricket Australia move on from its greatest controversy? The ‘underarm incident’ may offer lessons",
-   "published": "2026-11-19 02:49 UTC"
+   "title": "Seven major tech incidents in a week – what’s going on, and what can we do?",
+   "published": "2026-11-19 03:44 UTC"
   },
   {
    "region": "Oceania",
