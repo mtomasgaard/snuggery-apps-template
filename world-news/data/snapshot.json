@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T02:01:40Z",
+ "generatedAt": "2026-11-19T03:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "When’s a new organ not really new? Two anatomists explain",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/whens-a-new-organ-not-really-new-two-anatomists-explain-292684",
+     "published": "2026-11-19T01:53:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amanda Meyer, Senior Lecturer, Anatomy and Pathology in the College of Medicine and Dentistry, James Cook University"
+    },
+    {
      "title": "Coalition takes primary vote lead in a federal Morgan poll",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Henry Maher, Lecturer in Politics, Department of Government and International Relations, University of Sydney"
-    },
-    {
-     "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victoria-has-long-dominated-the-afl-draft-landscape-other-regions-are-catching-up-295548",
-     "published": "2026-11-18T23:20:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Paul Larkin, Senior Researcher in Youth Athlete Development, Victoria University"
     },
     {
      "title": "Westpac’s new hazard risk reports should sound a warning for NZ homeowners",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "When’s a new organ not really new? Two anatomists explain",
+   "published": "2026-11-19 01:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Coalition takes primary vote lead in a federal Morgan poll",
    "published": "2026-11-19 00:59 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "An attempt to tax US billionaires has failed. It says a lot about wealth and power in America",
    "published": "2026-11-19 00:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Victoria has long dominated the AFL draft landscape. Other regions are catching up",
-   "published": "2026-11-18 23:20 UTC"
   },
   {
    "region": "Oceania",
