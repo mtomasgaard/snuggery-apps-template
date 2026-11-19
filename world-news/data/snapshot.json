@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-19T17:01:46Z",
+ "generatedAt": "2026-11-19T18:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -32,7 +32,7 @@
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168807",
      "published": "2026-11-15T12:00:00Z",
-     "summary": "Humanitarian workers providing support to communities on the frontline of the war between Ukraine and Russia must balance remaining close to those in need with the heightened risks of operating in a conflict zone…",
+     "summary": "Humanitarian workers providing support to communities on the frontline of the war between Ukraine and Russia must balance remaining close to those in need with the heightened risks of operating in a warzone, according…",
      "stale": false
     },
     {
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Myanmar genocide ruling is a watershed moment in international justice – with huge ramifications for other cases",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/myanmar-genocide-ruling-is-a-watershed-moment-in-international-justice-with-huge-ramifications-for-other-cases-296987",
+     "published": "2026-11-19T17:06:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Max Pensky, Co-Director, Institute for Genocide and Mass Atrocity Prevention, Binghamton University, State University of New York"
+    },
+    {
      "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Kyle Olson, Lecturer in Archaeology, Washington University in St. Louis"
-    },
-    {
-     "title": "Nvidia isn’t the first company to dump a misbehaving CEO – history shows it’s in the interest of corporate boards to act",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/nvidia-isnt-the-first-company-to-dump-a-misbehaving-ceo-history-shows-its-in-the-interest-of-corporate-boards-to-act-296800",
-     "published": "2026-11-19T13:42:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael Nalick, Assistant Professor of Management, University of Denver"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168836",
+     "published": "2026-11-19T12:00:00Z",
+     "summary": "The International Court of Justice, the principal judicial organ of the UN, delivered its judgment on Thursday in the case of The Gambia v. Myanmar on the application of the Genocide Convention, finding Myanmar…",
+     "stale": false
+    },
+    {
      "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -391,15 +400,6 @@
      "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries and connect readers across borders through cultural exchange.",
      "stale": false,
      "author": "Sangita Swechcha"
-    },
-    {
-     "title": "Afghan children face narrowing path to education, UN agencies report",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168732",
-     "published": "2026-11-04T12:00:00Z",
-     "summary": "More than half of Afghanistan’s children who should be in primary school remain outside formal learning and millions of girls can only dream of going to university.",
-     "stale": false
     },
     {
      "title": "Tracing the recruitment trap behind Russia’s war",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
-   "published": "2026-11-19 13:42 UTC"
+   "title": "Myanmar genocide ruling is a watershed moment in international justice – with huge ramifications for other cases",
+   "published": "2026-11-19 17:06 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Nvidia isn’t the first company to dump a misbehaving CEO – history shows it’s in the interest of corporate boards to act",
+   "title": "US and Iran once practiced diplomacy through archaeology – that legacy need not lie in ruins",
    "published": "2026-11-19 13:42 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
+   "published": "2026-11-19 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
    "published": "2026-11-18 11:48 UTC"
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "The dreamer who wants the world to read Nepali literature",
    "published": "2026-11-09 05:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Afghan children face narrowing path to education, UN agencies report",
-   "published": "2026-11-04 12:00 UTC"
   },
   {
    "region": "Asia",
