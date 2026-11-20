@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T14:09:46Z",
+ "generatedAt": "2026-11-20T15:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168844",
+     "published": "2026-11-20T12:00:00Z",
+     "summary": "Aid and development agencies in Afghanistan warned on Friday of an escalating “assault” on the rights and freedoms of women and girls that is preventing growing numbers from accessing vital medical care.",
+     "stale": false
+    },
+    {
      "title": "Why Japan’s anti-hate measures fall short",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -381,15 +390,6 @@
      "summary": "\"Justice for civilian victims of military abuses shouldn’t be blocked by an unfair military court system.\"",
      "stale": false,
      "author": "Mong Palatino"
-    },
-    {
-     "title": "At his final ASEAN Summit, Guterres upholds cooperation and action on Myanmar",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168809",
-     "published": "2026-11-16T12:00:00Z",
-     "summary": "UN Secretary-General António Guterres underscored the need for stronger collaboration with the Association of Southeast Asian Nations (ASEAN) and an end to the crisis in Myanmar, in remarks to regional leaders meeting…",
-     "stale": false
     },
     {
      "title": "The dreamer who wants the world to read Nepali literature",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
+   "published": "2026-11-20 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Why Japan’s anti-hate measures fall short",
    "published": "2026-11-20 00:00 UTC"
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
    "published": "2026-11-17 06:55 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "At his final ASEAN Summit, Guterres upholds cooperation and action on Myanmar",
-   "published": "2026-11-16 12:00 UTC"
   },
   {
    "region": "Asia",
