@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T05:01:34Z",
+ "generatedAt": "2026-11-20T06:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/was-anthropics-record-us-81-billion-listing-a-vote-of-confidence-in-ai-and-whats-next-297151",
+     "published": "2026-11-20T04:53:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Angel Zhong, Professor of Finance, RMIT University"
+    },
+    {
      "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
-    },
-    {
-     "title": "Xi-Trump meeting avoids difficult conversations, and both leaders get what they want",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/xi-trump-meeting-avoids-difficult-conversations-and-both-leaders-get-what-they-want-297046",
-     "published": "2026-11-20T01:10:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nick Bisley, Pro Vice-Chancellor Research and Professor of International Studies, La Trobe University"
     },
     {
      "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
+   "published": "2026-11-20 04:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
    "published": "2026-11-20 03:59 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "They wanted kombucha, but got a killer SCOBY instead. Zombucha! is a wonderfully silly Aussie film",
    "published": "2026-11-20 03:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Xi-Trump meeting avoids difficult conversations, and both leaders get what they want",
-   "published": "2026-11-20 01:10 UTC"
   },
   {
    "region": "Oceania",
