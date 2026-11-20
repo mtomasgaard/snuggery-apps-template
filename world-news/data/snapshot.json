@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T18:01:43Z",
+ "generatedAt": "2026-11-20T19:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/20/the-ongoing-efforts-to-get-ecocide-recognized-at-the-international-criminal-court/",
+     "published": "2026-11-20T18:05:05Z",
+     "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
+    {
      "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -224,16 +234,6 @@
      "summary": "At the annual COP17 on biodiversity, Madagascar confirmed its commitment to the 30x30 Global Target and the conservation of its natural heritage.",
      "stale": false,
      "author": "Rebecca Cluett"
-    },
-    {
-     "title": "Learning under trees in the era of AI: The paradox of education in Mozambique",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/14/learning-under-trees-in-the-era-of-ai-the-paradox-of-education-in-mozambique/",
-     "published": "2026-11-14T18:39:17Z",
-     "summary": "Mozambique faces an educational paradox: While the use of artificial intelligence is being debated, thousands of students still learn outdoors, without basic infrastructure or internet access.",
-     "stale": false,
-     "author": "Masudul Zarif"
     },
     {
      "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/11/20/the-ongoing-efforts-to-get-ecocide-recognized-at-the-international-criminal-court/",
+     "published": "2026-11-20T18:05:05Z",
+     "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
+    {
      "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -497,16 +507,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
-     "source": "Global Voices",
-     "feed": "gv-oceania",
-     "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
-     "published": "2026-09-14T18:56:04Z",
-     "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
-     "stale": false,
-     "author": "Kevin Rennie"
     }
    ]
   }
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
+   "published": "2026-11-20 18:05 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
    "published": "2026-11-20 08:03 UTC"
@@ -795,12 +801,6 @@
    "source": "Global Voices",
    "title": "Madagascar aims to support biodiversity by protecting marine areas",
    "published": "2026-11-15 08:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Learning under trees in the era of AI: The paradox of education in Mozambique",
-   "published": "2026-11-14 18:39 UTC"
   },
   {
    "region": "Africa",
@@ -912,6 +912,12 @@
   },
   {
    "region": "Oceania",
+   "source": "Global Voices",
+   "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
+   "published": "2026-11-20 18:05 UTC"
+  },
+  {
+   "region": "Oceania",
    "source": "The Conversation",
    "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
    "published": "2026-11-20 08:22 UTC"
@@ -951,12 +957,6 @@
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "Global Voices",
-   "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
-   "published": "2026-09-14 18:56 UTC"
   }
  ]
 }
