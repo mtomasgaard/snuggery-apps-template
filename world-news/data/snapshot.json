@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T20:01:19Z",
+ "generatedAt": "2026-11-20T21:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/whether-its-sister-or-your-own-sister-the-burden-that-caring-for-aging-parents-puts-on-women-is-no-joke-297041",
+     "published": "2026-11-20T19:58:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Patricia Smith, Professor of Economics Emeritus, University of Michigan"
+    },
+    {
      "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Jane Tavares, Senior Research Fellow and Lecturer of Gerontology, UMass Boston"
-    },
-    {
-     "title": "Trump administration may fund white South Africans to document ‘hateful rhetoric and violent acts’",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/trump-administration-may-fund-white-south-africans-to-document-hateful-rhetoric-and-violent-acts-296360",
-     "published": "2026-11-20T13:45:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Susan Appe, Professor of Public Administration and Policy, University at Albany, State University of New York"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
-   "published": "2026-11-20 13:45 UTC"
+   "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
+   "published": "2026-11-20 19:58 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump administration may fund white South Africans to document ‘hateful rhetoric and violent acts’",
+   "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
    "published": "2026-11-20 13:45 UTC"
   },
   {
