@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T08:01:39Z",
+ "generatedAt": "2026-11-20T09:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/comment-les-tensions-entre-la-rdc-et-le-rwanda-revelent-les-divisions-au-sein-de-la-francophonie-297004",
+     "published": "2026-11-20T08:03:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Frédéric Turpin, Historien, Université Savoie Mont Blanc"
+    },
+    {
      "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Wanjirũ G. Mbure, Associate Professor of English and Film & Media Studies and Senior Associate Dean, William & Mary"
-    },
-    {
-     "title": "South Africa recycles only about one-fifth of its plastic waste. What’s holding it back?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africa-recycles-only-about-one-fifth-of-its-plastic-waste-whats-holding-it-back-294328",
-     "published": "2026-11-19T13:44:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephanie Giselle Nicolaides, PhD Candidate, University of the Western Cape"
     },
     {
      "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-jobless-numbers-highlight-that-the-reserve-banks-credibility-is-on-the-line-296269",
+     "published": "2026-11-20T08:22:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Lewis Ingram, Lecturer in Physiotherapy, Adelaide University"
-    },
-    {
-     "title": "They wanted kombucha, but got a killer SCOBY instead. Zombucha! is a wonderfully silly Aussie film",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/they-wanted-kombucha-but-got-a-killer-scoby-instead-zombucha-is-a-wonderfully-silly-aussie-film-296815",
-     "published": "2026-11-20T03:08:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
     },
     {
      "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
-   "published": "2026-11-19 13:44 UTC"
+   "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
+   "published": "2026-11-20 08:03 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa recycles only about one-fifth of its plastic waste. What’s holding it back?",
+   "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
    "published": "2026-11-19 13:44 UTC"
   },
   {
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
+   "published": "2026-11-20 08:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
    "published": "2026-11-20 04:53 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
    "published": "2026-11-20 03:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "They wanted kombucha, but got a killer SCOBY instead. Zombucha! is a wonderfully silly Aussie film",
-   "published": "2026-11-20 03:08 UTC"
   },
   {
    "region": "Oceania",
