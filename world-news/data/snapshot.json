@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T13:01:35Z",
+ "generatedAt": "2026-11-20T14:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "A doctor’s guide to surviving — and enjoying — holiday feasting while on GLP-1 medication",
+     "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/a-doctors-guide-to-surviving-and-enjoying-holiday-feasting-while-on-glp-1-medication-295301",
-     "published": "2026-11-19T19:09:59Z",
+     "link": "https://theconversation.com/snl-sister-sketch-nails-the-failures-of-us-healthcare-policy-297022",
+     "published": "2026-11-20T13:45:11Z",
      "summary": "",
      "stale": false,
-     "author": "Reed Berger-Fleishman, Associate Clinical Professor of Medicine and Surgery, University of Illinois Chicago"
+     "author": "Jane Tavares, Senior Research Fellow and Lecturer of Gerontology, UMass Boston"
     },
     {
-     "title": "Xi-Putin-Trump summit was heavy on symbolism, light on substance – and not exactly a Yalta II",
+     "title": "Trump administration may fund white South Africans to document ‘hateful rhetoric and violent acts’",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/xi-putin-trump-summit-was-heavy-on-symbolism-light-on-substance-and-not-exactly-a-yalta-ii-297087",
-     "published": "2026-11-19T18:43:22Z",
+     "link": "https://theconversation.com/trump-administration-may-fund-white-south-africans-to-document-hateful-rhetoric-and-violent-acts-296360",
+     "published": "2026-11-20T13:45:01Z",
      "summary": "",
      "stale": false,
-     "author": "Rana Mitter, Professor of U.S.-Asia Relations, Harvard Kennedy School"
+     "author": "Susan Appe, Professor of Public Administration and Policy, University at Albany, State University of New York"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A doctor’s guide to surviving — and enjoying — holiday feasting while on GLP-1 medication",
-   "published": "2026-11-19 19:09 UTC"
+   "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
+   "published": "2026-11-20 13:45 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Xi-Putin-Trump summit was heavy on symbolism, light on substance – and not exactly a Yalta II",
-   "published": "2026-11-19 18:43 UTC"
+   "title": "Trump administration may fund white South Africans to document ‘hateful rhetoric and violent acts’",
+   "published": "2026-11-20 13:45 UTC"
   },
   {
    "region": "Americas",
