@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T04:01:44Z",
+ "generatedAt": "2026-11-20T05:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-is-fascia-release-and-do-i-need-to-do-it-a-physiotherapy-expert-unpacks-the-evidence-292606",
+     "published": "2026-11-20T03:59:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lewis Ingram, Lecturer in Physiotherapy, Adelaide University"
+    },
+    {
      "title": "They wanted kombucha, but got a killer SCOBY instead. Zombucha! is a wonderfully silly Aussie film",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Nick Bisley, Pro Vice-Chancellor Research and Professor of International Studies, La Trobe University"
-    },
-    {
-     "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-seismic-icj-ruling-has-found-myanmar-responsible-for-genocide-but-will-it-help-the-rohingya-296700",
-     "published": "2026-11-20T00:35:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Juliette McIntyre, Senior Lecturer in Law, Adelaide University"
     },
     {
      "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
+   "published": "2026-11-20 03:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "They wanted kombucha, but got a killer SCOBY instead. Zombucha! is a wonderfully silly Aussie film",
    "published": "2026-11-20 03:08 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Xi-Trump meeting avoids difficult conversations, and both leaders get what they want",
    "published": "2026-11-20 01:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
-   "published": "2026-11-20 00:35 UTC"
   },
   {
    "region": "Oceania",
