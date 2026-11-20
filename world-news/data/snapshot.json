@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T01:01:26Z",
+ "generatedAt": "2026-11-20T02:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why Japan’s anti-hate measures fall short",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/20/why-japans-anti-hate-measures-fall-short/",
+     "published": "2026-11-20T00:00:00Z",
+     "summary": "The prevalence of online hate speech is to a large extent related to a lack of effective domestic legislation and human rights education.",
+     "stale": false,
+     "author": "Jo Carter"
+    },
+    {
      "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -380,16 +390,6 @@
      "published": "2026-11-16T12:00:00Z",
      "summary": "UN Secretary-General António Guterres underscored the need for stronger collaboration with the Association of Southeast Asian Nations (ASEAN) and an end to the crisis in Myanmar, in remarks to regional leaders meeting…",
      "stale": false
-    },
-    {
-     "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
-     "published": "2026-11-10T05:36:17Z",
-     "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": false,
-     "author": "Global Voices East Asia"
     },
     {
      "title": "The dreamer who wants the world to read Nepali literature",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Xi-Trump meeting avoids difficult conversations, and both leaders get what they want",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/xi-trump-meeting-avoids-difficult-conversations-and-both-leaders-get-what-they-want-297046",
+     "published": "2026-11-20T01:10:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nick Bisley, Pro Vice-Chancellor Research and Professor of International Studies, La Trobe University"
+    },
+    {
      "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Matt McDonald, Professor of International Relations, The University of Queensland"
-    },
-    {
-     "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/we-found-a-seaweed-that-hadnt-been-spotted-in-90-years-and-discovered-vast-underwater-forests-291975",
-     "published": "2026-11-19T22:30:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Rees, Honorary Fellow and Research Scientist in Marine Ecology, University of Wollongong"
     },
     {
      "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Why Japan’s anti-hate measures fall short",
+   "published": "2026-11-20 00:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
    "published": "2026-11-19 12:00 UTC"
@@ -889,12 +895,6 @@
   {
    "region": "Asia",
    "source": "Global Voices",
-   "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
-   "published": "2026-11-10 05:36 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
    "title": "The dreamer who wants the world to read Nepali literature",
    "published": "2026-11-09 05:00 UTC"
   },
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Xi-Trump meeting avoids difficult conversations, and both leaders get what they want",
+   "published": "2026-11-20 01:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
    "published": "2026-11-20 00:35 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Wars and cost of living have pushed climate change off the priority list",
    "published": "2026-11-20 00:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
-   "published": "2026-11-19 22:30 UTC"
   },
   {
    "region": "Oceania",
