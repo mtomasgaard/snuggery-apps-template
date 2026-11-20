@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-20T00:01:24Z",
+ "generatedAt": "2026-11-20T01:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-seismic-icj-ruling-has-found-myanmar-responsible-for-genocide-but-will-it-help-the-rohingya-296700",
+     "published": "2026-11-20T00:35:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Juliette McIntyre, Senior Lecturer in Law, Adelaide University"
+    },
+    {
+     "title": "Wars and cost of living have pushed climate change off the priority list",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/wars-and-cost-of-living-have-pushed-climate-change-off-the-priority-list-296984",
+     "published": "2026-11-20T00:31:15Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matt McDonald, Professor of International Relations, The University of Queensland"
+    },
+    {
      "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
-    },
-    {
-     "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rocky-at-50-the-most-iconic-sports-film-of-all-time-taught-us-winning-isnt-everything-276876",
-     "published": "2026-11-19T19:05:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lisa J. Hackett, Senior Lecturer, Cultural History, University of New England"
-    },
-    {
-     "title": "With AI blamed for mass layoffs, here’s how we can ensure workers get a fairer go",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/with-ai-blamed-for-mass-layoffs-heres-how-we-can-ensure-workers-get-a-fairer-go-296948",
-     "published": "2026-11-19T19:05:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chris F. Wright, Professor of Work and Labour Market Policy, University of Sydney"
     },
     {
      "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A seismic ICJ ruling has found Myanmar responsible for genocide. But will it help the Rohingya?",
+   "published": "2026-11-20 00:35 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Wars and cost of living have pushed climate change off the priority list",
+   "published": "2026-11-20 00:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "We found a seaweed that hadn’t been spotted in 90 years - and discovered vast underwater forests",
    "published": "2026-11-19 22:30 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
    "published": "2026-11-19 21:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Rocky at 50: the most iconic sports film of all time taught us winning isn’t everything",
-   "published": "2026-11-19 19:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "With AI blamed for mass layoffs, here’s how we can ensure workers get a fairer go",
-   "published": "2026-11-19 19:05 UTC"
   },
   {
    "region": "Oceania",
