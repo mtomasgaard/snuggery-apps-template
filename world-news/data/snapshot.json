@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T06:01:35Z",
+ "generatedAt": "2026-11-21T07:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Reclaiming Indigenous culinary histories in Nepal",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/11/21/rereclaiming-indigenous-culinary-histories-in-nepal/",
+     "published": "2026-11-21T06:12:59Z",
+     "summary": "Sanjib Chaudhary of Global Voices caught up with Binti Gurung, a food historian and founder of Natural Roots Foundation, to talk about her work on the food heritage of Nepal.",
+     "stale": false,
+     "author": "Sanjib Chaudhary"
+    },
+    {
      "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
      "stale": false,
      "author": "Zulker Naeen"
-    },
-    {
-     "title": "Bangladesh weighs tougher cyber law as AI-generated abuse targets women",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/28/bangladesh-weighs-tougher-cyber-law-as-ai-generated-abuse-targets-women/",
-     "published": "2026-10-28T07:51:42Z",
-     "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumors, defamation, and disinformation could revive censorship and threaten online free expression, even as victims need…",
-     "stale": false,
-     "author": "Masudul Zarif"
     }
    ]
   },
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Reclaiming Indigenous culinary histories in Nepal",
+   "published": "2026-11-21 06:12 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
    "published": "2026-11-20 12:00 UTC"
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "Tracing the recruitment trap behind Russia’s war",
    "published": "2026-11-04 05:26 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Bangladesh weighs tougher cyber law as AI-generated abuse targets women",
-   "published": "2026-10-28 07:51 UTC"
   },
   {
    "region": "Oceania",
