@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T14:01:28Z",
+ "generatedAt": "2026-11-21T15:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -354,6 +354,15 @@
      "author": "Sanjib Chaudhary"
     },
     {
+     "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168853",
+     "published": "2026-11-20T12:00:00Z",
+     "summary": "A day after the UN’s highest court found that Myanmar had committed genocide against the Rohingya, the President of the General Assembly visited the refugee camps in Cox’s Bazar, Bangladesh, urging the world to turn the…",
+     "stale": false
+    },
+    {
      "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -371,15 +380,6 @@
      "summary": "The prevalence of online hate speech is to a large extent related to a lack of effective domestic legislation and human rights education.",
      "stale": false,
      "author": "Jo Carter"
-    },
-    {
-     "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168836",
-     "published": "2026-11-19T12:00:00Z",
-     "summary": "The International Court of Justice, the principal judicial organ of the UN, delivered its judgment on Thursday in the case of The Gambia v. Myanmar on the application of the Genocide Convention, finding Myanmar…",
-     "stale": false
     },
     {
      "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
@@ -871,6 +871,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
+   "published": "2026-11-20 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
    "published": "2026-11-20 12:00 UTC"
   },
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "Why Japan’s anti-hate measures fall short",
    "published": "2026-11-20 00:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
-   "published": "2026-11-19 12:00 UTC"
   },
   {
    "region": "Asia",
