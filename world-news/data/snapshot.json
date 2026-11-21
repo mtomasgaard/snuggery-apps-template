@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T18:01:38Z",
+ "generatedAt": "2026-11-21T19:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -103,6 +103,15 @@
      "author": "Patrick O'Shaughnessy, Professor of Occupational and Environmental Health, University of Iowa"
     },
     {
+     "title": "Homes abandoned, harvests failing: Haiti’s farmers rebuild amid violence, hunger and El Niño",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168834",
+     "published": "2026-11-21T12:00:00Z",
+     "summary": "Years of insecurity, violence perpetrated by murderous armed gangs and economic instability, combined with displacement, poor agricultural performance and climate shocks, have left millions of Haitians struggling to…",
+     "stale": false
+    },
+    {
      "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -151,15 +160,6 @@
      "author": "Gina Yauri"
     },
     {
-     "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168789",
-     "published": "2026-11-12T12:00:00Z",
-     "summary": "More than 1,000 people were killed in Haiti during the third quarter of this year, as armed gangs continue to terrorize the population in the capital Port-au-Prince and beyond, the UN team in the island nation, said in…",
-     "stale": false
-    },
-    {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -176,6 +176,16 @@
    "name": "Africa",
    "stale": false,
    "items": [
+    {
+     "title": "Growing up displaced in Cameroon after ten years of conflict",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/21/growing-up-displaced-in-cameroon-after-ten-years-of-conflict/",
+     "published": "2026-11-21T18:02:14Z",
+     "summary": "In Buea, children displaced by Cameroon’s armed Anglophone conflict are balancing school with market trading to help their families survive, while years of displacement have interrupted their education, relationships…",
+     "stale": false,
+     "author": "Cynthia Ebot Takang"
+    },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
      "source": "Global Voices",
@@ -224,16 +234,6 @@
      "summary": "The telecommunications decree in Mozambique raises serious concerns regarding potential restrictions on fundamental rights, including freedom of expression and access to information during periods of political tension.",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "Madagascar aims to support biodiversity by protecting marine areas",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/15/madagascar-aims-to-support-biodiversity-by-protecting-marine-areas/",
-     "published": "2026-11-15T08:11:47Z",
-     "summary": "At the annual COP17 on biodiversity, Madagascar confirmed its commitment to the 30x30 Global Target and the conservation of its natural heritage.",
-     "stale": false,
-     "author": "Rebecca Cluett"
     },
     {
      "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
@@ -726,6 +726,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "Homes abandoned, harvests failing: Haiti’s farmers rebuild amid violence, hunger and El Niño",
+   "published": "2026-11-21 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
    "published": "2026-11-20 19:58 UTC"
@@ -756,15 +762,15 @@
   },
   {
    "region": "Americas",
-   "source": "UN News",
-   "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
-   "published": "2026-11-12 12:00 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "Global Voices",
    "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
    "published": "2026-11-08 14:12 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "Growing up displaced in Cameroon after ten years of conflict",
+   "published": "2026-11-21 18:02 UTC"
   },
   {
    "region": "Africa",
@@ -795,12 +801,6 @@
    "source": "Global Voices",
    "title": "Civil society questions decree that could block access to telecommunications networks in Mozambique",
    "published": "2026-11-16 08:38 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Madagascar aims to support biodiversity by protecting marine areas",
-   "published": "2026-11-15 08:11 UTC"
   },
   {
    "region": "Africa",
