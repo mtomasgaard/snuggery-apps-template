@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T17:01:40Z",
+ "generatedAt": "2026-11-21T18:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168849",
+     "published": "2026-11-20T12:00:00Z",
+     "summary": "Israeli settlers have carried out more than 400 attacks causing casualties or property damage during this year’s olive harvest in the occupied West Bank – more than in any previous season, UN agencies and humanitarian…",
+     "stale": false
+    },
+    {
      "title": "Dozens more children killed in Yemen amid escalating hostilities",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168818",
      "published": "2026-11-16T12:00:00Z",
      "summary": "Mental health support must be a core part of the humanitarian response, said the UN Deputy Secretary-General during a visit to Lebanon over the weekend, where efforts to address the psychological toll of years of…",
-     "stale": false
-    },
-    {
-     "title": "Syria: Progress ‘real’ but fragile, as remnants of war wreck young lives",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168814",
-     "published": "2026-11-16T12:00:00Z",
-     "summary": "Syria is showing “undeniable signs of progress” nearly two years after the fall of the Assad regime, but explosive ordnance, the approaching winter and severe funding shortfalls threaten those fragile gains, senior UN…",
      "stale": false
     },
     {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
+   "published": "2026-11-20 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Dozens more children killed in Yemen amid escalating hostilities",
    "published": "2026-11-18 12:00 UTC"
   },
@@ -830,12 +836,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Lebanon leading the way in mental health support",
-   "published": "2026-11-16 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Syria: Progress ‘real’ but fragile, as remnants of war wreck young lives",
    "published": "2026-11-16 12:00 UTC"
   },
   {
