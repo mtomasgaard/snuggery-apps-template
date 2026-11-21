@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T13:35:05Z",
+ "generatedAt": "2026-11-21T14:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Army’s plan to blow up aging explosives will spread lead over part of Iowa – what you need to know about the risks",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/armys-plan-to-blow-up-aging-explosives-will-spread-lead-over-part-of-iowa-what-you-need-to-know-about-the-risks-297225",
+     "published": "2026-11-21T13:14:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Patrick O'Shaughnessy, Professor of Occupational and Environmental Health, University of Iowa"
+    },
+    {
      "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Patricia Smith, Professor of Economics Emeritus, University of Michigan"
-    },
-    {
-     "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/snl-sister-sketch-nails-the-failures-of-us-healthcare-policy-297022",
-     "published": "2026-11-20T13:45:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jane Tavares, Senior Research Fellow and Lecturer of Gerontology, UMass Boston"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -354,15 +354,6 @@
      "author": "Sanjib Chaudhary"
     },
     {
-     "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168853",
-     "published": "2026-11-20T12:00:00Z",
-     "summary": "A day after the UN’s highest court found that Myanmar had committed genocide against the Rohingya, the President of the General Assembly visited the refugee camps in Cox’s Bazar, Bangladesh, urging the world to turn the…",
-     "stale": false
-    },
-    {
      "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -380,6 +371,15 @@
      "summary": "The prevalence of online hate speech is to a large extent related to a lack of effective domestic legislation and human rights education.",
      "stale": false,
      "author": "Jo Carter"
+    },
+    {
+     "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168836",
+     "published": "2026-11-19T12:00:00Z",
+     "summary": "The International Court of Justice, the principal judicial organ of the UN, delivered its judgment on Thursday in the case of The Gambia v. Myanmar on the application of the Genocide Convention, finding Myanmar…",
+     "stale": false
     },
     {
      "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
-   "published": "2026-11-20 19:58 UTC"
+   "title": "Army’s plan to blow up aging explosives will spread lead over part of Iowa – what you need to know about the risks",
+   "published": "2026-11-21 13:14 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "‘SNL’ ‘Sister’ sketch nails the failures of US healthcare policy",
-   "published": "2026-11-20 13:45 UTC"
+   "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
+   "published": "2026-11-20 19:58 UTC"
   },
   {
    "region": "Americas",
@@ -871,12 +871,6 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-   "published": "2026-11-20 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
    "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
    "published": "2026-11-20 12:00 UTC"
   },
@@ -885,6 +879,12 @@
    "source": "Global Voices",
    "title": "Why Japan’s anti-hate measures fall short",
    "published": "2026-11-20 00:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "World’s top court finds Myanmar guilty of genocide against Rohingya",
+   "published": "2026-11-19 12:00 UTC"
   },
   {
    "region": "Asia",
