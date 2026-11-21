@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-21T05:01:36Z",
+ "generatedAt": "2026-11-21T06:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why fossil fuel-producing countries are stalling this crucial climate report",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-fossil-fuel-producing-countries-are-stalling-this-crucial-climate-report-296997",
+     "published": "2026-11-21T05:45:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kathryn Bowen, Director, Melbourne Climate Futures and Professor - Environment, Climate and Global Health at Melbourne Climate Futures and Melbourne School of…"
+    },
+    {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
      "source": "Global Voices",
      "feed": "gv-oceania",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Angel Zhong, Professor of Finance, RMIT University"
-    },
-    {
-     "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-is-fascia-release-and-do-i-need-to-do-it-a-physiotherapy-expert-unpacks-the-evidence-292606",
-     "published": "2026-11-20T03:59:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lewis Ingram, Lecturer in Physiotherapy, Adelaide University"
     },
     {
      "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
@@ -912,6 +912,12 @@
   },
   {
    "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why fossil fuel-producing countries are stalling this crucial climate report",
+   "published": "2026-11-21 05:45 UTC"
+  },
+  {
+   "region": "Oceania",
    "source": "Global Voices",
    "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
    "published": "2026-11-20 18:05 UTC"
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
    "published": "2026-11-20 04:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What is ‘fascia release’ and do I need to do it? A physiotherapy expert unpacks the evidence",
-   "published": "2026-11-20 03:59 UTC"
   },
   {
    "region": "Oceania",
