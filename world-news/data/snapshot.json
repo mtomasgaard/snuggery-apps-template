@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T21:01:33Z",
+ "generatedAt": "2026-11-22T22:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Your say: week beginning November 23",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-november-23-297262",
+     "published": "2026-11-22T20:42:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Judy Ingham, Newsletter Producer, The Conversation"
+    },
+    {
      "title": "How is Gen Z changing what we eat? These writers found out by asking over 20,000 young people",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Gregory Moore, Senior Research Associate, School of Agriculture, Food and Ecosystem Sciences, The University of Melbourne"
-    },
-    {
-     "title": "Why is it OK to murder people in GTA games, but not to sexually assault them?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-is-it-ok-to-murder-people-in-gta-games-but-not-to-sexually-assault-them-296825",
-     "published": "2026-11-22T18:39:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Thomas Montefiore, Postdoctoral Research Associate in Philosophy, Macquarie University"
     },
     {
      "title": "Air New Zealand is betting on Christchurch. But will the regions benefit as well?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning November 23",
+   "published": "2026-11-22 20:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How is Gen Z changing what we eat? These writers found out by asking over 20,000 young people",
    "published": "2026-11-22 18:39 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "What’s the best way to keep cut flowers? A plant scientist shares their top tips",
-   "published": "2026-11-22 18:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why is it OK to murder people in GTA games, but not to sexually assault them?",
    "published": "2026-11-22 18:39 UTC"
   },
   {
