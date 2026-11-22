@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T08:01:22Z",
+ "generatedAt": "2026-11-22T09:01:54Z",
  "regions": [
   {
    "key": "europe",
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": false,
+     "stale": true,
      "author": "Global Voices East Asia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
+     "stale": true,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "URLError: <urlopen error timed out>; kept 3 cached"
   },
   {
    "id": "gv-eastern-europe",
