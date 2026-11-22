@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T17:01:35Z",
+ "generatedAt": "2026-11-22T18:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Air New Zealand is betting on Christchurch. But will the regions benefit as well?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/air-new-zealand-is-betting-on-christchurch-but-will-the-regions-benefit-as-well-296911",
+     "published": "2026-11-22T17:47:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ajai Jayathilakan, Lecturer in Aviation Management, Te Kunenga ki Pūrehuroa – Massey University"
+    },
+    {
      "title": "Why fossil fuel-producing countries are stalling this crucial climate report",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,6 +459,16 @@
      "author": "Sydney Allen"
     },
     {
+     "title": "Grand Theft Auto represented a satirical vision of America – the absurdity of reality has tipped the game into empathy",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/grand-theft-auto-represented-a-satirical-vision-of-america-the-absurdity-of-reality-has-tipped-the-game-into-empathy-297076",
+     "published": "2026-11-20T12:55:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gaspard Pelurson, Lecturer in Culture, Media and Creative Industries, King's College London"
+    },
+    {
      "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,26 +487,6 @@
      "summary": "",
      "stale": false,
      "author": "Angel Zhong, Professor of Finance, RMIT University"
-    },
-    {
-     "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-pay-equity-law-has-been-found-to-breach-womens-rights-how-can-it-stand-297057",
-     "published": "2026-11-19T21:25:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
-    },
-    {
-     "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/new-cancer-frontiers-could-covid-vaccines-help-make-treatments-more-effective-290627",
-     "published": "2026-11-19T18:20:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Fraser, Dean, Faculty of Medical and Health Sciences, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Air New Zealand is betting on Christchurch. But will the regions benefit as well?",
+   "published": "2026-11-22 17:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why fossil fuel-producing countries are stalling this crucial climate report",
    "published": "2026-11-21 05:45 UTC"
   },
@@ -925,6 +931,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grand Theft Auto represented a satirical vision of America – the absurdity of reality has tipped the game into empathy",
+   "published": "2026-11-20 12:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "View from The Hill: Jobless numbers highlight that the Reserve Bank’s credibility is on the line",
    "published": "2026-11-20 08:22 UTC"
   },
@@ -933,18 +945,6 @@
    "source": "The Conversation",
    "title": "Was Anthropic’s record US$81 billion listing a vote of confidence in AI – and what’s next?",
    "published": "2026-11-20 04:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s pay equity law has been found to breach women’s rights. How can it stand?",
-   "published": "2026-11-19 21:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "New cancer frontiers: Could COVID vaccines help make treatments more effective?",
-   "published": "2026-11-19 18:20 UTC"
   },
   {
    "region": "Oceania",
