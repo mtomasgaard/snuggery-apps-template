@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T22:01:24Z",
+ "generatedAt": "2026-11-22T23:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Albanese’s ratings plunge to new low in Newspoll; Victorian Coalition set to win election",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/albaneses-ratings-plunge-to-new-low-in-newspoll-victorian-coalition-set-to-win-election-297157",
+     "published": "2026-11-22T22:33:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Your say: week beginning November 23",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Lauren Samuelsson, Associate Lecturer in History, University of Wollongong"
-    },
-    {
-     "title": "What’s the best way to keep cut flowers? A plant scientist shares their top tips",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/whats-the-best-way-to-keep-cut-flowers-a-plant-scientist-shares-their-top-tips-287678",
-     "published": "2026-11-22T18:39:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gregory Moore, Senior Research Associate, School of Agriculture, Food and Ecosystem Sciences, The University of Melbourne"
     },
     {
      "title": "Air New Zealand is betting on Christchurch. But will the regions benefit as well?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Albanese’s ratings plunge to new low in Newspoll; Victorian Coalition set to win election",
+   "published": "2026-11-22 22:33 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning November 23",
    "published": "2026-11-22 20:42 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "How is Gen Z changing what we eat? These writers found out by asking over 20,000 young people",
-   "published": "2026-11-22 18:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What’s the best way to keep cut flowers? A plant scientist shares their top tips",
    "published": "2026-11-22 18:39 UTC"
   },
   {
