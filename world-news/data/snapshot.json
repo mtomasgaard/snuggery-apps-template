@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T20:02:59Z",
+ "generatedAt": "2026-11-22T21:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -23,7 +23,7 @@
      "link": "https://globalvoices.org/2026/11/19/in-moldova-teens-are-learning-about-democracy-and-elections-through-an-app/",
      "published": "2026-11-19T00:00:14Z",
      "summary": "VotEDU started off as a civic-education project to help young people understand democracy before they vote for the first time.",
-     "stale": true,
+     "stale": false,
      "author": "Daria Dergacheva"
     },
     {
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/11/10/in-ukraine-youth-are-finding-their-voices-in-the-digital-democracy/",
      "published": "2026-11-10T19:49:12Z",
      "summary": "We saw a gap: young people were consuming information and even participating online, but without media literacy, digital security awareness, or confidence that their voice could shape anything.",
-     "stale": true,
+     "stale": false,
      "author": "Nurbek Bekmurzaev"
     },
     {
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": true,
+     "stale": false,
      "author": "Global Voices East Asia"
     },
     {
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/11/07/how-people-in-montenegro-are-making-their-country-cleaner/",
      "published": "2026-11-07T08:09:15Z",
      "summary": "While Montenegro works to align its waste management with EU directives, ordinary citizens are taking practical steps to improve the situation now.",
-     "stale": true,
+     "stale": false,
      "author": "Daria Dergacheva"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": true,
+     "stale": false,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -146,7 +146,7 @@
      "link": "https://globalvoices.org/2026/11/13/how-medical-neglect-killed-alfredo-diaz-in-a-venezuelan-cell/",
      "published": "2026-11-13T03:00:41Z",
      "summary": "Despite government shifts, a UN report confirms Venezuela's repressive system remains active, documenting how medical neglect in state custody led to the death of regional leader and politician Alfredo Díaz.",
-     "stale": true,
+     "stale": false,
      "author": "Luis Carlos Diaz"
     },
     {
@@ -156,7 +156,7 @@
      "link": "https://globalvoices.org/2026/11/12/ecuadorian-youth-unite-against-neoliberal-models-and-state-violence/",
      "published": "2026-11-12T14:00:33Z",
      "summary": "Thousands of Ecuadorian students have taken to the streets to reject President Noboa’s temporary job plans, demanding permanent solutions for public healthcare, education funding, and rising insecurity.",
-     "stale": true,
+     "stale": false,
      "author": "Gina Yauri"
     },
     {
@@ -166,7 +166,7 @@
      "link": "https://globalvoices.org/2026/11/08/beyond-the-beaches-the-dominican-republic-and-the-global-debate-over-deep-sea-mining/",
      "published": "2026-11-08T14:12:02Z",
      "summary": "The DR wanted science to keep advancing and the International Seabed Authority to finish building the regulatory framework that the UN Convention had mandated it to develop.",
-     "stale": true,
+     "stale": false,
      "author": "Carolina Pichardo"
     }
    ]
@@ -203,7 +203,7 @@
      "link": "https://globalvoices.org/2026/11/21/growing-up-displaced-in-cameroon-after-ten-years-of-conflict/",
      "published": "2026-11-21T18:02:14Z",
      "summary": "In Buea, children displaced by Cameroon’s armed Anglophone conflict are balancing school with market trading to help their families survive, while years of displacement have interrupted their education, relationships…",
-     "stale": true,
+     "stale": false,
      "author": "Cynthia Ebot Takang"
     },
     {
@@ -213,7 +213,7 @@
      "link": "https://globalvoices.org/2026/11/20/the-ongoing-efforts-to-get-ecocide-recognized-at-the-international-criminal-court/",
      "published": "2026-11-20T18:05:05Z",
      "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -232,7 +232,7 @@
      "link": "https://globalvoices.org/2026/11/16/civil-society-questions-decree-that-could-block-access-to-telecommunications-networks-in-mozambique/",
      "published": "2026-11-16T08:38:21Z",
      "summary": "The telecommunications decree in Mozambique raises serious concerns regarding potential restrictions on fundamental rights, including freedom of expression and access to information during periods of political tension.",
-     "stale": true,
+     "stale": false,
      "author": "Masudul Zarif"
     },
     {
@@ -303,7 +303,7 @@
      "link": "https://globalvoices.org/2026/11/16/making-injustice-legal-how-israeli-law-legitimizes-apartheid-genocide-and-impunity/",
      "published": "2026-11-16T00:00:00Z",
      "summary": "From military courts to closed investigations, Israeli law enforces two systems to maintain an apartheid, and international accountability is being dismantled by sanctions against the courts that uphold international…",
-     "stale": true,
+     "stale": false,
      "author": "Walid El Houri"
     },
     {
@@ -313,7 +313,7 @@
      "link": "https://globalvoices.org/2026/11/05/what-comes-after-networked-authoritarianism/",
      "published": "2026-11-05T16:17:00Z",
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
-     "stale": true,
+     "stale": false,
      "author": "Rebecca MacKinnon"
     },
     {
@@ -323,7 +323,7 @@
      "link": "https://globalvoices.org/2026/11/03/egypts-crackdown-on-independent-media-reaches-mada-masr-as-editor-faces-trial/",
      "published": "2026-11-03T15:56:04Z",
      "summary": "Egypt has convicted Mada Masr’s editor-in-chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
-     "stale": true,
+     "stale": false,
      "author": "Walid El Houri"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/10/29/a-digital-publication-sheds-light-on-turkeys-prison-system/",
      "published": "2026-10-29T23:06:48Z",
      "summary": "“For the relatives of people in prison, as well as for national and international human rights organizations and agencies, the information provided by the Prison Agenda publication can be vital.”",
-     "stale": true,
+     "stale": false,
      "author": "Daria Dergacheva"
     }
    ]
@@ -536,17 +536,17 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-europe",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-africa",
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": false,
-   "items": 4,
-   "note": "URLError: <urlopen error timed out>; kept 4 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-middle-east",
