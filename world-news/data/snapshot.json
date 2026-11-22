@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T07:01:21Z",
+ "generatedAt": "2026-11-22T08:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Most women in Rwanda give birth in a health facility – but how are they treated?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/most-women-in-rwanda-give-birth-in-a-health-facility-but-how-are-they-treated-292161",
+     "published": "2026-11-22T07:28:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alice Muhayimana, Lecturer, University of Rwanda"
+    },
+    {
+     "title": "South Africa’s child support grant ends at 18: the mental health impact is severe – research",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-child-support-grant-ends-at-18-the-mental-health-impact-is-severe-research-295688",
+     "published": "2026-11-22T07:28:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tsepang Khumalo, Postdoctoral Researcher, Global Health, Erasmus University Rotterdam"
+    },
+    {
      "title": "Growing up displaced in Cameroon after ten years of conflict",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,26 +215,6 @@
      "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/comment-les-tensions-entre-la-rdc-et-le-rwanda-revelent-les-divisions-au-sein-de-la-francophonie-297004",
-     "published": "2026-11-20T08:03:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Frédéric Turpin, Historien, Université Savoie Mont Blanc"
-    },
-    {
-     "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/african-glamour-the-bold-women-who-styled-wrote-and-read-drum-magazine-294183",
-     "published": "2026-11-19T13:44:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Wanjirũ G. Mbure, Associate Professor of English and Film & Media Studies and Senior Associate Dean, William & Mary"
     },
     {
      "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Most women in Rwanda give birth in a health facility – but how are they treated?",
+   "published": "2026-11-22 07:28 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s child support grant ends at 18: the mental health impact is severe – research",
+   "published": "2026-11-22 07:28 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Growing up displaced in Cameroon after ten years of conflict",
    "published": "2026-11-21 18:02 UTC"
@@ -777,18 +789,6 @@
    "source": "Global Voices",
    "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
    "published": "2026-11-20 18:05 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Comment les tensions entre la RDC et le Rwanda révèlent les divisions au sein de la Francophonie",
-   "published": "2026-11-20 08:03 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "African glamour: the bold women who styled, wrote and read Drum magazine",
-   "published": "2026-11-19 13:44 UTC"
   },
   {
    "region": "Africa",
