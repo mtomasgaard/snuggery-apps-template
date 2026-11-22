@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-22T18:01:34Z",
+ "generatedAt": "2026-11-22T19:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘We escaped with only our lives’: Fighting to give birth in war-torn Yemen",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168851",
+     "published": "2026-11-21T12:00:00Z",
+     "summary": "When fighting suddenly escalated around Taiz, in southwestern Yemen two months ago, midwife Anisa Fadhl had no time to pack a bag before she fled, leaving behind her home and her clinic. Both were later looted and…",
+     "stale": false
+    },
+    {
      "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168821",
      "published": "2026-11-17T12:00:00Z",
      "summary": "Gaza is facing a deepening shelter, sanitation and food security crisis as winter rains flood makeshift shelters, destroy scarce food supplies and leave displaced families struggling to stay warm and fed.",
-     "stale": false
-    },
-    {
-     "title": "Lebanon leading the way in mental health support",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168818",
-     "published": "2026-11-16T12:00:00Z",
-     "summary": "Mental health support must be a core part of the humanitarian response, said the UN Deputy Secretary-General during a visit to Lebanon over the weekend, where efforts to address the psychological toll of years of…",
      "stale": false
     },
     {
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168852",
+     "published": "2026-11-22T12:00:00Z",
+     "summary": "For five years, Zahra cared for an elderly woman in Iran and earned enough to get by. Now back in Herat, western Afghanistan, the 28-year-old trained midwife is unemployed. She lives with her parents and siblings, apart…",
+     "stale": false
+    },
+    {
      "title": "Breaking the silence: Pratishta’s journey from childhood abuse to advocacy",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -370,15 +379,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168853",
      "published": "2026-11-20T12:00:00Z",
      "summary": "A day after the UN’s highest court found that Myanmar had committed genocide against the Rohingya, the President of the General Assembly visited the refugee camps in Cox’s Bazar, Bangladesh, urging the world to turn the…",
-     "stale": false
-    },
-    {
-     "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168844",
-     "published": "2026-11-20T12:00:00Z",
-     "summary": "Aid and development agencies in Afghanistan warned on Friday of an escalating “assault” on the rights and freedoms of women and girls that is preventing growing numbers from accessing vital medical care.",
      "stale": false
     },
     {
@@ -431,7 +431,7 @@
     {
      "title": "Air New Zealand is betting on Christchurch. But will the regions benefit as well?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/air-new-zealand-is-betting-on-christchurch-but-will-the-regions-benefit-as-well-296911",
      "published": "2026-11-22T17:47:32Z",
      "summary": "",
@@ -441,7 +441,7 @@
     {
      "title": "Why fossil fuel-producing countries are stalling this crucial climate report",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/why-fossil-fuel-producing-countries-are-stalling-this-crucial-climate-report-296997",
      "published": "2026-11-21T05:45:46Z",
      "summary": "",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "‘We escaped with only our lives’: Fighting to give birth in war-torn Yemen",
+   "published": "2026-11-21 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
    "published": "2026-11-20 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "Winter rains deepen Gaza crisis amid restricted access and aid cuts",
    "published": "2026-11-17 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Lebanon leading the way in mental health support",
-   "published": "2026-11-16 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
+   "published": "2026-11-22 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Breaking the silence: Pratishta’s journey from childhood abuse to advocacy",
    "published": "2026-11-22 06:10 UTC"
@@ -878,12 +884,6 @@
    "region": "Asia",
    "source": "UN News",
    "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-   "published": "2026-11-20 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Afghanistan restrictions prevent pregnant women from seeking medical help",
    "published": "2026-11-20 12:00 UTC"
   },
   {
