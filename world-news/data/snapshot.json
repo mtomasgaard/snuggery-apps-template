@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T02:01:19Z",
+ "generatedAt": "2026-11-23T03:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
+     "title": "The UN climate talks failed to reach agreement over refusal to mention fossil fuels. What now?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-un-climate-talks-failed-to-reach-agreement-over-refusal-to-mention-fossil-fuels-what-now-296994",
+     "published": "2026-11-23T02:56:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jacqueline Peel, Professor of Law, The University of Melbourne"
+    },
+    {
+     "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/cop31-collapse-countries-reject-deal-without-mention-of-transition-away-from-fossil-fuels-297269",
      "published": "2026-11-23T01:50:03Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Maria Armoudian, Associate Professor, Politics & International Relations; Director, Sustainability Hub, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Are your kids really ratty right now? How to get through the final weeks of school",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/are-your-kids-really-ratty-right-now-how-to-get-through-the-final-weeks-of-school-296940",
-     "published": "2026-11-22T18:38:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Trevor Mazzucchelli, Associate Professor of Clinical Psychology, Curtin University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The UN climate talks failed to reach agreement over refusal to mention fossil fuels. What now?",
+   "published": "2026-11-23 02:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
    "published": "2026-11-23 01:50 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
    "published": "2026-11-22 23:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Are your kids really ratty right now? How to get through the final weeks of school",
-   "published": "2026-11-22 18:38 UTC"
   },
   {
    "region": "Oceania",
