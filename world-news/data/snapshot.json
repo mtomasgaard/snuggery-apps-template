@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T18:01:26Z",
+ "generatedAt": "2026-11-23T19:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -13,7 +13,7 @@
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168859",
      "published": "2026-11-23T12:00:00Z",
-     "summary": "As winter sets in, the Security Council is holding a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how…",
+     "summary": "As winter sets in, the Security Council hold a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how strikes on…",
      "stale": false
     },
     {
@@ -431,7 +431,7 @@
     {
      "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/why-sportswomen-are-turning-to-onlyfans-and-what-it-says-about-inequality-in-sport-297131",
      "published": "2026-11-23T17:40:43Z",
      "summary": "",
@@ -447,6 +447,16 @@
      "summary": "",
      "stale": false,
      "author": "Gareth Enticott, Professor of Human Geography, Cardiff University; University of Waikato"
+    },
+    {
+     "title": "AI has solved a host of big maths problems – here’s why this threatens the whole field of mathematics",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/ai-has-solved-a-host-of-big-maths-problems-heres-why-this-threatens-the-whole-field-of-mathematics-293982",
+     "published": "2026-11-23T12:27:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Neil Saunders, Senior Lecturer in Mathematics, Department of Mathematical Sciences, City St George's, University of London"
     },
     {
      "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Peter Banks, Professor of Conservation Biology, School of Life and Environmental Sciences, University of Sydney"
-    },
-    {
-     "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-sacred-object-in-mathematics-the-riemann-hypothesis-ai-and-a-proof-no-human-can-read-297276",
-     "published": "2026-11-23T04:32:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -925,6 +925,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "AI has solved a host of big maths problems – here’s why this threatens the whole field of mathematics",
+   "published": "2026-11-23 12:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
    "published": "2026-11-23 06:05 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "A trick marketers use to sell you things can also persuade rats to enter traps – new study",
    "published": "2026-11-23 05:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
-   "published": "2026-11-23 04:32 UTC"
   },
   {
    "region": "Oceania",
