@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T04:01:22Z",
+ "generatedAt": "2026-11-23T05:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "When a loved one is moving into aged care, selling the family home isn’t the only way to pay",
+     "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/when-a-loved-one-is-moving-into-aged-care-selling-the-family-home-isnt-the-only-way-to-pay-295451",
-     "published": "2026-11-23T03:25:28Z",
+     "link": "https://theconversation.com/the-sacred-object-in-mathematics-the-riemann-hypothesis-ai-and-a-proof-no-human-can-read-297276",
+     "published": "2026-11-23T04:32:09Z",
      "summary": "",
      "stale": false,
-     "author": "Braam Lowies, Senior Lecturer in Property, Adelaide University"
+     "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
     },
     {
-     "title": "How did the COP31 climate agreement fall apart – and what happens now?",
+     "title": "Chalmers flags slowing growth, warns Australians ‘things might get a bit harder’",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/how-did-the-cop31-climate-agreement-fall-apart-and-what-happens-now-296994",
-     "published": "2026-11-23T02:56:48Z",
+     "link": "https://theconversation.com/chalmers-flags-slowing-growth-warns-australians-things-might-get-a-bit-harder-295660",
+     "published": "2026-11-23T04:30:53Z",
      "summary": "",
      "stale": false,
-     "author": "Jacqueline Peel, Professor of Law, The University of Melbourne"
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "NSW has passed a special law for one coal mine. Here’s why that’s worrying",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nsw-has-passed-a-special-law-for-one-coal-mine-heres-why-thats-worrying-296703",
+     "published": "2026-11-23T04:23:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Katherine Owens, Associate Professor of Environmental Law, University of Sydney"
     },
     {
      "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Tim Naish, Professor in Earth Sciences, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "How to avoid ‘charger rage’: the unwritten rules of EV charging etiquette",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-to-avoid-charger-rage-the-unwritten-rules-of-ev-charging-etiquette-293546",
-     "published": "2026-11-23T01:48:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
     },
     {
      "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "When a loved one is moving into aged care, selling the family home isn’t the only way to pay",
-   "published": "2026-11-23 03:25 UTC"
+   "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
+   "published": "2026-11-23 04:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How did the COP31 climate agreement fall apart – and what happens now?",
-   "published": "2026-11-23 02:56 UTC"
+   "title": "Chalmers flags slowing growth, warns Australians ‘things might get a bit harder’",
+   "published": "2026-11-23 04:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NSW has passed a special law for one coal mine. Here’s why that’s worrying",
+   "published": "2026-11-23 04:23 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
    "published": "2026-11-23 01:50 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How to avoid ‘charger rage’: the unwritten rules of EV charging etiquette",
-   "published": "2026-11-23 01:48 UTC"
   },
   {
    "region": "Oceania",
