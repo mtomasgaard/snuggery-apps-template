@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T03:01:33Z",
+ "generatedAt": "2026-11-23T04:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,10 +429,20 @@
    "stale": false,
    "items": [
     {
-     "title": "The UN climate talks failed to reach agreement over refusal to mention fossil fuels. What now?",
+     "title": "When a loved one is moving into aged care, selling the family home isn’t the only way to pay",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-un-climate-talks-failed-to-reach-agreement-over-refusal-to-mention-fossil-fuels-what-now-296994",
+     "link": "https://theconversation.com/when-a-loved-one-is-moving-into-aged-care-selling-the-family-home-isnt-the-only-way-to-pay-295451",
+     "published": "2026-11-23T03:25:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Braam Lowies, Senior Lecturer in Property, Adelaide University"
+    },
+    {
+     "title": "How did the COP31 climate agreement fall apart – and what happens now?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-did-the-cop31-climate-agreement-fall-apart-and-what-happens-now-296994",
      "published": "2026-11-23T02:56:48Z",
      "summary": "",
      "stale": false,
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
-    },
-    {
-     "title": "No one loved Aussie music more than Molly Meldrum",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/no-one-loved-aussie-music-more-than-molly-meldrum-293822",
-     "published": "2026-11-23T00:10:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Giuffre, Associate Professor in Media, University of Technology Sydney"
     },
     {
      "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
@@ -913,7 +913,13 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The UN climate talks failed to reach agreement over refusal to mention fossil fuels. What now?",
+   "title": "When a loved one is moving into aged care, selling the family home isn’t the only way to pay",
+   "published": "2026-11-23 03:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How did the COP31 climate agreement fall apart – and what happens now?",
    "published": "2026-11-23 02:56 UTC"
   },
   {
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "How to avoid ‘charger rage’: the unwritten rules of EV charging etiquette",
    "published": "2026-11-23 01:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "No one loved Aussie music more than Molly Meldrum",
-   "published": "2026-11-23 00:10 UTC"
   },
   {
    "region": "Oceania",
