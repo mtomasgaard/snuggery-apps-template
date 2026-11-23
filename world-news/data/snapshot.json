@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T01:01:22Z",
+ "generatedAt": "2026-11-23T02:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/cop31-collapse-countries-reject-deal-without-mention-of-transition-away-from-fossil-fuels-297269",
+     "published": "2026-11-23T01:50:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tim Naish, Professor in Earth Sciences, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "How to avoid ‘charger rage’: the unwritten rules of EV charging etiquette",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-to-avoid-charger-rage-the-unwritten-rules-of-ev-charging-etiquette-293546",
+     "published": "2026-11-23T01:48:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
+    },
+    {
      "title": "No one loved Aussie music more than Molly Meldrum",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +459,6 @@
      "author": "Liz Giuffre, Associate Professor in Media, University of Technology Sydney"
     },
     {
-     "title": "Victoria’s next government needs to delay or cancel big build projects, top economists warn",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victorias-next-government-needs-to-delay-or-cancel-big-build-projects-top-economists-warn-296925",
-     "published": "2026-11-22T23:21:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Victoria Thieberger, Business and Economics Editor, The Conversation"
-    },
-    {
      "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Maria Armoudian, Associate Professor, Politics & International Relations; Director, Sustainability Hub, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Albanese’s ratings plunge to new low in Newspoll; Victorian Coalition set to win election",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/albaneses-ratings-plunge-to-new-low-in-newspoll-victorian-coalition-set-to-win-election-297157",
-     "published": "2026-11-22T22:33:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Are your kids really ratty right now? How to get through the final weeks of school",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
+   "published": "2026-11-23 01:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How to avoid ‘charger rage’: the unwritten rules of EV charging etiquette",
+   "published": "2026-11-23 01:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "No one loved Aussie music more than Molly Meldrum",
    "published": "2026-11-23 00:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Victoria’s next government needs to delay or cancel big build projects, top economists warn",
-   "published": "2026-11-22 23:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
    "published": "2026-11-22 23:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Albanese’s ratings plunge to new low in Newspoll; Victorian Coalition set to win election",
-   "published": "2026-11-22 22:33 UTC"
   },
   {
    "region": "Oceania",
