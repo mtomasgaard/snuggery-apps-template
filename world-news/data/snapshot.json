@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T17:01:37Z",
+ "generatedAt": "2026-11-23T18:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -13,7 +13,7 @@
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168859",
      "published": "2026-11-23T12:00:00Z",
-     "summary": "As winter sets in, the Security Council hold a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how strikes on…",
+     "summary": "As winter sets in, the Security Council is holding a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how…",
      "stale": false
     },
     {
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/why-sportswomen-are-turning-to-onlyfans-and-what-it-says-about-inequality-in-sport-297131",
+     "published": "2026-11-23T17:40:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Holly Thorpe, Professor in Sociology of Sport and Gender, University of Waikato"
+    },
+    {
+     "title": "The curious history of the huntaway, New Zealand’s unusually loud sheepdog",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-curious-history-of-the-huntaway-new-zealands-unusually-loud-sheepdog-296876",
+     "published": "2026-11-23T17:29:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gareth Enticott, Professor of Human Geography, Cardiff University; University of Waikato"
+    },
+    {
      "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
-    },
-    {
-     "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/cop31-collapse-countries-reject-deal-without-mention-of-transition-away-from-fossil-fuels-297269",
-     "published": "2026-11-23T01:50:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tim Naish, Professor in Earth Sciences, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/a-global-push-to-become-nature-positive-is-growing-but-can-we-measure-its-progress-297134",
-     "published": "2026-11-22T23:09:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Maria Armoudian, Associate Professor, Politics & International Relations; Director, Sustainability Hub, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
+   "published": "2026-11-23 17:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The curious history of the huntaway, New Zealand’s unusually loud sheepdog",
+   "published": "2026-11-23 17:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
    "published": "2026-11-23 06:05 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
    "published": "2026-11-23 04:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
-   "published": "2026-11-23 01:50 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A global push to become ‘nature positive’ is growing. But can we measure its progress?",
-   "published": "2026-11-22 23:09 UTC"
   },
   {
    "region": "Oceania",
