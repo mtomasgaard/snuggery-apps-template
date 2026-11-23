@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T16:11:32Z",
+ "generatedAt": "2026-11-23T17:01:37Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Security Council LIVE: Winter attacks on Ukraine's power grid and Black Sea shipping threaten lives and global food supplies",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168859",
+     "published": "2026-11-23T12:00:00Z",
+     "summary": "As winter sets in, the Security Council hold a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how strikes on…",
+     "stale": false
+    },
     {
      "title": "Shattered playgrounds and freezing classrooms: Inside Ukraine’s deadliest year for children",
      "source": "UN News",
@@ -25,15 +34,6 @@
      "summary": "VotEDU started off as a civic-education project to help young people understand democracy before they vote for the first time.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Patients running out of options as antibiotics stop working against common infections",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168832",
-     "published": "2026-11-18T12:00:00Z",
-     "summary": "Common bacteria are becoming highly resistant to front-line and even “last-resort” antibiotics, the UN World Health Organization (WHO) said on Wednesday, warning that the situation today is worse than it was in 2019.",
-     "stale": false
     },
     {
      "title": "In Ukraine, youth are finding their voices in the digital democracy",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "UN News",
+   "title": "Security Council LIVE: Winter attacks on Ukraine's power grid and Black Sea shipping threaten lives and global food supplies",
+   "published": "2026-11-23 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
    "title": "Shattered playgrounds and freezing classrooms: Inside Ukraine’s deadliest year for children",
    "published": "2026-11-20 12:00 UTC"
   },
@@ -681,12 +687,6 @@
    "source": "Global Voices",
    "title": "In Moldova, teens are learning about democracy and elections through an app",
    "published": "2026-11-19 00:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Patients running out of options as antibiotics stop working against common infections",
-   "published": "2026-11-18 12:00 UTC"
   },
   {
    "region": "Europe",
