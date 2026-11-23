@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T00:01:27Z",
+ "generatedAt": "2026-11-23T01:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "No one loved Aussie music more than Molly Meldrum",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/no-one-loved-aussie-music-more-than-molly-meldrum-293822",
+     "published": "2026-11-23T00:10:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Giuffre, Associate Professor in Media, University of Technology Sydney"
+    },
+    {
      "title": "Victoria’s next government needs to delay or cancel big build projects, top economists warn",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Your say: week beginning November 23",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-november-23-297262",
-     "published": "2026-11-22T20:42:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "Are your kids really ratty right now? How to get through the final weeks of school",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "No one loved Aussie music more than Molly Meldrum",
+   "published": "2026-11-23 00:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victoria’s next government needs to delay or cancel big build projects, top economists warn",
    "published": "2026-11-22 23:21 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Albanese’s ratings plunge to new low in Newspoll; Victorian Coalition set to win election",
    "published": "2026-11-22 22:33 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning November 23",
-   "published": "2026-11-22 20:42 UTC"
   },
   {
    "region": "Oceania",
