@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T19:01:32Z",
+ "generatedAt": "2026-11-23T20:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -13,7 +13,7 @@
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168859",
      "published": "2026-11-23T12:00:00Z",
-     "summary": "As winter sets in, the Security Council hold a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how strikes on…",
+     "summary": "As winter sets in, the Security Council is holding a high stakes meeting Monday to discuss how Russian attacks on Ukraine's energy grid are leaving civilians without heat, power and water. It will also look at how…",
      "stale": false
     },
     {
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/nvidias-jensen-huang-is-getting-his-ceo-job-back-but-history-shows-companies-perform-better-when-corporate-boards-take-executive-misbehavior-seriously-281689",
+     "published": "2026-11-23T18:31:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael Nalick, Assistant Professor of Management, University of Denver"
+    },
+    {
      "title": "What was the first animal that ever lived on Earth?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Matthew W. Brown, Dr. Donald L. Hall Professor of Biology, Mississippi State University"
-    },
-    {
-     "title": "A fungus that can survive in Chernobyl could help create materials that trap and break down nerve agents and pesticides",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/a-fungus-that-can-survive-in-chernobyl-could-help-create-materials-that-trap-and-break-down-nerve-agents-and-pesticides-294087",
-     "published": "2026-11-23T13:04:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sofia Aman, PhD Researcher in Materials Science and Engineering, Northwestern University"
     },
     {
      "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
+     "title": "As climate change creates ‘disasters on steroids’, it’s time we asked: what happens after an evacuation?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/as-climate-change-creates-disasters-on-steroids-its-time-we-asked-what-happens-after-an-evacuation-296951",
+     "published": "2026-11-23T19:30:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jane McAdam, Scientia Professor and ARC Laureate Fellow, Kaldor Centre for International Refugee Law, UNSW"
+    },
+    {
+     "title": "Guide to the classics: how André Gide’s The Counterfeiters subverted the traditional novel",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/guide-to-the-classics-how-andre-gides-the-counterfeiters-subverted-the-traditional-novel-277492",
+     "published": "2026-11-23T19:18:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Véronique Duché, A.R. Chisholm Professor of French, The University of Melbourne"
+    },
+    {
+     "title": "PNG’s parliament is voting on ratifying Bougainville independence. A ‘no’ won’t be the end of the story",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/pngs-parliament-is-voting-on-ratifying-bougainville-independence-a-no-wont-be-the-end-of-the-story-290063",
+     "published": "2026-11-23T19:18:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tania Miletic, Co-Director, Initiative for Peacebuilding, Faculty of Arts, The University of Melbourne"
+    },
+    {
+     "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/why-sportswomen-are-turning-to-onlyfans-and-what-it-says-about-inequality-in-sport-297131",
      "published": "2026-11-23T17:40:43Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Gareth Enticott, Professor of Human Geography, Cardiff University; University of Waikato"
-    },
-    {
-     "title": "AI has solved a host of big maths problems – here’s why this threatens the whole field of mathematics",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/ai-has-solved-a-host-of-big-maths-problems-heres-why-this-threatens-the-whole-field-of-mathematics-293982",
-     "published": "2026-11-23T12:27:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Neil Saunders, Senior Lecturer in Mathematics, Department of Mathematical Sciences, City St George's, University of London"
-    },
-    {
-     "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-it-was-like-to-watch-crucial-cop-climate-talks-fall-apart-at-the-last-minute-297270",
-     "published": "2026-11-23T06:05:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
-    },
-    {
-     "title": "A trick marketers use to sell you things can also persuade rats to enter traps – new study",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-trick-marketers-use-to-sell-you-things-can-also-persuade-rats-to-enter-traps-new-study-296932",
-     "published": "2026-11-23T05:05:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peter Banks, Professor of Conservation Biology, School of Life and Environmental Sciences, University of Sydney"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What was the first animal that ever lived on Earth?",
-   "published": "2026-11-23 13:05 UTC"
+   "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
+   "published": "2026-11-23 18:31 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A fungus that can survive in Chernobyl could help create materials that trap and break down nerve agents and pesticides",
-   "published": "2026-11-23 13:04 UTC"
+   "title": "What was the first animal that ever lived on Earth?",
+   "published": "2026-11-23 13:05 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "As climate change creates ‘disasters on steroids’, it’s time we asked: what happens after an evacuation?",
+   "published": "2026-11-23 19:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Guide to the classics: how André Gide’s The Counterfeiters subverted the traditional novel",
+   "published": "2026-11-23 19:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "PNG’s parliament is voting on ratifying Bougainville independence. A ‘no’ won’t be the end of the story",
+   "published": "2026-11-23 19:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
    "published": "2026-11-23 17:40 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "The curious history of the huntaway, New Zealand’s unusually loud sheepdog",
    "published": "2026-11-23 17:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI has solved a host of big maths problems – here’s why this threatens the whole field of mathematics",
-   "published": "2026-11-23 12:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What it was like to watch crucial COP climate talks fall apart at the last minute",
-   "published": "2026-11-23 06:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A trick marketers use to sell you things can also persuade rats to enter traps – new study",
-   "published": "2026-11-23 05:05 UTC"
   },
   {
    "region": "Oceania",
