@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T14:01:26Z",
+ "generatedAt": "2026-11-23T15:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,44 @@
    "stale": false,
    "items": [
     {
+     "title": "South Africa’s small cattle farmers need help before super El Niño hits: how to set up shade, water and feed",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-small-cattle-farmers-need-help-before-super-el-nino-hits-how-to-set-up-shade-water-and-feed-295110",
+     "published": "2026-11-23T13:57:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mhlangabezi Slayi, Lecturer, University of Fort Hare"
+    },
+    {
+     "title": "Rwanda and Papua New Guinea had big energy access plans: study compares what happened",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/rwanda-and-papua-new-guinea-had-big-energy-access-plans-study-compares-what-happened-294582",
+     "published": "2026-11-23T13:56:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ben Radley, Reader in International Development, University of Bath"
+    },
+    {
+     "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168858",
+     "published": "2026-11-23T12:00:00Z",
+     "summary": "Heavy fighting near a hospital in Ituri province in the Democratic Republic of the Congo (DRC) has disrupted the vital work of Ebola responders and forced emergency teams to take cover for more than 24 hours.",
+     "stale": false
+    },
+    {
+     "title": "Libya: UN mission urges probe into Benghazi port attacks",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168857",
+     "published": "2026-11-23T12:00:00Z",
+     "summary": "The UN Support Mission in Libya (UNSMIL) has called for an independent investigation into attacks carried out at Benghazi port and off the coast of the eastern city on Sunday.",
+     "stale": false
+    },
+    {
      "title": "Nigerien women lose their rights before ever reaching a courtroom",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -185,26 +223,6 @@
      "summary": "Long before reaching any courtroom, women face barriers not only within their families and communities, but also in the resolution of disputes, often over land, inheritance, and child custody.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Most women in Rwanda give birth in a health facility – but how are they treated?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/most-women-in-rwanda-give-birth-in-a-health-facility-but-how-are-they-treated-292161",
-     "published": "2026-11-22T07:28:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alice Muhayimana, Lecturer, University of Rwanda"
-    },
-    {
-     "title": "South Africa’s child support grant ends at 18: the mental health impact is severe – research",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-child-support-grant-ends-at-18-the-mental-health-impact-is-severe-research-295688",
-     "published": "2026-11-22T07:28:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tsepang Khumalo, Postdoctoral Researcher, Global Health, Erasmus University Rotterdam"
     },
     {
      "title": "Growing up displaced in Cameroon after ten years of conflict",
@@ -233,24 +251,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168822",
      "published": "2026-11-17T12:00:00Z",
      "summary": "The World Food Programme (WFP) is assisting thousands of families who fled recent violence in Ethiopia for the Moyale area in neighbouring Kenya, the UN agency reported on Tuesday.",
-     "stale": false
-    },
-    {
-     "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168797",
-     "published": "2026-11-13T12:00:00Z",
-     "summary": "The Ebola outbreak in the Democratic Republic of the Congo (DRC) continues to spread amid repeated and ongoing deadly attacks on civilians and frontline health workers by armed groups that are obstructing efforts to…",
-     "stale": false
-    },
-    {
-     "title": "Aid is the ‘only hope’ for millions in Sudan, WFP chief warns, as funding cuts deepen hunger crisis",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168793",
-     "published": "2026-11-12T12:00:00Z",
-     "summary": "The World Food Programme’s (WFP) new Executive Director has warned that funding cuts are worsening Sudan’s hunger crisis following his first field mission to the country, where he met families displaced by conflict and…",
      "stale": false
     }
    ]
@@ -768,21 +768,33 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s small cattle farmers need help before super El Niño hits: how to set up shade, water and feed",
+   "published": "2026-11-23 13:57 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Rwanda and Papua New Guinea had big energy access plans: study compares what happened",
+   "published": "2026-11-23 13:56 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
+   "published": "2026-11-23 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Libya: UN mission urges probe into Benghazi port attacks",
+   "published": "2026-11-23 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Nigerien women lose their rights before ever reaching a courtroom",
    "published": "2026-11-23 06:45 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Most women in Rwanda give birth in a health facility – but how are they treated?",
-   "published": "2026-11-22 07:28 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South Africa’s child support grant ends at 18: the mental health impact is severe – research",
-   "published": "2026-11-22 07:28 UTC"
   },
   {
    "region": "Africa",
@@ -801,18 +813,6 @@
    "source": "UN News",
    "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
    "published": "2026-11-17 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo Ebola outbreak: Unrest fuelled by armed groups holds back response",
-   "published": "2026-11-13 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Aid is the ‘only hope’ for millions in Sudan, WFP chief warns, as funding cuts deepen hunger crisis",
-   "published": "2026-11-12 12:00 UTC"
   },
   {
    "region": "Middle East",
