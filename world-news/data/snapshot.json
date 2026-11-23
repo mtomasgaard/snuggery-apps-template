@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T13:01:36Z",
+ "generatedAt": "2026-11-23T14:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "What was the first animal that ever lived on Earth?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-was-the-first-animal-that-ever-lived-on-earth-287460",
+     "published": "2026-11-23T13:05:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew W. Brown, Dr. Donald L. Hall Professor of Biology, Mississippi State University"
+    },
+    {
+     "title": "A fungus that can survive in Chernobyl could help create materials that trap and break down nerve agents and pesticides",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/a-fungus-that-can-survive-in-chernobyl-could-help-create-materials-that-trap-and-break-down-nerve-agents-and-pesticides-294087",
+     "published": "2026-11-23T13:04:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sofia Aman, PhD Researcher in Materials Science and Engineering, Northwestern University"
+    },
+    {
      "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
      "source": "UN News",
      "feed": "un-americas",
@@ -102,16 +122,6 @@
      "stale": false
     },
     {
-     "title": "Army’s plan to blow up aging explosives in Iowa will spread lead for miles – here’s what you need to know about the risks",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/armys-plan-to-blow-up-aging-explosives-in-iowa-will-spread-lead-for-miles-heres-what-you-need-to-know-about-the-risks-297225",
-     "published": "2026-11-21T13:14:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Patrick O'Shaughnessy, Professor of Occupational and Environmental Health, University of Iowa"
-    },
-    {
      "title": "Homes abandoned, harvests failing: Haiti’s farmers rebuild amid violence, hunger and El Niño",
      "source": "UN News",
      "feed": "un-americas",
@@ -119,16 +129,6 @@
      "published": "2026-11-21T12:00:00Z",
      "summary": "Years of insecurity, violence perpetrated by murderous armed gangs and economic instability, combined with displacement, poor agricultural performance and climate shocks, have left millions of Haitians struggling to…",
      "stale": false
-    },
-    {
-     "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/whether-its-sister-or-your-own-sister-the-burden-that-caring-for-aging-parents-puts-on-women-is-no-joke-297041",
-     "published": "2026-11-20T19:58:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Patricia Smith, Professor of Economics Emeritus, University of Michigan"
     },
     {
      "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
@@ -720,27 +720,27 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "What was the first animal that ever lived on Earth?",
+   "published": "2026-11-23 13:05 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "A fungus that can survive in Chernobyl could help create materials that trap and break down nerve agents and pesticides",
+   "published": "2026-11-23 13:04 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
    "published": "2026-11-22 12:00 UTC"
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "Army’s plan to blow up aging explosives in Iowa will spread lead for miles – here’s what you need to know about the risks",
-   "published": "2026-11-21 13:14 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "UN News",
    "title": "Homes abandoned, harvests failing: Haiti’s farmers rebuild amid violence, hunger and El Niño",
    "published": "2026-11-21 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Whether it’s ‘Sister’ or your own sister, the burden that caring for aging parents puts on women is no joke",
-   "published": "2026-11-20 19:58 UTC"
   },
   {
    "region": "Americas",
