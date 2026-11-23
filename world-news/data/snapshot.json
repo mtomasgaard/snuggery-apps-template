@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T05:01:23Z",
+ "generatedAt": "2026-11-23T06:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -93,10 +93,10 @@
    "stale": false,
    "items": [
     {
-     "title": "Army’s plan to blow up aging explosives will spread lead over part of Iowa – what you need to know about the risks",
+     "title": "Army’s plan to blow up aging explosives in Iowa will spread lead for miles – here’s what you need to know about the risks",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/armys-plan-to-blow-up-aging-explosives-will-spread-lead-over-part-of-iowa-what-you-need-to-know-about-the-risks-297225",
+     "link": "https://theconversation.com/armys-plan-to-blow-up-aging-explosives-in-iowa-will-spread-lead-for-miles-heres-what-you-need-to-know-about-the-risks-297225",
      "published": "2026-11-21T13:14:31Z",
      "summary": "",
      "stale": false,
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A trick marketers use to sell you things can also persuade rats to enter traps – new study",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-trick-marketers-use-to-sell-you-things-can-also-persuade-rats-to-enter-traps-new-study-296932",
+     "published": "2026-11-23T05:05:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Peter Banks, Professor of Conservation Biology, School of Life and Environmental Sciences, University of Sydney"
+    },
+    {
      "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "NSW has passed a special law for one coal mine. Here’s why that’s worrying",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/nsw-has-passed-a-special-law-for-one-coal-mine-heres-why-thats-worrying-296703",
-     "published": "2026-11-23T04:23:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katherine Owens, Associate Professor of Environmental Law, University of Sydney"
     },
     {
      "title": "COP31 collapse: countries reject deal without mention of transition away from fossil fuels",
@@ -721,7 +721,7 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Army’s plan to blow up aging explosives will spread lead over part of Iowa – what you need to know about the risks",
+   "title": "Army’s plan to blow up aging explosives in Iowa will spread lead for miles – here’s what you need to know about the risks",
    "published": "2026-11-21 13:14 UTC"
   },
   {
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A trick marketers use to sell you things can also persuade rats to enter traps – new study",
+   "published": "2026-11-23 05:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘The sacred object in mathematics’: the Riemann hypothesis, AI and a proof no human can read",
    "published": "2026-11-23 04:32 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Chalmers flags slowing growth, warns Australians ‘things might get a bit harder’",
    "published": "2026-11-23 04:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NSW has passed a special law for one coal mine. Here’s why that’s worrying",
-   "published": "2026-11-23 04:23 UTC"
   },
   {
    "region": "Oceania",
