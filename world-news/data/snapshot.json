@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T04:01:25Z",
+ "generatedAt": "2026-11-24T05:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Australia is spending $4 billion on remote NT housing, but risks repeating the same mistakes",
+     "title": "Who can resist an inflatable dolphin balloon? The wonder and melancholy of artist Philippe Parreno",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/australia-is-spending-4-billion-on-remote-nt-housing-but-risks-repeating-the-same-mistakes-297282",
-     "published": "2026-11-24T03:04:18Z",
+     "link": "https://theconversation.com/who-can-resist-an-inflatable-dolphin-balloon-the-wonder-and-melancholy-of-artist-philippe-parreno-296817",
+     "published": "2026-11-24T04:03:46Z",
      "summary": "",
      "stale": false,
-     "author": "Kieran Wong, Adjunct Professor, Department of Architecture, Monash University"
+     "author": "Grant Stevens, Associate Professor of Fine Arts, School of Art & Design, UNSW"
     },
     {
-     "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
+     "title": "From Pinocchio to E.T. and Chucky: Lifelike at ACMI celebrates our favourite onscreen puppets",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/silver-tongue-is-a-rollicking-queer-retelling-of-the-classic-tale-treasure-island-296819",
-     "published": "2026-11-24T00:48:12Z",
+     "link": "https://theconversation.com/from-pinocchio-to-e-t-and-chucky-lifelike-at-acmi-celebrates-our-favourite-onscreen-puppets-296945",
+     "published": "2026-11-24T04:03:34Z",
      "summary": "",
      "stale": false,
-     "author": "Narelle Yeo, Associate Professor in Voice, Opera and Stagecraft, Director Music Theatre, Sydney Conservatorium of Music, University of Sydney"
+     "author": "Ruth Richards, Lecturer (Media), RMIT University"
+    },
+    {
+     "title": "Vale, Chris Dickman: Australian science grieves the loss of a giant of ecology and conservation",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/vale-chris-dickman-australian-science-grieves-the-loss-of-a-giant-of-ecology-and-conservation-297156",
+     "published": "2026-11-24T03:50:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
     },
     {
      "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Sara Ali, Research Fellow and Academic Database Advisor, Department of Finance, Auckland University of Technology"
-    },
-    {
-     "title": "As climate change creates ‘disasters on steroids’, it’s time we asked: what happens after an evacuation?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/as-climate-change-creates-disasters-on-steroids-its-time-we-asked-what-happens-after-an-evacuation-296951",
-     "published": "2026-11-23T19:30:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jane McAdam, Scientia Professor and ARC Laureate Fellow, Kaldor Centre for International Refugee Law, UNSW"
     },
     {
      "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australia is spending $4 billion on remote NT housing, but risks repeating the same mistakes",
-   "published": "2026-11-24 03:04 UTC"
+   "title": "Who can resist an inflatable dolphin balloon? The wonder and melancholy of artist Philippe Parreno",
+   "published": "2026-11-24 04:03 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
-   "published": "2026-11-24 00:48 UTC"
+   "title": "From Pinocchio to E.T. and Chucky: Lifelike at ACMI celebrates our favourite onscreen puppets",
+   "published": "2026-11-24 04:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Vale, Chris Dickman: Australian science grieves the loss of a giant of ecology and conservation",
+   "published": "2026-11-24 03:50 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
    "published": "2026-11-23 22:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "As climate change creates ‘disasters on steroids’, it’s time we asked: what happens after an evacuation?",
-   "published": "2026-11-23 19:30 UTC"
   },
   {
    "region": "Oceania",
