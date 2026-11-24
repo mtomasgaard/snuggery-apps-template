@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T19:01:35Z",
+ "generatedAt": "2026-11-24T20:01:48Z",
  "regions": [
   {
    "key": "europe",
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": false,
+     "stale": true,
      "author": "Global Voices East Asia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
+     "stale": true,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/companies-are-getting-less-accurate-data-on-extreme-weather-just-when-they-need-it-the-most-295737",
+     "published": "2026-11-24T19:03:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Suvrat Dhanorkar, Associate Professor of Operations Management, Georgia Institute of Technology"
+    },
+    {
      "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Destenie Nock, Alex Hills Career Development Associate Professor of Engineering and Public Policy, Civil and Environmental Engineering, Carnegie Mellon…"
-    },
-    {
-     "title": "California raised minimum wages for fast-food workers – here’s how it played out 2 years later",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/california-raised-minimum-wages-for-fast-food-workers-heres-how-it-played-out-2-years-later-294552",
-     "published": "2026-11-24T13:14:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liam Sigaud, Research Associate, West Virginia University"
     },
     {
      "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Albanese and Taylor focus their troops on election as government pushes agenda through packed pre-Christmas sitting week",
+     "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/albanese-and-taylor-focus-their-troops-on-election-as-government-pushes-agenda-through-packed-pre-christmas-sitting-week-296267",
-     "published": "2026-11-24T11:02:57Z",
+     "link": "https://theconversation.com/quality-time-and-gifting-flowers-why-we-love-that-gta-became-a-game-about-relationships-297286",
+     "published": "2026-11-24T19:10:54Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Giselle Woodley, Sexologist & Lecturer and Research Fellow in Communications & Culture, Edith Cowan University"
     },
     {
-     "title": "Cold comfort on copyright for Australian creatives in new AI committee report",
+     "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/cold-comfort-on-copyright-for-australian-creatives-in-new-ai-committee-report-297291",
-     "published": "2026-11-24T06:11:56Z",
+     "link": "https://theconversation.com/i-diagnose-human-cruelty-australian-and-nz-medical-workers-on-treating-palestinians-in-gaza-293222",
+     "published": "2026-11-24T19:10:38Z",
      "summary": "",
      "stale": false,
-     "author": "Alice Grundy, Visiting Fellow, School of Literature, Language and Linguistics, Australian National University"
+     "author": "Martin Kear, Lecturer, Department of Government and International Relations, University of Sydney"
     },
     {
-     "title": "View from The Hill: Ben Carroll has elevated integrity in his campaign after passing it by in 2023",
+     "title": "Is Australia’s new aged care at home program actually delivering better care?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-ben-carroll-has-elevated-integrity-in-his-campaign-after-passing-it-by-in-2023-296273",
-     "published": "2026-11-24T06:06:09Z",
+     "link": "https://theconversation.com/is-australias-new-aged-care-at-home-program-actually-delivering-better-care-296917",
+     "published": "2026-11-24T19:10:20Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Ushi Ghoorah, Senior Lecturer, School of Business, Western Sydney University"
     },
     {
      "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "URLError: <urlopen error timed out>; kept 3 cached"
   },
   {
    "id": "gv-eastern-europe",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
-   "published": "2026-11-24 13:14 UTC"
+   "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
+   "published": "2026-11-24 19:03 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "California raised minimum wages for fast-food workers – here’s how it played out 2 years later",
+   "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
    "published": "2026-11-24 13:14 UTC"
   },
   {
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Albanese and Taylor focus their troops on election as government pushes agenda through packed pre-Christmas sitting week",
-   "published": "2026-11-24 11:02 UTC"
+   "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
+   "published": "2026-11-24 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Cold comfort on copyright for Australian creatives in new AI committee report",
-   "published": "2026-11-24 06:11 UTC"
+   "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
+   "published": "2026-11-24 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: Ben Carroll has elevated integrity in his campaign after passing it by in 2023",
-   "published": "2026-11-24 06:06 UTC"
+   "title": "Is Australia’s new aged care at home program actually delivering better care?",
+   "published": "2026-11-24 19:10 UTC"
   },
   {
    "region": "Oceania",
