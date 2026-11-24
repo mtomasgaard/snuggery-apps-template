@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T01:01:30Z",
+ "generatedAt": "2026-11-24T02:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
+     "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/silver-tongue-is-a-rollicking-queer-retelling-of-the-classic-tale-treasure-island-296819",
+     "published": "2026-11-24T00:48:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Narelle Yeo, Associate Professor in Voice, Opera and Stagecraft, Director Music Theatre, Sydney Conservatorium of Music, University of Sydney"
+    },
+    {
+     "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nvidias-ceo-is-back-but-the-turmoil-has-exposed-the-ai-booms-risks-for-nz-investors-296924",
      "published": "2026-11-23T22:01:55Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Holly Thorpe, Professor in Sociology of Sport and Gender, University of Waikato"
-    },
-    {
-     "title": "The curious history of the huntaway, New Zealand’s unusually loud sheepdog",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-curious-history-of-the-huntaway-new-zealands-unusually-loud-sheepdog-296876",
-     "published": "2026-11-23T17:29:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gareth Enticott, Professor of Human Geography, Cardiff University; University of Waikato"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
+   "published": "2026-11-24 00:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
    "published": "2026-11-23 22:01 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
    "published": "2026-11-23 17:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The curious history of the huntaway, New Zealand’s unusually loud sheepdog",
-   "published": "2026-11-23 17:29 UTC"
   },
   {
    "region": "Oceania",
