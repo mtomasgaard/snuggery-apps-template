@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T20:01:48Z",
+ "generatedAt": "2026-11-24T21:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
      "published": "2026-11-10T05:36:17Z",
      "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
-     "stale": true,
+     "stale": false,
      "author": "Global Voices East Asia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": true,
+     "stale": false,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What are AI chips, and what’s so special about Nvidia’s?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-are-ai-chips-and-whats-so-special-about-nvidias-297128",
+     "published": "2026-11-24T20:08:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jeffrey Young, Principal Research Scientist, Partnership for an Advanced Computing Environment, Georgia Institute of Technology"
+    },
+    {
      "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Suvrat Dhanorkar, Associate Professor of Operations Management, Georgia Institute of Technology"
-    },
-    {
-     "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/prepaid-electricity-can-make-bills-more-predictable-but-not-necessarily-more-affordable-296551",
-     "published": "2026-11-24T13:14:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Destenie Nock, Alex Hills Career Development Associate Professor of Engineering and Public Policy, Civil and Environmental Engineering, Carnegie Mellon…"
     },
     {
      "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/10-years-after-nzs-7-8-earthquake-a-changed-coastline-offers-clues-to-future-hazards-297266",
+     "published": "2026-11-24T20:34:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Wayne Stephenson, Professor of Geography, University of Otago"
+    },
+    {
      "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -459,24 +469,14 @@
      "author": "Ushi Ghoorah, Senior Lecturer, School of Business, Western Sydney University"
     },
     {
-     "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
+     "title": "The silver lining of the COP31 flop? Climate coalitions will rise – and the shift away from fossil fuels will accelerate",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nvidias-ceo-is-back-but-the-turmoil-has-exposed-the-ai-booms-risks-for-nz-investors-296924",
-     "published": "2026-11-23T22:01:55Z",
+     "link": "https://theconversation.com/the-silver-lining-of-the-cop31-flop-climate-coalitions-will-rise-and-the-shift-away-from-fossil-fuels-will-accelerate-297294",
+     "published": "2026-11-24T19:09:32Z",
      "summary": "",
      "stale": false,
-     "author": "Sara Ali, Research Fellow and Academic Database Advisor, Department of Finance, Auckland University of Technology"
-    },
-    {
-     "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/why-sportswomen-are-turning-to-onlyfans-and-what-it-says-about-inequality-in-sport-297131",
-     "published": "2026-11-23T17:40:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Holly Thorpe, Professor in Sociology of Sport and Gender, University of Waikato"
+     "author": "Frank Jotzo, Professor, Crawford School of Public Policy and Director, Centre for Climate and Energy Policy, Australian National University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
-   "published": "2026-11-24 19:03 UTC"
+   "title": "What are AI chips, and what’s so special about Nvidia’s?",
+   "published": "2026-11-24 20:08 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
-   "published": "2026-11-24 13:14 UTC"
+   "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
+   "published": "2026-11-24 19:03 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
+   "published": "2026-11-24 20:34 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
    "published": "2026-11-24 19:10 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
-   "published": "2026-11-23 22:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
-   "published": "2026-11-23 17:40 UTC"
+   "title": "The silver lining of the COP31 flop? Climate coalitions will rise – and the shift away from fossil fuels will accelerate",
+   "published": "2026-11-24 19:09 UTC"
   },
   {
    "region": "Oceania",
