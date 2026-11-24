@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-23T23:01:39Z",
+ "generatedAt": "2026-11-24T00:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NATO witnesses a surge of airspace violations by Russia as Moscow seeks to test alliance",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/nato-witnesses-a-surge-of-airspace-violations-by-russia-as-moscow-seeks-to-test-alliance-297361",
+     "published": "2026-11-23T22:52:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Frederic Lemieux, Professor of the Practice and Faculty Director of the Master's in Applied Intelligence, Georgetown University"
+    },
+    {
      "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael Nalick, Assistant Professor of Management, University of Denver"
-    },
-    {
-     "title": "What was the first animal that ever lived on Earth?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-was-the-first-animal-that-ever-lived-on-earth-287460",
-     "published": "2026-11-23T13:05:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew W. Brown, Dr. Donald L. Hall Professor of Biology, Mississippi State University"
     },
     {
      "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
-   "published": "2026-11-23 18:31 UTC"
+   "title": "NATO witnesses a surge of airspace violations by Russia as Moscow seeks to test alliance",
+   "published": "2026-11-23 22:52 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What was the first animal that ever lived on Earth?",
-   "published": "2026-11-23 13:05 UTC"
+   "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
+   "published": "2026-11-23 18:31 UTC"
   },
   {
    "region": "Americas",
