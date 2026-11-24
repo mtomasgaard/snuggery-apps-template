@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T11:01:23Z",
+ "generatedAt": "2026-11-24T12:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Albanese and Taylor focus their troops on election as government pushes agenda through packed pre-Christmas sitting week",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/albanese-and-taylor-focus-their-troops-on-election-as-government-pushes-agenda-through-packed-pre-christmas-sitting-week-296267",
+     "published": "2026-11-24T11:02:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Cold comfort on copyright for Australian creatives in new AI committee report",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "What the ICJ’s landmark genocide finding could mean for the case against Israel in Gaza",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-the-icjs-landmark-genocide-finding-could-mean-for-the-case-against-israel-in-gaza-297374",
-     "published": "2026-11-24T05:18:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Melanie O'Brien, Professor of International Law, The University of Western Australia"
     },
     {
      "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Albanese and Taylor focus their troops on election as government pushes agenda through packed pre-Christmas sitting week",
+   "published": "2026-11-24 11:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Cold comfort on copyright for Australian creatives in new AI committee report",
    "published": "2026-11-24 06:11 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: Ben Carroll has elevated integrity in his campaign after passing it by in 2023",
    "published": "2026-11-24 06:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What the ICJ’s landmark genocide finding could mean for the case against Israel in Gaza",
-   "published": "2026-11-24 05:18 UTC"
   },
   {
    "region": "Oceania",
