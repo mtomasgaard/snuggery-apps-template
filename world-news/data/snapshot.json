@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T03:01:33Z",
+ "generatedAt": "2026-11-24T04:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia is spending $4 billion on remote NT housing, but risks repeating the same mistakes",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australia-is-spending-4-billion-on-remote-nt-housing-but-risks-repeating-the-same-mistakes-297282",
+     "published": "2026-11-24T03:04:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kieran Wong, Adjunct Professor, Department of Architecture, Monash University"
+    },
+    {
      "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Jane McAdam, Scientia Professor and ARC Laureate Fellow, Kaldor Centre for International Refugee Law, UNSW"
-    },
-    {
-     "title": "Guide to the classics: how André Gide’s The Counterfeiters subverted the traditional novel",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/guide-to-the-classics-how-andre-gides-the-counterfeiters-subverted-the-traditional-novel-277492",
-     "published": "2026-11-23T19:18:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Véronique Duché, A.R. Chisholm Professor of French, The University of Melbourne"
     },
     {
      "title": "Why sportswomen are turning to OnlyFans – and what it says about inequality in sport",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia is spending $4 billion on remote NT housing, but risks repeating the same mistakes",
+   "published": "2026-11-24 03:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Silver Tongue is a rollicking, queer retelling of the classic tale Treasure Island",
    "published": "2026-11-24 00:48 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "As climate change creates ‘disasters on steroids’, it’s time we asked: what happens after an evacuation?",
    "published": "2026-11-23 19:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Guide to the classics: how André Gide’s The Counterfeiters subverted the traditional novel",
-   "published": "2026-11-23 19:18 UTC"
   },
   {
    "region": "Oceania",
