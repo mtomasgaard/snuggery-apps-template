@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T05:01:24Z",
+ "generatedAt": "2026-11-24T06:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Who can resist an inflatable dolphin balloon? The wonder and melancholy of artist Philippe Parreno",
+     "title": "What the ICJ’s landmark genocide finding could mean for the case against Israel in Gaza",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/who-can-resist-an-inflatable-dolphin-balloon-the-wonder-and-melancholy-of-artist-philippe-parreno-296817",
-     "published": "2026-11-24T04:03:46Z",
+     "link": "https://theconversation.com/what-the-icjs-landmark-genocide-finding-could-mean-for-the-case-against-israel-in-gaza-297374",
+     "published": "2026-11-24T05:18:08Z",
      "summary": "",
      "stale": false,
-     "author": "Grant Stevens, Associate Professor of Fine Arts, School of Art & Design, UNSW"
+     "author": "Melanie O'Brien, Professor of International Law, The University of Western Australia"
     },
     {
-     "title": "From Pinocchio to E.T. and Chucky: Lifelike at ACMI celebrates our favourite onscreen puppets",
+     "title": "Australians will be able to sue big tech platforms for online harm under digital duty of care law",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/from-pinocchio-to-e-t-and-chucky-lifelike-at-acmi-celebrates-our-favourite-onscreen-puppets-296945",
-     "published": "2026-11-24T04:03:34Z",
+     "link": "https://theconversation.com/australians-will-be-able-to-sue-big-tech-platforms-for-online-harm-under-digital-duty-of-care-law-297390",
+     "published": "2026-11-24T05:00:10Z",
      "summary": "",
      "stale": false,
-     "author": "Ruth Richards, Lecturer (Media), RMIT University"
+     "author": "Rob Nicholls, Senior Research Associate in Media and Communications, University of Sydney"
     },
     {
-     "title": "Vale, Chris Dickman: Australian science grieves the loss of a giant of ecology and conservation",
+     "title": "Trump had 4 reasons to ‘convince’ Nvidia to rehire Jensen Huang. Here’s why it matters globally",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/vale-chris-dickman-australian-science-grieves-the-loss-of-a-giant-of-ecology-and-conservation-297156",
-     "published": "2026-11-24T03:50:02Z",
+     "link": "https://theconversation.com/trump-had-4-reasons-to-convince-nvidia-to-rehire-jensen-huang-heres-why-it-matters-globally-297377",
+     "published": "2026-11-24T04:57:18Z",
      "summary": "",
      "stale": false,
-     "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
+     "author": "Marta Khomyn, Senior Lecturer, Finance and Data Analytics, Adelaide University"
     },
     {
      "title": "Nvidia’s CEO is back – but the turmoil has exposed the AI boom’s risks for NZ investors",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Who can resist an inflatable dolphin balloon? The wonder and melancholy of artist Philippe Parreno",
-   "published": "2026-11-24 04:03 UTC"
+   "title": "What the ICJ’s landmark genocide finding could mean for the case against Israel in Gaza",
+   "published": "2026-11-24 05:18 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "From Pinocchio to E.T. and Chucky: Lifelike at ACMI celebrates our favourite onscreen puppets",
-   "published": "2026-11-24 04:03 UTC"
+   "title": "Australians will be able to sue big tech platforms for online harm under digital duty of care law",
+   "published": "2026-11-24 05:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Vale, Chris Dickman: Australian science grieves the loss of a giant of ecology and conservation",
-   "published": "2026-11-24 03:50 UTC"
+   "title": "Trump had 4 reasons to ‘convince’ Nvidia to rehire Jensen Huang. Here’s why it matters globally",
+   "published": "2026-11-24 04:57 UTC"
   },
   {
    "region": "Oceania",
