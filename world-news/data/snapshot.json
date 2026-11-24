@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T16:01:27Z",
+ "generatedAt": "2026-11-24T17:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Roger Southall, Professor of Sociology, University of the Witwatersrand"
     },
     {
+     "title": "DR Congo: Concern for trapped Ebola workers as violence against women and girls deepens",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168865",
+     "published": "2026-11-24T12:00:00Z",
+     "summary": "Staff from the World Health Organization (WHO) and Ebola responders remain trapped in a hospital in Ituri province, Democratic Republic of the Congo (DRC), as heavy fighting continues in the vicinity, the UN agency said…",
+     "stale": false
+    },
+    {
      "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
      "source": "UN News",
      "feed": "un-africa",
@@ -243,15 +252,6 @@
      "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168822",
-     "published": "2026-11-17T12:00:00Z",
-     "summary": "The World Food Programme (WFP) is assisting thousands of families who fled recent violence in Ethiopia for the Moyale area in neighbouring Kenya, the UN agency reported on Tuesday.",
-     "stale": false
     }
    ]
   },
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "DR Congo: Concern for trapped Ebola workers as violence against women and girls deepens",
+   "published": "2026-11-24 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
    "published": "2026-11-23 12:00 UTC"
   },
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
    "published": "2026-11-20 18:05 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Hunger should not be a concern’: WFP steps in for families in Kenya who fled Ethiopia violence",
-   "published": "2026-11-17 12:00 UTC"
   },
   {
    "region": "Middle East",
