@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T14:01:27Z",
+ "generatedAt": "2026-11-24T15:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Liam Sigaud, Research Associate, West Virginia University"
     },
     {
+     "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168864",
+     "published": "2026-11-24T12:00:00Z",
+     "summary": "UN Secretary-General António Guterres has commended Colombia for progress achieved in the decade since a landmark accord known as the Final Peace Agreement ended more than 50 years of insurgency but stressed the need to…",
+     "stale": false
+    },
+    {
      "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
      "source": "UN News",
      "feed": "un-americas",
@@ -128,15 +137,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168834",
      "published": "2026-11-21T12:00:00Z",
      "summary": "Years of insecurity, violence perpetrated by murderous armed gangs and economic instability, combined with displacement, poor agricultural performance and climate shocks, have left millions of Haitians struggling to…",
-     "stale": false
-    },
-    {
-     "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168823",
-     "published": "2026-11-17T12:00:00Z",
-     "summary": "The UN human rights office, OHCHR has urged greater protection for civilians in Haiti amid ongoing “atrocious abuses” committed by gangs and intensified security operations.",
      "stale": false
     },
     {
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Libre-échange en Afrique : pourquoi les politiques doivent s'adapter aux petits commerçants transfrontaliers",
+     "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/libre-echange-en-afrique-pourquoi-les-politiques-doivent-sadapter-aux-petits-commercants-transfrontaliers-297188",
-     "published": "2026-11-24T05:45:23Z",
+     "link": "https://theconversation.com/johannesburg-has-had-101-mayors-over-the-last-140-years-new-book-reviews-the-good-times-and-the-bad-297313",
+     "published": "2026-11-24T13:55:45Z",
      "summary": "",
      "stale": false,
-     "author": "Samppa Kamara, Lecturer (Assistant Professor), University of Sheffield"
+     "author": "Philip Harrison, Professor School of Architecture and Planning, University of the Witwatersrand"
     },
     {
-     "title": "South Africa’s small cattle farmers need help before super El Niño hits: how to set up shade, water and feed",
+     "title": "South Africa after the local government elections: an ideology-free zone?",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-small-cattle-farmers-need-help-before-super-el-nino-hits-how-to-set-up-shade-water-and-feed-295110",
-     "published": "2026-11-23T13:57:16Z",
+     "link": "https://theconversation.com/south-africa-after-the-local-government-elections-an-ideology-free-zone-297302",
+     "published": "2026-11-24T13:55:29Z",
      "summary": "",
      "stale": false,
-     "author": "Mhlangabezi Slayi, Lecturer, University of Fort Hare"
+     "author": "Roger Southall, Professor of Sociology, University of the Witwatersrand"
     },
     {
      "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
+   "published": "2026-11-24 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
    "published": "2026-11-22 12:00 UTC"
   },
@@ -741,12 +747,6 @@
    "source": "UN News",
    "title": "Homes abandoned, harvests failing: Haiti’s farmers rebuild amid violence, hunger and El Niño",
    "published": "2026-11-21 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Haiti: ‘Atrocious abuses’ continue as UN warns anti-gang operations must priortise civilian protection",
-   "published": "2026-11-17 12:00 UTC"
   },
   {
    "region": "Americas",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Libre-échange en Afrique : pourquoi les politiques doivent s'adapter aux petits commerçants transfrontaliers",
-   "published": "2026-11-24 05:45 UTC"
+   "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
+   "published": "2026-11-24 13:55 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s small cattle farmers need help before super El Niño hits: how to set up shade, water and feed",
-   "published": "2026-11-23 13:57 UTC"
+   "title": "South Africa after the local government elections: an ideology-free zone?",
+   "published": "2026-11-24 13:55 UTC"
   },
   {
    "region": "Africa",
