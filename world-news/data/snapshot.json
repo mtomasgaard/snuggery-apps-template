@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T21:01:26Z",
+ "generatedAt": "2026-11-24T22:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/mpox-cases-are-on-the-rise-again-in-brazil-just-as-an-antiviral-drug-fails-in-trials-297434",
+     "published": "2026-11-24T21:09:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Klinger Soares Faico Filho, Professor de Clínica Médica e Medicina Laboratorial, Universidade Federal de São Paulo (UNIFESP)"
+    },
+    {
      "title": "What are AI chips, and what’s so special about Nvidia’s?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Jeffrey Young, Principal Research Scientist, Partnership for an Advanced Computing Environment, Georgia Institute of Technology"
-    },
-    {
-     "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/companies-are-getting-less-accurate-data-on-extreme-weather-just-when-they-need-it-the-most-295737",
-     "published": "2026-11-24T19:03:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Suvrat Dhanorkar, Associate Professor of Operations Management, Georgia Institute of Technology"
     },
     {
      "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/energy-and-climate-have-been-overlooked-at-victorias-election-but-theres-a-lot-at-stake-295871",
+     "published": "2026-11-24T21:37:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Karoly, Professor Emeritus in Climate Science, The University of Melbourne"
+    },
+    {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -451,7 +461,7 @@
     {
      "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/i-diagnose-human-cruelty-australian-and-nz-medical-workers-on-treating-palestinians-in-gaza-293222",
      "published": "2026-11-24T19:10:38Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ushi Ghoorah, Senior Lecturer, School of Business, Western Sydney University"
-    },
-    {
-     "title": "The silver lining of the COP31 flop? Climate coalitions will rise – and the shift away from fossil fuels will accelerate",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-silver-lining-of-the-cop31-flop-climate-coalitions-will-rise-and-the-shift-away-from-fossil-fuels-will-accelerate-297294",
-     "published": "2026-11-24T19:09:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Frank Jotzo, Professor, Crawford School of Public Policy and Director, Centre for Climate and Energy Policy, Australian National University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What are AI chips, and what’s so special about Nvidia’s?",
-   "published": "2026-11-24 20:08 UTC"
+   "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
+   "published": "2026-11-24 21:09 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Companies are getting less accurate data on extreme weather just when they need it the most",
-   "published": "2026-11-24 19:03 UTC"
+   "title": "What are AI chips, and what’s so special about Nvidia’s?",
+   "published": "2026-11-24 20:08 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
+   "published": "2026-11-24 21:37 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
    "published": "2026-11-24 20:34 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Is Australia’s new aged care at home program actually delivering better care?",
    "published": "2026-11-24 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The silver lining of the COP31 flop? Climate coalitions will rise – and the shift away from fossil fuels will accelerate",
-   "published": "2026-11-24 19:09 UTC"
   },
   {
    "region": "Oceania",
