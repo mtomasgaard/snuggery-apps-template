@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T13:01:25Z",
+ "generatedAt": "2026-11-24T14:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "NATO witnesses a surge of airspace violations by Russia as Moscow seeks to test alliance",
+     "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/nato-witnesses-a-surge-of-airspace-violations-by-russia-as-moscow-seeks-to-test-alliance-297361",
-     "published": "2026-11-23T22:52:03Z",
+     "link": "https://theconversation.com/prepaid-electricity-can-make-bills-more-predictable-but-not-necessarily-more-affordable-296551",
+     "published": "2026-11-24T13:14:36Z",
      "summary": "",
      "stale": false,
-     "author": "Frederic Lemieux, Professor of the Practice and Faculty Director of the Master's in Applied Intelligence, Georgetown University"
+     "author": "Destenie Nock, Alex Hills Career Development Associate Professor of Engineering and Public Policy, Civil and Environmental Engineering, Carnegie Mellon…"
     },
     {
-     "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
+     "title": "California raised minimum wages for fast-food workers – here’s how it played out 2 years later",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/nvidias-jensen-huang-is-getting-his-ceo-job-back-but-history-shows-companies-perform-better-when-corporate-boards-take-executive-misbehavior-seriously-281689",
-     "published": "2026-11-23T18:31:53Z",
+     "link": "https://theconversation.com/california-raised-minimum-wages-for-fast-food-workers-heres-how-it-played-out-2-years-later-294552",
+     "published": "2026-11-24T13:14:22Z",
      "summary": "",
      "stale": false,
-     "author": "Michael Nalick, Assistant Professor of Management, University of Denver"
+     "author": "Liam Sigaud, Research Associate, West Virginia University"
     },
     {
      "title": "Guterres laments COP31 outcome, urges climate justice from Barbados",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "NATO witnesses a surge of airspace violations by Russia as Moscow seeks to test alliance",
-   "published": "2026-11-23 22:52 UTC"
+   "title": "Prepaid electricity can make bills more predictable, but not necessarily more affordable",
+   "published": "2026-11-24 13:14 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Nvidia’s Jensen Huang is getting his CEO job back, but history shows companies perform better when corporate boards take executive misbehavior seriously",
-   "published": "2026-11-23 18:31 UTC"
+   "title": "California raised minimum wages for fast-food workers – here’s how it played out 2 years later",
+   "published": "2026-11-24 13:14 UTC"
   },
   {
    "region": "Americas",
