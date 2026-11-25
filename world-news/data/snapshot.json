@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T06:01:30Z",
+ "generatedAt": "2026-11-25T07:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/beau-lamarre-condon-has-been-found-guilty-of-two-murders-legal-experts-explain-why-296148",
+     "published": "2026-11-25T06:05:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ben Livings, Associate Professor in Criminal Law and Criminal Justice, Adelaide University"
+    },
+    {
      "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/inflation-jumps-to-4-9-as-fuel-prices-surge-but-the-rba-should-hold-rates-steady-297288",
-     "published": "2026-11-25T02:46:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
+   "published": "2026-11-25 06:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
    "published": "2026-11-25 04:04 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
    "published": "2026-11-25 03:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
-   "published": "2026-11-25 02:46 UTC"
   },
   {
    "region": "Oceania",
