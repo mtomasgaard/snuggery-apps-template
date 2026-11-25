@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-24T23:01:24Z",
+ "generatedAt": "2026-11-25T00:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/sending-an-australian-astronaut-to-space-is-expensive-how-do-we-work-out-if-its-worth-it-296824",
+     "published": "2026-11-24T23:18:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kathryn Robison, Lecturer in American Politics, United States Studies Centre, University of Sydney"
+    },
+    {
      "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Martin Kear, Lecturer, Department of Government and International Relations, University of Sydney"
-    },
-    {
-     "title": "Is Australia’s new aged care at home program actually delivering better care?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/is-australias-new-aged-care-at-home-program-actually-delivering-better-care-296917",
-     "published": "2026-11-24T19:10:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ushi Ghoorah, Senior Lecturer, School of Business, Western Sydney University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
+   "published": "2026-11-24 23:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
    "published": "2026-11-24 21:37 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
-   "published": "2026-11-24 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Is Australia’s new aged care at home program actually delivering better care?",
    "published": "2026-11-24 19:10 UTC"
   },
   {
