@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T13:01:29Z",
+ "generatedAt": "2026-11-25T14:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "How the construction, desecration and destruction of Jerusalem’s ancient temples shaped Judaism – and Hanukkah",
+     "title": "Ancient Cahokia was transformed amid droughts and flooding – climate change is reshaping modern communities in similar ways",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/how-the-construction-desecration-and-destruction-of-jerusalems-ancient-temples-shaped-judaism-and-hanukkah-297050",
-     "published": "2026-11-25T01:27:08Z",
+     "link": "https://theconversation.com/ancient-cahokia-was-transformed-amid-droughts-and-flooding-climate-change-is-reshaping-modern-communities-in-similar-ways-294435",
+     "published": "2026-11-25T13:39:48Z",
      "summary": "",
      "stale": false,
-     "author": "Samuel L. Boyd, Associate Professor of Religious Studies and Jewish Studies, University of Colorado Boulder"
+     "author": "AJ White, Assistant Professor of Anthropology, Indiana University"
     },
     {
-     "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
+     "title": "Sewing an infinity of phalluses – how Japanese artist Yayoi Kusama confronted the male-dominated art world by mocking it",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/mpox-cases-are-on-the-rise-again-in-brazil-just-as-an-antiviral-drug-fails-in-trials-297434",
-     "published": "2026-11-24T21:09:17Z",
+     "link": "https://theconversation.com/sewing-an-infinity-of-phalluses-how-japanese-artist-yayoi-kusama-confronted-the-male-dominated-art-world-by-mocking-it-290804",
+     "published": "2026-11-25T13:39:13Z",
      "summary": "",
      "stale": false,
-     "author": "Klinger Soares Faico Filho, Professor de Clínica Médica e Medicina Laboratorial, Universidade Federal de São Paulo (UNIFESP)"
+     "author": "Midori Yamamura, Associate Professor of Art History, City University of New York"
     },
     {
      "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "How the construction, desecration and destruction of Jerusalem’s ancient temples shaped Judaism – and Hanukkah",
-   "published": "2026-11-25 01:27 UTC"
+   "title": "Ancient Cahokia was transformed amid droughts and flooding – climate change is reshaping modern communities in similar ways",
+   "published": "2026-11-25 13:39 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
-   "published": "2026-11-24 21:09 UTC"
+   "title": "Sewing an infinity of phalluses – how Japanese artist Yayoi Kusama confronted the male-dominated art world by mocking it",
+   "published": "2026-11-25 13:39 UTC"
   },
   {
    "region": "Americas",
