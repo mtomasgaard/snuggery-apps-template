@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T02:01:27Z",
+ "generatedAt": "2026-11-25T03:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Jensen Huang’s controversial return to Nvidia poses the question – what’s the point of a board?",
+     "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/jensen-huangs-controversial-return-to-nvidia-poses-the-question-whats-the-point-of-a-board-297386",
-     "published": "2026-11-25T01:46:09Z",
+     "link": "https://theconversation.com/inflation-jumps-to-4-9-as-fuel-prices-surge-but-the-rba-should-hold-rates-steady-297288",
+     "published": "2026-11-25T02:46:02Z",
      "summary": "",
      "stale": false,
-     "author": "Anish Purkayastha, Senior lecturer, University of Sydney"
+     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
     },
     {
-     "title": "It’s called journalism, not content",
+     "title": "Politics with Michelle Grattan: Barnaby Joyce on being part of changing the political agenda",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/its-called-journalism-not-content-297502",
-     "published": "2026-11-25T01:45:28Z",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-barnaby-joyce-on-being-part-of-changing-the-political-agenda-297393",
+     "published": "2026-11-25T01:53:57Z",
      "summary": "",
      "stale": false,
-     "author": "Misha Ketchell, Editor-in-chief & Executive Director, The Conversation"
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "40 years of data on one dolphin community teaches new lessons about social circles in old age",
+     "title": "A viral SNL skit exposed how unpaid care too often defaults to women. Why won’t more men help?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/40-years-of-data-on-one-dolphin-community-teaches-new-lessons-about-social-circles-in-old-age-297307",
-     "published": "2026-11-25T01:13:18Z",
+     "link": "https://theconversation.com/a-viral-snl-skit-exposed-how-unpaid-care-too-often-defaults-to-women-why-wont-more-men-help-297264",
+     "published": "2026-11-25T01:51:13Z",
      "summary": "",
      "stale": false,
-     "author": "Kelley Meehan, PhD Candidate in Behavioural Ecology, The University of Queensland"
+     "author": "Janeen Baxter, Professor of Sociology, Director of Australian Research Council Centre of Excellence for Children and Families over the Life Course, The…"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Jensen Huang’s controversial return to Nvidia poses the question – what’s the point of a board?",
-   "published": "2026-11-25 01:46 UTC"
+   "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
+   "published": "2026-11-25 02:46 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "It’s called journalism, not content",
-   "published": "2026-11-25 01:45 UTC"
+   "title": "Politics with Michelle Grattan: Barnaby Joyce on being part of changing the political agenda",
+   "published": "2026-11-25 01:53 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "40 years of data on one dolphin community teaches new lessons about social circles in old age",
-   "published": "2026-11-25 01:13 UTC"
+   "title": "A viral SNL skit exposed how unpaid care too often defaults to women. Why won’t more men help?",
+   "published": "2026-11-25 01:51 UTC"
   },
   {
    "region": "Oceania",
