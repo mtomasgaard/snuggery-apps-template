@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T08:01:35Z",
+ "generatedAt": "2026-11-25T09:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/25/jailed-for-being-poor-forgotten-by-slow-courts-in-nigeria-saved-by-strangers-online/",
+     "published": "2026-11-25T08:33:17Z",
+     "summary": "The Nigerian Correctional Service said that most people in its custody were still waiting for trial. They have not been found guilty of any crime.",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "In Buea, children displaced by Cameroon’s armed Anglophone conflict are balancing school with market trading to help their families survive, while years of displacement have interrupted their education, relationships…",
      "stale": false,
      "author": "Cynthia Ebot Takang"
-    },
-    {
-     "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/20/the-ongoing-efforts-to-get-ecocide-recognized-at-the-international-criminal-court/",
-     "published": "2026-11-20T18:05:05Z",
-     "summary": "For the nations that started this, the stakes are not abstract. They are asking the world to build infrastructure to prosecute and prevent harm that is already happening to them.",
-     "stale": false,
-     "author": "Sydney Allen"
     }
    ]
   },
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Jumping at shadows? The new defence bill may give good reason to do so",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/jumping-at-shadows-the-new-defence-bill-may-give-good-reason-to-do-so-297520",
+     "published": "2026-11-25T08:49:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anne Twomey, Professor Emerita in Constitutional Law, University of Sydney"
+    },
+    {
+     "title": "Solomon Islands and Australia sign a new defence treaty – and there’s plenty in it for both countries",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/solomon-islands-and-australia-sign-a-new-defence-treaty-and-theres-plenty-in-it-for-both-countries-297498",
+     "published": "2026-11-25T07:54:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anna Kwai, Associate fellow, Department of Pacific Affairs, Australian National University"
+    },
+    {
      "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ben Livings, Associate Professor in Criminal Law and Criminal Justice, Adelaide University"
-    },
-    {
-     "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-handsome-one-how-parhan-the-celebrity-indonesian-mall-cat-became-government-business-297487",
-     "published": "2026-11-25T04:04:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Elisabeth Kramer, Scientia Senior Lecturer in Politics and Public Policy, UNSW"
-    },
-    {
-     "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victorian-labor-in-danger-of-losing-opposition-status-at-election-with-former-premiers-seats-likely-to-be-lost-297280",
-     "published": "2026-11-25T03:19:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
+   "published": "2026-11-25 08:33 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
    "published": "2026-11-24 13:55 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Growing up displaced in Cameroon after ten years of conflict",
    "published": "2026-11-21 18:02 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
-   "published": "2026-11-20 18:05 UTC"
   },
   {
    "region": "Middle East",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Jumping at shadows? The new defence bill may give good reason to do so",
+   "published": "2026-11-25 08:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Solomon Islands and Australia sign a new defence treaty – and there’s plenty in it for both countries",
+   "published": "2026-11-25 07:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
    "published": "2026-11-25 06:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
-   "published": "2026-11-25 04:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
-   "published": "2026-11-25 03:19 UTC"
   },
   {
    "region": "Oceania",
