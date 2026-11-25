@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T01:01:23Z",
+ "generatedAt": "2026-11-25T02:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How the construction, desecration and destruction of Jerusalem’s ancient temples shaped Judaism – and Hanukkah",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/how-the-construction-desecration-and-destruction-of-jerusalems-ancient-temples-shaped-judaism-and-hanukkah-297050",
+     "published": "2026-11-25T01:27:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Samuel L. Boyd, Associate Professor of Religious Studies and Jewish Studies, University of Colorado Boulder"
+    },
+    {
      "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Klinger Soares Faico Filho, Professor de Clínica Médica e Medicina Laboratorial, Universidade Federal de São Paulo (UNIFESP)"
-    },
-    {
-     "title": "What are AI chips, and what’s so special about Nvidia’s?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-are-ai-chips-and-whats-so-special-about-nvidias-297128",
-     "published": "2026-11-24T20:08:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeffrey Young, Principal Research Scientist, Partnership for an Advanced Computing Environment, Georgia Institute of Technology"
     },
     {
      "title": "Colombia: Guterres urges renewed commitment to landmark peace deal",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Government to exempt all pensioners from cut to seniors’ health insurance rebates",
+     "title": "Jensen Huang’s controversial return to Nvidia poses the question – what’s the point of a board?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/government-to-exempt-all-pensioners-from-cut-to-seniors-health-insurance-rebates-296266",
-     "published": "2026-11-25T00:52:50Z",
+     "link": "https://theconversation.com/jensen-huangs-controversial-return-to-nvidia-poses-the-question-whats-the-point-of-a-board-297386",
+     "published": "2026-11-25T01:46:09Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Anish Purkayastha, Senior lecturer, University of Sydney"
     },
     {
-     "title": "That Black Friday countdown says the sale ends in ten minutes. But is it real?",
+     "title": "It’s called journalism, not content",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/that-black-friday-countdown-says-the-sale-ends-in-ten-minutes-but-is-it-real-296501",
-     "published": "2026-11-25T00:01:51Z",
+     "link": "https://theconversation.com/its-called-journalism-not-content-297502",
+     "published": "2026-11-25T01:45:28Z",
      "summary": "",
      "stale": false,
-     "author": "Meena Jha, Associate Professor, College of Information & Communication Technology, School of Engineering and Technology, CQUniversity Australia"
+     "author": "Misha Ketchell, Editor-in-chief & Executive Director, The Conversation"
     },
     {
-     "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
+     "title": "40 years of data on one dolphin community teaches new lessons about social circles in old age",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/sending-an-australian-astronaut-to-space-is-expensive-how-do-we-work-out-if-its-worth-it-296824",
-     "published": "2026-11-24T23:18:43Z",
+     "link": "https://theconversation.com/40-years-of-data-on-one-dolphin-community-teaches-new-lessons-about-social-circles-in-old-age-297307",
+     "published": "2026-11-25T01:13:18Z",
      "summary": "",
      "stale": false,
-     "author": "Kathryn Robison, Lecturer in American Politics, United States Studies Centre, University of Sydney"
+     "author": "Kelley Meehan, PhD Candidate in Behavioural Ecology, The University of Queensland"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
-   "published": "2026-11-24 21:09 UTC"
+   "title": "How the construction, desecration and destruction of Jerusalem’s ancient temples shaped Judaism – and Hanukkah",
+   "published": "2026-11-25 01:27 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What are AI chips, and what’s so special about Nvidia’s?",
-   "published": "2026-11-24 20:08 UTC"
+   "title": "Mpox cases are on the rise again in Brazil – just as an antiviral drug fails in trials",
+   "published": "2026-11-24 21:09 UTC"
   },
   {
    "region": "Americas",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Government to exempt all pensioners from cut to seniors’ health insurance rebates",
-   "published": "2026-11-25 00:52 UTC"
+   "title": "Jensen Huang’s controversial return to Nvidia poses the question – what’s the point of a board?",
+   "published": "2026-11-25 01:46 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "That Black Friday countdown says the sale ends in ten minutes. But is it real?",
-   "published": "2026-11-25 00:01 UTC"
+   "title": "It’s called journalism, not content",
+   "published": "2026-11-25 01:45 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
-   "published": "2026-11-24 23:18 UTC"
+   "title": "40 years of data on one dolphin community teaches new lessons about social circles in old age",
+   "published": "2026-11-25 01:13 UTC"
   },
   {
    "region": "Oceania",
