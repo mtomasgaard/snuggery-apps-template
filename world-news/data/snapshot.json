@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T17:01:30Z",
+ "generatedAt": "2026-11-25T18:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Gina Ziervogel, Director of African Climate and Development Initiative, Professor in Environmental and Geographical Science, University of Cape Town"
     },
     {
+     "title": "Somalia: Famine risk decreases in Baidoa – but millions still going hungry",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168874",
+     "published": "2026-11-25T12:00:00Z",
+     "summary": "Millions of people in Somalia still face severe food shortages and malnutrition despite the reduced risk of famine in Baidoa, global food security experts warned on Wednesday.",
+     "stale": false
+    },
+    {
      "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168858",
      "published": "2026-11-23T12:00:00Z",
      "summary": "Heavy fighting near a hospital in Ituri province in the Democratic Republic of the Congo (DRC) has disrupted the vital work of Ebola responders and forced emergency teams to take cover for more than 24 hours.",
-     "stale": false
-    },
-    {
-     "title": "Libya: UN mission urges probe into Benghazi port attacks",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168857",
-     "published": "2026-11-23T12:00:00Z",
-     "summary": "The UN Support Mission in Libya (UNSMIL) has called for an independent investigation into attacks carried out at Benghazi port and off the coast of the eastern city on Sunday.",
      "stale": false
     },
     {
@@ -780,6 +780,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Somalia: Famine risk decreases in Baidoa – but millions still going hungry",
+   "published": "2026-11-25 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
    "published": "2026-11-25 08:33 UTC"
@@ -794,12 +800,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
-   "published": "2026-11-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Libya: UN mission urges probe into Benghazi port attacks",
    "published": "2026-11-23 12:00 UTC"
   },
   {
