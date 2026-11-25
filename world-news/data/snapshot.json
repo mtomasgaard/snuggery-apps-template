@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T19:01:23Z",
+ "generatedAt": "2026-11-25T20:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
+     "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/new-study-reveals-a-close-up-of-nzs-alpine-fault-and-how-the-next-big-quake-might-unfold-297505",
+     "published": "2026-11-25T19:40:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Townend, Professor of Geophysics, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "Seeing Sea Country: how Traditional Owners are leading the way in caring for our oceans",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/seeing-sea-country-how-traditional-owners-are-leading-the-way-in-caring-for-our-oceans-294478",
+     "published": "2026-11-25T19:08:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Melissa Nursey-Bray, Professor, Geography, Environment and Population, Adelaide University"
+    },
+    {
+     "title": "Memoir of a troubled Jew: the ghosts of the Holocaust and the Nakba haunt David Leser’s book",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/memoir-of-a-troubled-jew-the-ghosts-of-the-holocaust-and-the-nakba-haunt-david-lesers-book-294257",
+     "published": "2026-11-25T19:07:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dennis Altman, Vice Chancellor's Fellow and Professorial Fellow, Institute for Human Security and Social Change, La Trobe University"
+    },
+    {
+     "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/a-bigger-parliament-would-fix-the-overhang-problem-the-case-for-more-mps-297034",
      "published": "2026-11-25T18:03:57Z",
      "summary": "",
@@ -439,44 +469,14 @@
      "author": "Brian S. Roper, Associate Professor of Politics, University of Otago"
     },
     {
-     "title": "Jumping at shadows? The new defence bill may give good reason to do so",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/jumping-at-shadows-the-new-defence-bill-may-give-good-reason-to-do-so-297520",
-     "published": "2026-11-25T08:49:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anne Twomey, Professor Emerita in Constitutional Law, University of Sydney"
-    },
-    {
-     "title": "Solomon Islands and Australia sign a new defence treaty – and there’s plenty in it for both countries",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/solomon-islands-and-australia-sign-a-new-defence-treaty-and-theres-plenty-in-it-for-both-countries-297498",
-     "published": "2026-11-25T07:54:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anna Kwai, Associate fellow, Department of Pacific Affairs, Australian National University"
-    },
-    {
-     "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
+     "title": "Black Friday: consumer behaviour expert on what’s really behind our need to chase bargains",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/10-years-after-nzs-7-8-earthquake-a-changed-coastline-offers-clues-to-future-hazards-297266",
-     "published": "2026-11-24T20:34:52Z",
+     "link": "https://theconversation.com/black-friday-consumer-behaviour-expert-on-whats-really-behind-our-need-to-chase-bargains-296105",
+     "published": "2026-11-25T14:24:15Z",
      "summary": "",
      "stale": false,
-     "author": "Wayne Stephenson, Professor of Geography, University of Otago"
-    },
-    {
-     "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/i-diagnose-human-cruelty-australian-and-nz-medical-workers-on-treating-palestinians-in-gaza-293222",
-     "published": "2026-11-24T19:10:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Martin Kear, Lecturer, Department of Government and International Relations, University of Sydney"
+     "author": "Olaya Moldes Andrés, Senior Lecturer in Consumer Behaviour, Cardiff University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
+   "published": "2026-11-25 19:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Seeing Sea Country: how Traditional Owners are leading the way in caring for our oceans",
+   "published": "2026-11-25 19:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Memoir of a troubled Jew: the ghosts of the Holocaust and the Nakba haunt David Leser’s book",
+   "published": "2026-11-25 19:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
    "published": "2026-11-25 18:03 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Jumping at shadows? The new defence bill may give good reason to do so",
-   "published": "2026-11-25 08:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Solomon Islands and Australia sign a new defence treaty – and there’s plenty in it for both countries",
-   "published": "2026-11-25 07:54 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
-   "published": "2026-11-24 20:34 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
-   "published": "2026-11-24 19:10 UTC"
+   "title": "Black Friday: consumer behaviour expert on what’s really behind our need to chase bargains",
+   "published": "2026-11-25 14:24 UTC"
   },
   {
    "region": "Oceania",
