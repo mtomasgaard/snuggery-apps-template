@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T00:01:26Z",
+ "generatedAt": "2026-11-25T01:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Government to exempt all pensioners from cut to seniors’ health insurance rebates",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/government-to-exempt-all-pensioners-from-cut-to-seniors-health-insurance-rebates-296266",
+     "published": "2026-11-25T00:52:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "That Black Friday countdown says the sale ends in ten minutes. But is it real?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/that-black-friday-countdown-says-the-sale-ends-in-ten-minutes-but-is-it-real-296501",
+     "published": "2026-11-25T00:01:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Meena Jha, Associate Professor, College of Information & Communication Technology, School of Engineering and Technology, CQUniversity Australia"
+    },
+    {
      "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +459,6 @@
      "author": "Kathryn Robison, Lecturer in American Politics, United States Studies Centre, University of Sydney"
     },
     {
-     "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/energy-and-climate-have-been-overlooked-at-victorias-election-but-theres-a-lot-at-stake-295871",
-     "published": "2026-11-24T21:37:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Karoly, Professor Emeritus in Climate Science, The University of Melbourne"
-    },
-    {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Wayne Stephenson, Professor of Geography, University of Otago"
-    },
-    {
-     "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/quality-time-and-gifting-flowers-why-we-love-that-gta-became-a-game-about-relationships-297286",
-     "published": "2026-11-24T19:10:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Giselle Woodley, Sexologist & Lecturer and Research Fellow in Communications & Culture, Edith Cowan University"
     },
     {
      "title": "‘I diagnose human cruelty’: Australian and NZ medical workers on treating Palestinians in Gaza",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Government to exempt all pensioners from cut to seniors’ health insurance rebates",
+   "published": "2026-11-25 00:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "That Black Friday countdown says the sale ends in ten minutes. But is it real?",
+   "published": "2026-11-25 00:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Sending an Australian astronaut to space is expensive. How do we work out if it’s worth it?",
    "published": "2026-11-24 23:18 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Energy and climate have been overlooked at Victoria’s election – but there’s a lot at stake",
-   "published": "2026-11-24 21:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
    "published": "2026-11-24 20:34 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Quality time and gifting flowers: why we love that GTA became a game about relationships",
-   "published": "2026-11-24 19:10 UTC"
   },
   {
    "region": "Oceania",
