@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T20:01:36Z",
+ "generatedAt": "2026-11-25T21:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -459,24 +459,24 @@
      "author": "Dennis Altman, Vice Chancellor's Fellow and Professorial Fellow, Institute for Human Security and Social Change, La Trobe University"
     },
     {
-     "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
+     "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/a-bigger-parliament-would-fix-the-overhang-problem-the-case-for-more-mps-297034",
-     "published": "2026-11-25T18:03:57Z",
+     "link": "https://theconversation.com/50-years-of-the-sex-pistols-not-agents-of-chaos-but-dreamers-of-a-utopia-296476",
+     "published": "2026-11-25T19:07:32Z",
      "summary": "",
      "stale": false,
-     "author": "Brian S. Roper, Associate Professor of Politics, University of Otago"
+     "author": "John Schofield, Associate Professor, Archaeology, Flinders University; University of York"
     },
     {
-     "title": "Black Friday: consumer behaviour expert on what’s really behind our need to chase bargains",
+     "title": "No, eating celery won’t make you lose weight. How we fell for the myth of negative calories",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/black-friday-consumer-behaviour-expert-on-whats-really-behind-our-need-to-chase-bargains-296105",
-     "published": "2026-11-25T14:24:15Z",
+     "link": "https://theconversation.com/no-eating-celery-wont-make-you-lose-weight-how-we-fell-for-the-myth-of-negative-calories-292767",
+     "published": "2026-11-25T19:07:17Z",
      "summary": "",
      "stale": false,
-     "author": "Olaya Moldes Andrés, Senior Lecturer in Consumer Behaviour, Cardiff University"
+     "author": "Evangeline Mantzioris, Program Director of Nutrition and Food Sciences, Accredited Practising Dietitian, Adelaide University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
-   "published": "2026-11-25 18:03 UTC"
+   "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
+   "published": "2026-11-25 19:07 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Black Friday: consumer behaviour expert on what’s really behind our need to chase bargains",
-   "published": "2026-11-25 14:24 UTC"
+   "title": "No, eating celery won’t make you lose weight. How we fell for the myth of negative calories",
+   "published": "2026-11-25 19:07 UTC"
   },
   {
    "region": "Oceania",
