@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T04:01:24Z",
+ "generatedAt": "2026-11-25T05:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-handsome-one-how-parhan-the-celebrity-indonesian-mall-cat-became-government-business-297487",
+     "published": "2026-11-25T04:04:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Elisabeth Kramer, Scientia Senior Lecturer in Politics and Public Policy, UNSW"
+    },
+    {
      "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
-    },
-    {
-     "title": "Politics with Michelle Grattan: Barnaby Joyce on being part of changing the political agenda",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-barnaby-joyce-on-being-part-of-changing-the-political-agenda-297393",
-     "published": "2026-11-25T01:53:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "‘The handsome one’: how Parhan the celebrity Indonesian mall cat became government business",
+   "published": "2026-11-25 04:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
    "published": "2026-11-25 03:19 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
    "published": "2026-11-25 02:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Barnaby Joyce on being part of changing the political agenda",
-   "published": "2026-11-25 01:53 UTC"
   },
   {
    "region": "Oceania",
