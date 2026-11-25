@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T03:01:36Z",
+ "generatedAt": "2026-11-25T04:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/victorian-labor-in-danger-of-losing-opposition-status-at-election-with-former-premiers-seats-likely-to-be-lost-297280",
+     "published": "2026-11-25T03:19:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "A viral SNL skit exposed how unpaid care too often defaults to women. Why won’t more men help?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-viral-snl-skit-exposed-how-unpaid-care-too-often-defaults-to-women-why-wont-more-men-help-297264",
-     "published": "2026-11-25T01:51:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Janeen Baxter, Professor of Sociology, Director of Australian Research Council Centre of Excellence for Children and Families over the Life Course, The…"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Victorian Labor in danger of losing opposition status at election, with former premiers’ seats likely to be lost",
+   "published": "2026-11-25 03:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Inflation jumps to 4.9% as fuel prices surge, but the RBA should hold rates steady",
    "published": "2026-11-25 02:46 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Politics with Michelle Grattan: Barnaby Joyce on being part of changing the political agenda",
    "published": "2026-11-25 01:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A viral SNL skit exposed how unpaid care too often defaults to women. Why won’t more men help?",
-   "published": "2026-11-25 01:51 UTC"
   },
   {
    "region": "Oceania",
