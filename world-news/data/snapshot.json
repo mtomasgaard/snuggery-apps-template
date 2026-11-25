@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T14:01:42Z",
+ "generatedAt": "2026-11-25T15:01:54Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/tanzanias-herders-dont-trust-state-vets-how-scarce-skills-and-neglect-have-led-to-risky-antibiotic-use-296162",
+     "published": "2026-11-25T14:08:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Caroline Mwihaki Mburu, Honorary research fellow, University of St Andrews"
+    },
+    {
+     "title": "Climate adaptation: South African teams show why better solutions start with understanding local problems",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/climate-adaptation-south-african-teams-show-why-better-solutions-start-with-understanding-local-problems-294600",
+     "published": "2026-11-25T14:07:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gina Ziervogel, Director of African Climate and Development Initiative, Professor in Environmental and Geographical Science, University of Cape Town"
+    },
+    {
      "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -185,26 +205,6 @@
      "summary": "The Nigerian Correctional Service said that most people in its custody were still waiting for trial. They have not been found guilty of any crime.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/johannesburg-has-had-101-mayors-over-the-last-140-years-new-book-reviews-the-good-times-and-the-bad-297313",
-     "published": "2026-11-24T13:55:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Philip Harrison, Professor School of Architecture and Planning, University of the Witwatersrand"
-    },
-    {
-     "title": "South Africa after the local government elections: an ideology-free zone?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africa-after-the-local-government-elections-an-ideology-free-zone-297302",
-     "published": "2026-11-24T13:55:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Roger Southall, Professor of Sociology, University of the Witwatersrand"
     },
     {
      "title": "DR Congo: Concern for trapped Ebola workers as violence against women and girls deepens",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen war: Emergency aid chief calls for access to war-hit communities",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168872",
+     "published": "2026-11-25T12:00:00Z",
+     "summary": "The UN’s top aid official, Tom Fletcher, arrived in Yemen on Wednesday warning that the war there is preventing families from accessing the food and medicine they need to survive, particularly those in Taiz City.",
+     "stale": false
+    },
+    {
      "title": "Gaza war has undone 77 years of human development, UN warns",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168849",
      "published": "2026-11-20T12:00:00Z",
      "summary": "Israeli settlers have carried out more than 400 attacks causing casualties or property damage during this year’s olive harvest in the occupied West Bank – more than in any previous season, UN agencies and humanitarian…",
-     "stale": false
-    },
-    {
-     "title": "Dozens more children killed in Yemen amid escalating hostilities",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168830",
-     "published": "2026-11-18T12:00:00Z",
-     "summary": "The UN child rights agency, UNICEF, on Wednesday called for warring parties in Yemen to protect children as renewed conflict between Houthi rebels and Government forces approaches the three-month mark.",
      "stale": false
     },
     {
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
+   "published": "2026-11-25 14:08 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Climate adaptation: South African teams show why better solutions start with understanding local problems",
+   "published": "2026-11-25 14:07 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Jailed for being poor, forgotten by slow courts in Nigeria, saved by strangers online",
    "published": "2026-11-25 08:33 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Johannesburg has had 101 mayors over the last 140 years: new book reviews the good times and the bad",
-   "published": "2026-11-24 13:55 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South Africa after the local government elections: an ideology-free zone?",
-   "published": "2026-11-24 13:55 UTC"
   },
   {
    "region": "Africa",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Yemen war: Emergency aid chief calls for access to war-hit communities",
+   "published": "2026-11-25 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Gaza war has undone 77 years of human development, UN warns",
    "published": "2026-11-23 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
    "published": "2026-11-20 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Dozens more children killed in Yemen amid escalating hostilities",
-   "published": "2026-11-18 12:00 UTC"
   },
   {
    "region": "Middle East",
