@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-25T18:01:44Z",
+ "generatedAt": "2026-11-25T19:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Gaza’s widows raise their families alone: ‘We do our duties twice over, but where are our rights?’",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168875",
+     "published": "2026-11-25T12:00:00Z",
+     "summary": "For women in Gaza who lost their husbands in the war, providing for a family no longer means just putting food on the table. Now it also means finding shelter, hauling water and keeping children in school – all from a…",
+     "stale": false
+    },
+    {
      "title": "Yemen war: Emergency aid chief calls for access to war-hit communities",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168851",
      "published": "2026-11-21T12:00:00Z",
      "summary": "When fighting suddenly escalated around Taiz, in southwestern Yemen two months ago, midwife Anisa Fadhl had no time to pack a bag before she fled, leaving behind her home and her clinic. Both were later looted and…",
-     "stale": false
-    },
-    {
-     "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168849",
-     "published": "2026-11-20T12:00:00Z",
-     "summary": "Israeli settlers have carried out more than 400 attacks causing casualties or property damage during this year’s olive harvest in the occupied West Bank – more than in any previous season, UN agencies and humanitarian…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-bigger-parliament-would-fix-the-overhang-problem-the-case-for-more-mps-297034",
+     "published": "2026-11-25T18:03:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brian S. Roper, Associate Professor of Politics, University of Otago"
+    },
+    {
      "title": "Jumping at shadows? The new defence bill may give good reason to do so",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Anna Kwai, Associate fellow, Department of Pacific Affairs, Australian National University"
-    },
-    {
-     "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/beau-lamarre-condon-has-been-found-guilty-of-two-murders-legal-experts-explain-why-296148",
-     "published": "2026-11-25T06:05:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ben Livings, Associate Professor in Criminal Law and Criminal Justice, Adelaide University"
     },
     {
      "title": "10 years after NZ’s 7.8 earthquake, a changed coastline offers clues to future hazards",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Gaza’s widows raise their families alone: ‘We do our duties twice over, but where are our rights?’",
+   "published": "2026-11-25 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Yemen war: Emergency aid chief calls for access to war-hit communities",
    "published": "2026-11-25 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "‘We escaped with only our lives’: Fighting to give birth in war-torn Yemen",
    "published": "2026-11-21 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "West Bank: Record settler attacks mar olive harvest as UN urges Israel to protect farmers",
-   "published": "2026-11-20 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A bigger parliament would fix the overhang problem: the case for more MPs",
+   "published": "2026-11-25 18:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Jumping at shadows? The new defence bill may give good reason to do so",
    "published": "2026-11-25 08:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Solomon Islands and Australia sign a new defence treaty – and there’s plenty in it for both countries",
    "published": "2026-11-25 07:54 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Beau Lamarre-Condon has been found guilty of two murders. Legal experts explain why",
-   "published": "2026-11-25 06:05 UTC"
   },
   {
    "region": "Oceania",
