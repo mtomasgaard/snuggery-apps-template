@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T22:01:24Z",
+ "generatedAt": "2026-11-26T23:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/coalition-set-for-a-big-win-in-victorian-election-as-one-nation-fades-in-final-polls-297630",
+     "published": "2026-11-26T22:22:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Tully Barnett, Associate Professor, Cultural Policy and Creative Industries, Adelaide University"
-    },
-    {
-     "title": "AI could be used to write your child’s report. Is this a problem?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/ai-could-be-used-to-write-your-childs-report-is-this-a-problem-297517",
-     "published": "2026-11-26T19:15:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nicole Brownlie, Lecturer in Education, University of Southern Queensland"
     },
     {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
+   "published": "2026-11-26 22:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
    "published": "2026-11-26 19:15 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Victoria’s major parties are silent on arts and culture. What are the others offering?",
-   "published": "2026-11-26 19:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI could be used to write your child’s report. Is this a problem?",
    "published": "2026-11-26 19:15 UTC"
   },
   {
