@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T07:01:21Z",
+ "generatedAt": "2026-11-26T08:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-labors-political-capital-is-in-deficit-now-it-has-to-find-ways-to-replenish-it-297521",
+     "published": "2026-11-26T07:23:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Art Cotterell, Postdoctoral Fellow, Faculty of Law & Justice, UNSW"
-    },
-    {
-     "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/using-ai-to-hunt-for-black-friday-bargains-that-great-deal-might-not-exist-297299",
-     "published": "2026-11-26T02:08:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeannie Marie Paterson, Professor of Law (consumer protections and credit law), The University of Melbourne"
     },
     {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
+   "published": "2026-11-26 07:23 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
    "published": "2026-11-26 04:52 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Is Russia about to launch a nuclear weapon into Earth’s orbit? A space law expert explains the threat",
    "published": "2026-11-26 04:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
-   "published": "2026-11-26 02:08 UTC"
   },
   {
    "region": "Oceania",
