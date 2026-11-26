@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T17:01:16Z",
+ "generatedAt": "2026-11-26T22:28:50Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -1088,20 +1088,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-11-26",
-   "appliance": "Dishwasher",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 248.07,
-   "dayMean": 289.82,
-   "unit": "EUR/MWh",
-   "savingPct": 14
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-26",
    "appliance": "Washing machine",
    "runHours": 1.5,
    "windowScope": "whole day",
@@ -1111,20 +1097,6 @@
    "dayMean": 289.82,
    "unit": "EUR/MWh",
    "savingPct": 32
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-26",
-   "appliance": "Washing machine",
-   "runHours": 1.5,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:30",
-   "cheapestEnd": "00:00",
-   "avgPrice": 239.49,
-   "dayMean": 289.82,
-   "unit": "EUR/MWh",
-   "savingPct": 17
   },
   {
    "row": "appliance",
@@ -1144,20 +1116,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-11-26",
-   "appliance": "Car charging",
-   "runHours": 4.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "20:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 273.84,
-   "dayMean": 289.82,
-   "unit": "EUR/MWh",
-   "savingPct": 6
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-26",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
    "windowScope": "whole day",
@@ -1167,20 +1125,6 @@
    "dayMean": 289.82,
    "unit": "EUR/MWh",
    "savingPct": 32
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-26",
-   "appliance": "Tumble dryer",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 248.07,
-   "dayMean": 289.82,
-   "unit": "EUR/MWh",
-   "savingPct": 14
   },
   {
    "row": "hour",
