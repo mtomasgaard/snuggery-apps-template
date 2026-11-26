@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T02:01:17Z",
+ "generatedAt": "2026-11-26T03:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/using-ai-to-hunt-for-black-friday-bargains-that-great-deal-might-not-exist-297299",
+     "published": "2026-11-26T02:08:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jeannie Marie Paterson, Professor of Law (consumer protections and credit law), The University of Melbourne"
+    },
+    {
      "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/which-is-a-more-effective-deterrent-to-speeding-drivers-fines-or-demerit-points-our-study-found-out-296814",
-     "published": "2026-11-25T23:53:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Romain Gauriot, Associate professor, Deakin University"
     },
     {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
+   "published": "2026-11-26 02:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
    "published": "2026-11-26 01:32 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: Liberal senator’s defection to One Nation a major blow to Angus Taylor",
    "published": "2026-11-26 00:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
-   "published": "2026-11-25 23:53 UTC"
   },
   {
    "region": "Oceania",
