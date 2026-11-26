@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T00:01:27Z",
+ "generatedAt": "2026-11-26T01:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
+     "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/which-is-a-more-effective-deterrent-to-speeding-drivers-fines-or-demerit-points-our-study-found-out-296814",
+     "published": "2026-11-25T23:53:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Romain Gauriot, Associate professor, Deakin University"
+    },
+    {
+     "title": "76% of Australians are struggling to tell apart real and AI content – new report",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/76-of-australians-are-struggling-to-tell-apart-real-and-ai-content-new-report-296952",
+     "published": "2026-11-25T23:40:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sora Park, Director, News & Media Research Centre, University of Canberra"
+    },
+    {
+     "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/new-study-reveals-a-close-up-of-nzs-alpine-fault-and-how-the-next-big-quake-might-unfold-297505",
      "published": "2026-11-25T19:40:37Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Melissa Nursey-Bray, Professor, Geography, Environment and Population, Adelaide University"
     },
     {
-     "title": "Memoir of a troubled Jew: the ghosts of the Holocaust and the Nakba haunt David Leser’s book",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/memoir-of-a-troubled-jew-the-ghosts-of-the-holocaust-and-the-nakba-haunt-david-lesers-book-294257",
-     "published": "2026-11-25T19:07:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dennis Altman, Vice Chancellor's Fellow and Professorial Fellow, Institute for Human Security and Social Change, La Trobe University"
-    },
-    {
      "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "John Schofield, Associate Professor, Archaeology, Flinders University; University of York"
-    },
-    {
-     "title": "No, eating celery won’t make you lose weight. How we fell for the myth of negative calories",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/no-eating-celery-wont-make-you-lose-weight-how-we-fell-for-the-myth-of-negative-calories-292767",
-     "published": "2026-11-25T19:07:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Evangeline Mantzioris, Program Director of Nutrition and Food Sciences, Accredited Practising Dietitian, Adelaide University"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
+   "published": "2026-11-25 23:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "76% of Australians are struggling to tell apart real and AI content – new report",
+   "published": "2026-11-25 23:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
    "published": "2026-11-25 19:40 UTC"
   },
@@ -925,19 +937,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Memoir of a troubled Jew: the ghosts of the Holocaust and the Nakba haunt David Leser’s book",
-   "published": "2026-11-25 19:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
-   "published": "2026-11-25 19:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "No, eating celery won’t make you lose weight. How we fell for the myth of negative calories",
    "published": "2026-11-25 19:07 UTC"
   },
   {
