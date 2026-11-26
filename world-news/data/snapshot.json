@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T14:01:23Z",
+ "generatedAt": "2026-11-26T15:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,33 @@
    "stale": false,
    "items": [
     {
-     "title": "Pourquoi les États ouest-africains peinent à endiguer l’orpaillage clandestin",
+     "title": "A new fossil from South Africa offers clues to how giant plant-eating dinosaurs evolved",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/pourquoi-les-etats-ouest-africains-peinent-a-endiguer-lorpaillage-clandestin-297362",
-     "published": "2026-11-26T07:43:29Z",
+     "link": "https://theconversation.com/a-new-fossil-from-south-africa-offers-clues-to-how-giant-plant-eating-dinosaurs-evolved-297204",
+     "published": "2026-11-26T13:43:22Z",
      "summary": "",
      "stale": false,
-     "author": "Soumaila Lah, enseignant chercheur, Université des sciences juridiques et politiques de Bamako"
+     "author": "Atashni Moopen, PhD candidate, University of the Witwatersrand"
     },
     {
-     "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
+     "title": "African sheep farmers could improve their flocks by changing how they choose breeding animals",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/tanzanias-herders-dont-trust-state-vets-how-scarce-skills-and-neglect-have-led-to-risky-antibiotic-use-296162",
-     "published": "2026-11-25T14:08:02Z",
+     "link": "https://theconversation.com/african-sheep-farmers-could-improve-their-flocks-by-changing-how-they-choose-breeding-animals-294975",
+     "published": "2026-11-26T13:42:36Z",
      "summary": "",
      "stale": false,
-     "author": "Caroline Mwihaki Mburu, Honorary research fellow, University of St Andrews"
+     "author": "Thobela Louis Tyasi, Professor of Animal Breeding and Genetics, University of Limpopo"
+    },
+    {
+     "title": "DR Congo: Peacekepers step up civilian protection amid fighting in Ituri",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168883",
+     "published": "2026-11-26T12:00:00Z",
+     "summary": "United Nations peacekeepers in the Democratic Republic of the Congo (DRC) have stepped up efforts to protect civilians in Ebola-hit Ituri province following renewed armed clashes in Djugu territory.",
+     "stale": false
     },
     {
      "title": "Somalia: Famine risk decreases in Baidoa – but millions still going hungry",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168865",
      "published": "2026-11-24T12:00:00Z",
      "summary": "Staff from the World Health Organization (WHO) and Ebola responders remain trapped in a hospital in Ituri province, Democratic Republic of the Congo (DRC), as heavy fighting continues in the vicinity, the UN agency said…",
-     "stale": false
-    },
-    {
-     "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168858",
-     "published": "2026-11-23T12:00:00Z",
-     "summary": "Heavy fighting near a hospital in Ituri province in the Democratic Republic of the Congo (DRC) has disrupted the vital work of Ebola responders and forced emergency teams to take cover for more than 24 hours.",
      "stale": false
     },
     {
@@ -769,14 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Pourquoi les États ouest-africains peinent à endiguer l’orpaillage clandestin",
-   "published": "2026-11-26 07:43 UTC"
+   "title": "A new fossil from South Africa offers clues to how giant plant-eating dinosaurs evolved",
+   "published": "2026-11-26 13:43 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
-   "published": "2026-11-25 14:08 UTC"
+   "title": "African sheep farmers could improve their flocks by changing how they choose breeding animals",
+   "published": "2026-11-26 13:42 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "DR Congo: Peacekepers step up civilian protection amid fighting in Ituri",
+   "published": "2026-11-26 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -795,12 +801,6 @@
    "source": "UN News",
    "title": "DR Congo: Concern for trapped Ebola workers as violence against women and girls deepens",
    "published": "2026-11-24 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Heavy fighting in Ituri traps DR Congo Ebola responders: WHO",
-   "published": "2026-11-23 12:00 UTC"
   },
   {
    "region": "Africa",
