@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T01:01:17Z",
+ "generatedAt": "2026-11-26T02:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-fox-is-an-absurd-fable-like-comedy-that-explores-the-weirdness-of-being-human-290435",
+     "published": "2026-11-26T01:32:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
+    },
+    {
+     "title": "View from The Hill: Liberal senator’s defection to One Nation a major blow to Angus Taylor",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-liberal-senators-defection-to-one-nation-a-major-blow-to-angus-taylor-295661",
+     "published": "2026-11-26T00:55:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +459,6 @@
      "author": "Romain Gauriot, Associate professor, Deakin University"
     },
     {
-     "title": "76% of Australians are struggling to tell apart real and AI content – new report",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/76-of-australians-are-struggling-to-tell-apart-real-and-ai-content-new-report-296952",
-     "published": "2026-11-25T23:40:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sora Park, Director, News & Media Research Centre, University of Canberra"
-    },
-    {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "John Townend, Professor of Geophysics, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Seeing Sea Country: how Traditional Owners are leading the way in caring for our oceans",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/seeing-sea-country-how-traditional-owners-are-leading-the-way-in-caring-for-our-oceans-294478",
-     "published": "2026-11-25T19:08:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Melissa Nursey-Bray, Professor, Geography, Environment and Population, Adelaide University"
     },
     {
      "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
+   "published": "2026-11-26 01:32 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "View from The Hill: Liberal senator’s defection to One Nation a major blow to Angus Taylor",
+   "published": "2026-11-26 00:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Which is a more effective deterrent to speeding drivers – fines or demerit points? Our study found out",
    "published": "2026-11-25 23:53 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "76% of Australians are struggling to tell apart real and AI content – new report",
-   "published": "2026-11-25 23:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
    "published": "2026-11-25 19:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Seeing Sea Country: how Traditional Owners are leading the way in caring for our oceans",
-   "published": "2026-11-25 19:08 UTC"
   },
   {
    "region": "Oceania",
