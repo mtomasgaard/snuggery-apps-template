@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T08:01:20Z",
+ "generatedAt": "2026-11-26T09:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pourquoi les États ouest-africains peinent à endiguer l’orpaillage clandestin",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/pourquoi-les-etats-ouest-africains-peinent-a-endiguer-lorpaillage-clandestin-297362",
+     "published": "2026-11-26T07:43:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Soumaila Lah, enseignant chercheur, Université des sciences juridiques et politiques de Bamako"
+    },
+    {
      "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Caroline Mwihaki Mburu, Honorary research fellow, University of St Andrews"
-    },
-    {
-     "title": "Climate adaptation: South African teams show why better solutions start with understanding local problems",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/climate-adaptation-south-african-teams-show-why-better-solutions-start-with-understanding-local-problems-294600",
-     "published": "2026-11-25T14:07:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gina Ziervogel, Director of African Climate and Development Initiative, Professor in Environmental and Geographical Science, University of Cape Town"
     },
     {
      "title": "Somalia: Famine risk decreases in Baidoa – but millions still going hungry",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-world-is-experiencing-a-string-of-abnormally-hot-days-and-records-are-being-shattered-297633",
+     "published": "2026-11-26T08:13:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew King, ARC Future Fellow and Associate Professor in Climate Science, ARC Centre of Excellence for 21st Century Weather, The University of Melbourne"
+    },
+    {
      "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Denis Muller, Senior Research Fellow, Centre for Advancing Journalism and Information Integrity, The University of Melbourne"
-    },
-    {
-     "title": "Is Russia about to launch a nuclear weapon into Earth’s orbit? A space law expert explains the threat",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/is-russia-about-to-launch-a-nuclear-weapon-into-earths-orbit-a-space-law-expert-explains-the-threat-297496",
-     "published": "2026-11-26T04:48:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Art Cotterell, Postdoctoral Fellow, Faculty of Law & Justice, UNSW"
     },
     {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
-   "published": "2026-11-25 14:08 UTC"
+   "title": "Pourquoi les États ouest-africains peinent à endiguer l’orpaillage clandestin",
+   "published": "2026-11-26 07:43 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Climate adaptation: South African teams show why better solutions start with understanding local problems",
-   "published": "2026-11-25 14:07 UTC"
+   "title": "Tanzania’s herders don’t trust state vets: how scarce skills and neglect have led to risky antibiotic use",
+   "published": "2026-11-25 14:08 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
+   "published": "2026-11-26 08:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
    "published": "2026-11-26 07:23 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
    "published": "2026-11-26 04:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Is Russia about to launch a nuclear weapon into Earth’s orbit? A space law expert explains the threat",
-   "published": "2026-11-26 04:48 UTC"
   },
   {
    "region": "Oceania",
