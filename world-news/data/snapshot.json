@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T11:01:30Z",
+ "generatedAt": "2026-11-26T12:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Can the International Criminal Court survive Trump’s attacks – and hold world leaders to account?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/can-the-international-criminal-court-survive-trumps-attacks-and-hold-world-leaders-to-account-297530",
+     "published": "2026-11-26T11:10:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Grace Jennings-Edquist, Executive Producer, Podcasts, The Conversation"
+    },
+    {
      "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-good-the-bad-and-the-biased-the-medias-mixed-report-card-on-the-victorian-election-297285",
-     "published": "2026-11-26T04:52:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Denis Muller, Senior Research Fellow, Centre for Advancing Journalism and Information Integrity, The University of Melbourne"
     },
     {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Can the International Criminal Court survive Trump’s attacks – and hold world leaders to account?",
+   "published": "2026-11-26 11:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
    "published": "2026-11-26 08:13 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
    "published": "2026-11-26 07:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
-   "published": "2026-11-26 04:52 UTC"
   },
   {
    "region": "Oceania",
