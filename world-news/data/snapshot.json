@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T15:28:39Z",
+ "generatedAt": "2026-11-26T16:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168878",
+     "published": "2026-11-26T12:00:00Z",
+     "summary": "Irina* paced the apartment. Her husband had come home drunk again, and she knew the beatings would follow.",
+     "stale": false
+    },
+    {
      "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -371,15 +380,6 @@
      "summary": "Sanjib Chaudhary of Global Voices caught up with Binti Gurung, a food historian and founder of Natural Roots Foundation, to talk about her work on the food heritage of Nepal.",
      "stale": false,
      "author": "Sanjib Chaudhary"
-    },
-    {
-     "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168853",
-     "published": "2026-11-20T12:00:00Z",
-     "summary": "A day after the UN’s highest court found that Myanmar had committed genocide against the Rohingya, the President of the General Assembly visited the refugee camps in Cox’s Bazar, Bangladesh, urging the world to turn the…",
-     "stale": false
     },
     {
      "title": "Why Japan’s anti-hate measures fall short",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
+   "published": "2026-11-26 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
    "published": "2026-11-22 12:00 UTC"
   },
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "Reclaiming Indigenous culinary histories in Nepal",
    "published": "2026-11-21 06:12 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-   "published": "2026-11-20 12:00 UTC"
   },
   {
    "region": "Asia",
