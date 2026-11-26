@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T05:01:21Z",
+ "generatedAt": "2026-11-26T06:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-good-the-bad-and-the-biased-the-medias-mixed-report-card-on-the-victorian-election-297285",
+     "published": "2026-11-26T04:52:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Denis Muller, Senior Research Fellow, Centre for Advancing Journalism and Information Integrity, The University of Melbourne"
+    },
+    {
+     "title": "Is Russia about to launch a nuclear weapon into Earth’s orbit? A space law expert explains the threat",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/is-russia-about-to-launch-a-nuclear-weapon-into-earths-orbit-a-space-law-expert-explains-the-threat-297496",
+     "published": "2026-11-26T04:48:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Art Cotterell, Postdoctoral Fellow, Faculty of Law & Justice, UNSW"
+    },
+    {
      "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jeannie Marie Paterson, Professor of Law (consumer protections and credit law), The University of Melbourne"
-    },
-    {
-     "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-fox-is-an-absurd-fable-like-comedy-that-explores-the-weirdness-of-being-human-290435",
-     "published": "2026-11-26T01:32:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
-    },
-    {
-     "title": "View from The Hill: Liberal senator’s defection to One Nation a major blow to Angus Taylor",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-liberal-senators-defection-to-one-nation-a-major-blow-to-angus-taylor-295661",
-     "published": "2026-11-26T00:55:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The good, the bad and the biased: the media’s mixed report card on the Victorian election",
+   "published": "2026-11-26 04:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Is Russia about to launch a nuclear weapon into Earth’s orbit? A space law expert explains the threat",
+   "published": "2026-11-26 04:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Using AI to hunt for Black Friday bargains? That ‘great deal’ might not exist",
    "published": "2026-11-26 02:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Fox is an absurd, fable-like comedy that explores the weirdness of being human",
-   "published": "2026-11-26 01:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "View from The Hill: Liberal senator’s defection to One Nation a major blow to Angus Taylor",
-   "published": "2026-11-26 00:55 UTC"
   },
   {
    "region": "Oceania",
