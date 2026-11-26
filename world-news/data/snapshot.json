@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T19:01:22Z",
+ "generatedAt": "2026-11-26T20:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168878",
+     "published": "2026-11-26T12:00:00Z",
+     "summary": "Irina* paced the apartment. Her husband had come home drunk again, and she knew the beatings would follow.",
+     "stale": false
+    },
+    {
      "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -371,15 +380,6 @@
      "summary": "Sanjib Chaudhary of Global Voices caught up with Binti Gurung, a food historian and founder of Natural Roots Foundation, to talk about her work on the food heritage of Nepal.",
      "stale": false,
      "author": "Sanjib Chaudhary"
-    },
-    {
-     "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168853",
-     "published": "2026-11-20T12:00:00Z",
-     "summary": "A day after the UN’s highest court found that Myanmar had committed genocide against the Rohingya, the President of the General Assembly visited the refugee camps in Cox’s Bazar, Bangladesh, urging the world to turn the…",
-     "stale": false
     },
     {
      "title": "Why Japan’s anti-hate measures fall short",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Can the International Criminal Court survive Trump’s attacks – and hold world leaders to account?",
+     "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/can-the-international-criminal-court-survive-trumps-attacks-and-hold-world-leaders-to-account-297530",
-     "published": "2026-11-26T11:10:07Z",
+     "link": "https://theconversation.com/does-drinking-raw-milk-actually-deliver-extra-health-benefits-heres-the-science-296915",
+     "published": "2026-11-26T19:15:56Z",
      "summary": "",
      "stale": false,
-     "author": "Grace Jennings-Edquist, Executive Producer, Podcasts, The Conversation"
+     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
     },
     {
-     "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
+     "title": "Victoria’s major parties are silent on arts and culture. What are the others offering?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-world-is-experiencing-a-string-of-abnormally-hot-days-and-records-are-being-shattered-297633",
-     "published": "2026-11-26T08:13:01Z",
+     "link": "https://theconversation.com/victorias-major-parties-are-silent-on-arts-and-culture-what-are-the-others-offering-297298",
+     "published": "2026-11-26T19:15:39Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew King, ARC Future Fellow and Associate Professor in Climate Science, ARC Centre of Excellence for 21st Century Weather, The University of Melbourne"
+     "author": "Tully Barnett, Associate Professor, Cultural Policy and Creative Industries, Adelaide University"
     },
     {
-     "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
+     "title": "AI could be used to write your child’s report. Is this a problem?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-labors-political-capital-is-in-deficit-now-it-has-to-find-ways-to-replenish-it-297521",
-     "published": "2026-11-26T07:23:14Z",
+     "link": "https://theconversation.com/ai-could-be-used-to-write-your-childs-report-is-this-a-problem-297517",
+     "published": "2026-11-26T19:15:26Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Nicole Brownlie, Lecturer in Education, University of Southern Queensland"
     },
     {
-     "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
+     "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/new-study-reveals-a-close-up-of-nzs-alpine-fault-and-how-the-next-big-quake-might-unfold-297505",
-     "published": "2026-11-25T19:40:37Z",
+     "link": "https://theconversation.com/we-built-an-ai-you-can-dance-with-it-taught-us-about-developing-the-technology-responsibly-295348",
+     "published": "2026-11-26T19:15:14Z",
      "summary": "",
      "stale": false,
-     "author": "John Townend, Professor of Geophysics, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Charlotta Windahl, Senior Lecturer in Management and International Business, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
+     "title": "‘That’s when the chaos began’: the fall of the Berlin Wall in the words of east and west Germans",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/50-years-of-the-sex-pistols-not-agents-of-chaos-but-dreamers-of-a-utopia-296476",
-     "published": "2026-11-25T19:07:32Z",
+     "link": "https://theconversation.com/thats-when-the-chaos-began-the-fall-of-the-berlin-wall-in-the-words-of-east-and-west-germans-296018",
+     "published": "2026-11-26T15:20:35Z",
      "summary": "",
      "stale": false,
-     "author": "John Schofield, Associate Professor, Archaeology, Flinders University; University of York"
+     "author": "Christiane Bertram, Research Scientist at the Hector Research Institute of Education Sciences and Psychology, University of Tübingen"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
+   "published": "2026-11-26 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "‘I had a better life in Iran’: Afghan women forced home struggle to rebuild",
    "published": "2026-11-22 12:00 UTC"
   },
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "Reclaiming Indigenous culinary histories in Nepal",
    "published": "2026-11-21 06:12 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "‘You will not be alone’: General Assembly President tells Rohingya refugees after genocide ruling",
-   "published": "2026-11-20 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Can the International Criminal Court survive Trump’s attacks – and hold world leaders to account?",
-   "published": "2026-11-26 11:10 UTC"
+   "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
+   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The world is experiencing a string of abnormally hot days – and records are being shattered",
-   "published": "2026-11-26 08:13 UTC"
+   "title": "Victoria’s major parties are silent on arts and culture. What are the others offering?",
+   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Grattan on Friday: Labor’s political capital is in deficit. Now it has to find ways to replenish it",
-   "published": "2026-11-26 07:23 UTC"
+   "title": "AI could be used to write your child’s report. Is this a problem?",
+   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "New study reveals a close‑up of NZ’s Alpine Fault – and how the next big quake might unfold",
-   "published": "2026-11-25 19:40 UTC"
+   "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
+   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "50 years of the Sex Pistols: not agents of chaos, but dreamers of a utopia",
-   "published": "2026-11-25 19:07 UTC"
+   "title": "‘That’s when the chaos began’: the fall of the Berlin Wall in the words of east and west Germans",
+   "published": "2026-11-26 15:20 UTC"
   },
   {
    "region": "Oceania",
