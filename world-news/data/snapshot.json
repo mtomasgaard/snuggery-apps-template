@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T04:01:22Z",
+ "generatedAt": "2026-11-27T05:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
+     "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/australias-new-gas-reservation-policy-aims-to-keep-supply-secure-and-prices-low-will-it-work-297736",
+     "published": "2026-11-27T04:29:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Samantha Hepburn, Professor of Law, Deakin University"
+    },
+    {
+     "title": "Has Australia been rigged for the rich?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/has-australia-been-rigged-for-the-rich-291461",
+     "published": "2026-11-27T04:22:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Carl Rhodes, Professor of Business and Society, University of Technology Sydney"
+    },
+    {
+     "title": "The world’s ice is in real peril from climate change – and will keep melting even if we reach net zero",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-worlds-ice-is-in-real-peril-from-climate-change-and-will-keep-melting-even-if-we-reach-net-zero-297062",
+     "published": "2026-11-27T04:21:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jon Cox, Proposal Development Manager, Securing Antarctica’s Environmental Future, Monash University"
+    },
+    {
+     "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-election-final-right-needs-opportunity-to-govern-uncharted-political-waters-ahead-297127",
      "published": "2026-11-27T02:42:13Z",
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/melbournes-safe-injecting-room-is-one-of-the-worlds-busiest-the-liberals-have-vowed-to-close-it-297506",
-     "published": "2026-11-27T01:25:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Suzanne Nielsen, Professor and Deputy Director, Monash Addiction Research Centre, Monash University"
-    },
-    {
-     "title": "Soft plastic recycling in Australia is struggling. How do we fix it?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/soft-plastic-recycling-in-australia-is-struggling-how-do-we-fix-it-297148",
-     "published": "2026-11-27T01:24:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
     },
     {
      "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael J. I. Brown, Associate Professor in Astronomy, Monash University"
-    },
-    {
-     "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/we-built-an-ai-you-can-dance-with-it-taught-us-about-developing-the-technology-responsibly-295348",
-     "published": "2026-11-26T19:15:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charlotta Windahl, Senior Lecturer in Management and International Business, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
+   "published": "2026-11-27 04:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Has Australia been rigged for the rich?",
+   "published": "2026-11-27 04:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The world’s ice is in real peril from climate change – and will keep melting even if we reach net zero",
+   "published": "2026-11-27 04:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
    "published": "2026-11-27 02:42 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
-   "published": "2026-11-27 01:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Soft plastic recycling in Australia is struggling. How do we fix it?",
-   "published": "2026-11-27 01:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
    "published": "2026-11-26 23:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
-   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
