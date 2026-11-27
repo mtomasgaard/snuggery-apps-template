@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T01:01:18Z",
+ "generatedAt": "2026-11-27T02:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "The Coconut Children is a tender coming-of-age story about taking root between two worlds",
+     "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-coconut-children-is-a-tender-coming-of-age-story-about-taking-root-between-two-worlds-297659",
-     "published": "2026-11-27T00:28:38Z",
+     "link": "https://theconversation.com/melbournes-safe-injecting-room-is-one-of-the-worlds-busiest-the-liberals-have-vowed-to-close-it-297506",
+     "published": "2026-11-27T01:25:41Z",
      "summary": "",
      "stale": false,
-     "author": "Lillian Shaddick, Lecturer in Theatre and Performance Studies, University of Sydney"
+     "author": "Suzanne Nielsen, Professor and Deputy Director, Monash Addiction Research Centre, Monash University"
     },
     {
-     "title": "In the digital age, the ABC is more important than ever. Margaret Simons’ new book reveals why",
+     "title": "Soft plastic recycling in Australia is struggling. How do we fix it?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/in-the-digital-age-the-abc-is-more-important-than-ever-margaret-simons-new-book-reveals-why-296838",
-     "published": "2026-11-27T00:16:26Z",
+     "link": "https://theconversation.com/soft-plastic-recycling-in-australia-is-struggling-how-do-we-fix-it-297148",
+     "published": "2026-11-27T01:24:52Z",
      "summary": "",
      "stale": false,
-     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
+     "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
     },
     {
-     "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
+     "title": "Russia wants to build a new security framework to end the war. This is why it won’t work",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/elon-musk-has-approval-to-launch-1-million-satellites-an-astronomer-explains-how-this-would-impact-the-sky-297646",
-     "published": "2026-11-26T23:39:50Z",
+     "link": "https://theconversation.com/russia-wants-to-build-a-new-security-framework-to-end-the-war-this-is-why-it-wont-work-296813",
+     "published": "2026-11-27T01:19:26Z",
      "summary": "",
      "stale": false,
-     "author": "Michael J. I. Brown, Associate Professor in Astronomy, Monash University"
+     "author": "Dilnoza Ubaydullaeva, Lecturer - National Security College, Australian National University"
     },
     {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The Coconut Children is a tender coming-of-age story about taking root between two worlds",
-   "published": "2026-11-27 00:28 UTC"
+   "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
+   "published": "2026-11-27 01:25 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "In the digital age, the ABC is more important than ever. Margaret Simons’ new book reveals why",
-   "published": "2026-11-27 00:16 UTC"
+   "title": "Soft plastic recycling in Australia is struggling. How do we fix it?",
+   "published": "2026-11-27 01:24 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
-   "published": "2026-11-26 23:39 UTC"
+   "title": "Russia wants to build a new security framework to end the war. This is why it won’t work",
+   "published": "2026-11-27 01:19 UTC"
   },
   {
    "region": "Oceania",
