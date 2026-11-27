@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-26T23:01:31Z",
+ "generatedAt": "2026-11-27T00:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/elon-musk-has-approval-to-launch-1-million-satellites-an-astronomer-explains-how-this-would-impact-the-sky-297646",
+     "published": "2026-11-26T23:39:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael J. I. Brown, Associate Professor in Astronomy, Monash University"
+    },
+    {
+     "title": "Whispering Jack: John Farnham musical is a triumph of big hits and stratospheric vocals",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/whispering-jack-john-farnham-musical-is-a-triumph-of-big-hits-and-stratospheric-vocals-296836",
+     "published": "2026-11-26T23:18:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mara Davis Johnson, Lecturer in Creative and Performing Arts, University of Wollongong"
+    },
+    {
      "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/does-drinking-raw-milk-actually-deliver-extra-health-benefits-heres-the-science-296915",
-     "published": "2026-11-26T19:15:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
-    },
-    {
-     "title": "Victoria’s major parties are silent on arts and culture. What are the others offering?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victorias-major-parties-are-silent-on-arts-and-culture-what-are-the-others-offering-297298",
-     "published": "2026-11-26T19:15:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tully Barnett, Associate Professor, Cultural Policy and Creative Industries, Adelaide University"
     },
     {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
+   "published": "2026-11-26 23:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Whispering Jack: John Farnham musical is a triumph of big hits and stratospheric vocals",
+   "published": "2026-11-26 23:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
    "published": "2026-11-26 22:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Does drinking raw milk actually deliver extra health benefits? Here’s the science",
-   "published": "2026-11-26 19:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Victoria’s major parties are silent on arts and culture. What are the others offering?",
-   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
