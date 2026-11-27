@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T10:01:22Z",
+ "generatedAt": "2026-11-27T11:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Lutte contre le paludisme : le climat et les coupes budgétaires menacent les progrès en Afrique australe",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/lutte-contre-le-paludisme-le-climat-et-les-coupes-budgetaires-menacent-les-progres-en-afrique-australe-297533",
+     "published": "2026-11-27T10:40:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jaishree Raman, Principal Medical Scientist and Head of Laboratory for Antimalarial Resistance Monitoring and Malaria Operational Research, National Institute…"
+    },
+    {
      "title": "Who speaks for the voiceless in Tanzania?",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Atashni Moopen, PhD candidate, University of the Witwatersrand"
-    },
-    {
-     "title": "African sheep farmers could improve their flocks by changing how they choose breeding animals",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/african-sheep-farmers-could-improve-their-flocks-by-changing-how-they-choose-breeding-animals-294975",
-     "published": "2026-11-26T13:42:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Thobela Louis Tyasi, Professor of Animal Breeding and Genetics, University of Limpopo"
     },
     {
      "title": "DR Congo: Peacekepers step up civilian protection amid fighting in Ituri",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Lutte contre le paludisme : le climat et les coupes budgétaires menacent les progrès en Afrique australe",
+   "published": "2026-11-27 10:40 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Who speaks for the voiceless in Tanzania?",
    "published": "2026-11-27 07:54 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "A new fossil from South Africa offers clues to how giant plant-eating dinosaurs evolved",
    "published": "2026-11-26 13:43 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "African sheep farmers could improve their flocks by changing how they choose breeding animals",
-   "published": "2026-11-26 13:42 UTC"
   },
   {
    "region": "Africa",
