@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T02:01:21Z",
+ "generatedAt": "2026-11-27T03:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nz-election-final-right-needs-opportunity-to-govern-uncharted-political-waters-ahead-297127",
+     "published": "2026-11-27T02:42:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
-    },
-    {
-     "title": "Russia wants to build a new security framework to end the war. This is why it won’t work",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/russia-wants-to-build-a-new-security-framework-to-end-the-war-this-is-why-it-wont-work-296813",
-     "published": "2026-11-27T01:19:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dilnoza Ubaydullaeva, Lecturer - National Security College, Australian National University"
     },
     {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
+   "published": "2026-11-27 02:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Melbourne’s safe injecting room is one of the world’s busiest. The Liberals have vowed to close it",
    "published": "2026-11-27 01:25 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Soft plastic recycling in Australia is struggling. How do we fix it?",
    "published": "2026-11-27 01:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Russia wants to build a new security framework to end the war. This is why it won’t work",
-   "published": "2026-11-27 01:19 UTC"
   },
   {
    "region": "Oceania",
