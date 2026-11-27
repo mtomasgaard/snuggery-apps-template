@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T20:01:21Z",
+ "generatedAt": "2026-11-27T21:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "International Court of Justice rules Myanmar committed genocide against the Rohingya people",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/27/international-court-of-justice-rules-myanmar-committed-genocide-against-the-rohingya-people/",
+     "published": "2026-11-27T20:07:43Z",
+     "summary": "\"This verdict brings a sense of healing for me, too. It feels as though one of the chronic diseases Myanmar suffer has finally been named.\"",
+     "stale": false,
+     "author": "Mong Palatino"
+    },
+    {
      "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -400,16 +410,6 @@
      "summary": "The 30-year-old pro-democracy activist has spent almost six years behind bars and was set for release in January 2026, until authorities charged him with conspiring to foreign collusion last year.",
      "stale": false,
      "author": "Hong Kong Free Press"
-    },
-    {
-     "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/17/in-win-against-impunity-indonesian-court-orders-the-reform-of-military-justice-law/",
-     "published": "2026-11-17T06:55:29Z",
-     "summary": "\"Justice for civilian victims of military abuses shouldn’t be blocked by an unfair military court system.\"",
-     "stale": false,
-     "author": "Mong Palatino"
     },
     {
      "title": "The dreamer who wants the world to read Nepali literature",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "International Court of Justice rules Myanmar committed genocide against the Rohingya people",
+   "published": "2026-11-27 20:07 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "‘Come right now’: How a crisis centre in Samarkand helps women escape violence",
    "published": "2026-11-26 12:00 UTC"
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
    "published": "2026-11-18 11:48 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "In win against impunity, Indonesian court orders the reform of Military Justice Law",
-   "published": "2026-11-17 06:55 UTC"
   },
   {
    "region": "Asia",
