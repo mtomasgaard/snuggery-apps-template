@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T06:01:25Z",
+ "generatedAt": "2026-11-27T07:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/from-beau-lamarre-condon-to-erin-patterson-the-domestic-and-family-violence-we-dont-name-297619",
+     "published": "2026-11-27T05:53:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Xanthe Weston, Associate Professor of Domestic and Family Violence, Queensland Centre for Domestic and Family Violence Research, CQUniversity Australia"
+    },
+    {
      "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Carl Rhodes, Professor of Business and Society, University of Technology Sydney"
-    },
-    {
-     "title": "The world’s ice is in real peril from climate change – and will keep melting even if we reach net zero",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-worlds-ice-is-in-real-peril-from-climate-change-and-will-keep-melting-even-if-we-reach-net-zero-297062",
-     "published": "2026-11-27T04:21:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jon Cox, Proposal Development Manager, Securing Antarctica’s Environmental Future, Monash University"
     },
     {
      "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
+   "published": "2026-11-27 05:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
    "published": "2026-11-27 04:29 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Has Australia been rigged for the rich?",
    "published": "2026-11-27 04:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The world’s ice is in real peril from climate change – and will keep melting even if we reach net zero",
-   "published": "2026-11-27 04:21 UTC"
   },
   {
    "region": "Oceania",
