@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T00:01:27Z",
+ "generatedAt": "2026-11-27T01:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "The Coconut Children is a tender coming-of-age story about taking root between two worlds",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-coconut-children-is-a-tender-coming-of-age-story-about-taking-root-between-two-worlds-297659",
+     "published": "2026-11-27T00:28:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lillian Shaddick, Lecturer in Theatre and Performance Studies, University of Sydney"
+    },
+    {
+     "title": "In the digital age, the ABC is more important than ever. Margaret Simons’ new book reveals why",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/in-the-digital-age-the-abc-is-more-important-than-ever-margaret-simons-new-book-reveals-why-296838",
+     "published": "2026-11-27T00:16:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
+    },
+    {
      "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael J. I. Brown, Associate Professor in Astronomy, Monash University"
-    },
-    {
-     "title": "Whispering Jack: John Farnham musical is a triumph of big hits and stratospheric vocals",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/whispering-jack-john-farnham-musical-is-a-triumph-of-big-hits-and-stratospheric-vocals-296836",
-     "published": "2026-11-26T23:18:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mara Davis Johnson, Lecturer in Creative and Performing Arts, University of Wollongong"
-    },
-    {
-     "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/coalition-set-for-a-big-win-in-victorian-election-as-one-nation-fades-in-final-polls-297630",
-     "published": "2026-11-26T22:22:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
@@ -469,14 +469,14 @@
      "author": "Charlotta Windahl, Senior Lecturer in Management and International Business, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "‘That’s when the chaos began’: the fall of the Berlin Wall in the words of east and west Germans",
+     "title": "Friday essay: What if …? The imaginative adventure of reading alternative histories",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/thats-when-the-chaos-began-the-fall-of-the-berlin-wall-in-the-words-of-east-and-west-germans-296018",
-     "published": "2026-11-26T15:20:35Z",
+     "link": "https://theconversation.com/friday-essay-what-if-the-imaginative-adventure-of-reading-alternative-histories-286662",
+     "published": "2026-11-26T19:15:02Z",
      "summary": "",
      "stale": false,
-     "author": "Christiane Bertram, Research Scientist at the Hector Research Institute of Education Sciences and Psychology, University of Tübingen"
+     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Coconut Children is a tender coming-of-age story about taking root between two worlds",
+   "published": "2026-11-27 00:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "In the digital age, the ABC is more important than ever. Margaret Simons’ new book reveals why",
+   "published": "2026-11-27 00:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
    "published": "2026-11-26 23:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Whispering Jack: John Farnham musical is a triumph of big hits and stratospheric vocals",
-   "published": "2026-11-26 23:18 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Coalition set for a big win in Victorian election as One Nation fades in final polls",
-   "published": "2026-11-26 22:22 UTC"
   },
   {
    "region": "Oceania",
@@ -937,8 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "‘That’s when the chaos began’: the fall of the Berlin Wall in the words of east and west Germans",
-   "published": "2026-11-26 15:20 UTC"
+   "title": "Friday essay: What if …? The imaginative adventure of reading alternative histories",
+   "published": "2026-11-26 19:15 UTC"
   },
   {
    "region": "Oceania",
