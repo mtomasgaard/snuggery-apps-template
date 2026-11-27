@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T03:01:27Z",
+ "generatedAt": "2026-11-27T04:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -459,6 +459,16 @@
      "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
     },
     {
+     "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/elon-musk-has-approval-to-launch-1-million-satellites-an-astronomer-explains-how-this-would-impact-the-sky-297646",
+     "published": "2026-11-26T23:39:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael J. I. Brown, Associate Professor in Astronomy, Monash University"
+    },
+    {
      "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Charlotta Windahl, Senior Lecturer in Management and International Business, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Friday essay: What if …? The imaginative adventure of reading alternative histories",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/friday-essay-what-if-the-imaginative-adventure-of-reading-alternative-histories-286662",
-     "published": "2026-11-26T19:15:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
     },
     {
      "title": "The ongoing efforts to get ecocide recognized at the International Criminal Court",
@@ -931,13 +931,13 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
-   "published": "2026-11-26 19:15 UTC"
+   "title": "Elon Musk has approval to launch 1 million satellites. An astronomer explains how this would impact the sky",
+   "published": "2026-11-26 23:39 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Friday essay: What if …? The imaginative adventure of reading alternative histories",
+   "title": "We built an AI you can dance with. It taught us about developing the technology responsibly",
    "published": "2026-11-26 19:15 UTC"
   },
   {
