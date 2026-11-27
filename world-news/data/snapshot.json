@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-27T07:01:32Z",
+ "generatedAt": "2026-11-27T08:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Who speaks for the voiceless in Tanzania?",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/27/who-speaks-for-the-voiceless-in-tanzania/",
+     "published": "2026-11-27T07:54:18Z",
+     "summary": "\"The law guarantees freedom of expression, but people who criticize the government face arrest, intimidation, and, in some cases, alleged abduction.\"",
+     "stale": false,
+     "author": "Zita Zage"
+    },
+    {
      "title": "A new fossil from South Africa offers clues to how giant plant-eating dinosaurs evolved",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "Long before reaching any courtroom, women face barriers not only within their families and communities, but also in the resolution of disputes, often over land, inheritance, and child custody.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Growing up displaced in Cameroon after ten years of conflict",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/21/growing-up-displaced-in-cameroon-after-ten-years-of-conflict/",
-     "published": "2026-11-21T18:02:14Z",
-     "summary": "In Buea, children displaced by Cameroon’s armed Anglophone conflict are balancing school with market trading to help their families survive, while years of displacement have interrupted their education, relationships…",
-     "stale": false,
-     "author": "Cynthia Ebot Takang"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Who speaks for the voiceless in Tanzania?",
+   "published": "2026-11-27 07:54 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "A new fossil from South Africa offers clues to how giant plant-eating dinosaurs evolved",
    "published": "2026-11-26 13:43 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Nigerien women lose their rights before ever reaching a courtroom",
    "published": "2026-11-23 06:45 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Growing up displaced in Cameroon after ten years of conflict",
-   "published": "2026-11-21 18:02 UTC"
   },
   {
    "region": "Middle East",
