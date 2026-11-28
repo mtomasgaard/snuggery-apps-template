@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-28T09:01:34Z",
+ "generatedAt": "2026-11-28T10:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Who is Jess Wilson, Victoria’s new premier?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/who-is-jess-wilson-victorias-new-premier-296287",
+     "published": "2026-11-28T08:53:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Finley Watson, PhD Candidate, Politics, La Trobe University"
+    },
+    {
      "title": "Victoria state election: results at a glance",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Xanthe Weston, Associate Professor of Domestic and Family Violence, Queensland Centre for Domestic and Family Violence Research, CQUniversity Australia"
-    },
-    {
-     "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australias-new-gas-reservation-policy-aims-to-keep-supply-secure-and-prices-low-will-it-work-297736",
-     "published": "2026-11-27T04:29:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Samantha Hepburn, Professor of Law, Deakin University"
     },
     {
      "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Who is Jess Wilson, Victoria’s new premier?",
+   "published": "2026-11-28 08:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victoria state election: results at a glance",
    "published": "2026-11-28 07:37 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
    "published": "2026-11-27 05:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
-   "published": "2026-11-27 04:29 UTC"
   },
   {
    "region": "Oceania",
