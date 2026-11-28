@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-28T11:01:22Z",
+ "generatedAt": "2026-11-28T12:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Coalition wins thumping majority at Victorian election as Labor and Greens in contest for opposition status",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/coalition-wins-thumping-majority-at-victorian-election-as-labor-and-greens-in-contest-for-opposition-status-297265",
+     "published": "2026-11-28T10:37:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Who is Jess Wilson, Victoria’s new premier?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Digital Storytelling Team, The Conversation"
-    },
-    {
-     "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/from-beau-lamarre-condon-to-erin-patterson-the-domestic-and-family-violence-we-dont-name-297619",
-     "published": "2026-11-27T05:53:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Xanthe Weston, Associate Professor of Domestic and Family Violence, Queensland Centre for Domestic and Family Violence Research, CQUniversity Australia"
     },
     {
      "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Coalition wins thumping majority at Victorian election as Labor and Greens in contest for opposition status",
+   "published": "2026-11-28 10:37 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Who is Jess Wilson, Victoria’s new premier?",
    "published": "2026-11-28 08:53 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Victoria state election: results at a glance",
    "published": "2026-11-28 07:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
-   "published": "2026-11-27 05:53 UTC"
   },
   {
    "region": "Oceania",
