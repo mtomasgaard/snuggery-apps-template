@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-28T08:01:31Z",
+ "generatedAt": "2026-11-28T09:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Indonesia’s Mama Aleta: Don’t wait for permission to protect Mother Nature",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/28/indonesias-mama-aleta-dont-wait-for-permission-to-protect-mother-nature/",
+     "published": "2026-11-28T08:32:56Z",
+     "summary": "Two decades after Mollo women resisted marble mining in Indonesia, the climate crisis brings new urgency to their struggle for nature, Indigenous rights and collective action.",
+     "stale": false,
+     "author": "Dialogue Earth"
+    },
+    {
      "title": "International Court of Justice rules Myanmar committed genocide against the Rohingya people",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -402,16 +412,6 @@
      "author": "Jo Carter"
     },
     {
-     "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/18/who-will-respond-jailed-hong-kong-pro-democracy-activist-joshua-wong-fears-being-forgotten-amid-10-year-sentence/",
-     "published": "2026-11-18T11:48:15Z",
-     "summary": "The 30-year-old pro-democracy activist has spent almost six years behind bars and was set for release in January 2026, until authorities charged him with conspiring to foreign collusion last year.",
-     "stale": false,
-     "author": "Hong Kong Free Press"
-    },
-    {
      "title": "The dreamer who wants the world to read Nepali literature",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "Victoria state election: results at a glance",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/victoria-state-election-results-at-a-glance-296509",
+     "published": "2026-11-28T07:37:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Digital Storytelling Team, The Conversation"
+    },
     {
      "title": "From Beau Lamarre-Condon to Erin Patterson: the domestic and family violence we don’t name",
      "source": "The Conversation",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Samantha Hepburn, Professor of Law, Deakin University"
-    },
-    {
-     "title": "Has Australia been rigged for the rich?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/has-australia-been-rigged-for-the-rich-291461",
-     "published": "2026-11-27T04:22:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Carl Rhodes, Professor of Business and Society, University of Technology Sydney"
     },
     {
      "title": "NZ election final: right needs Opportunity to govern, uncharted political waters ahead",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Indonesia’s Mama Aleta: Don’t wait for permission to protect Mother Nature",
+   "published": "2026-11-28 08:32 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "International Court of Justice rules Myanmar committed genocide against the Rohingya people",
    "published": "2026-11-27 20:07 UTC"
   },
@@ -901,14 +907,14 @@
   {
    "region": "Asia",
    "source": "Global Voices",
-   "title": "‘Who will respond?’: Jailed Hong Kong pro-democracy activist Joshua Wong fears being forgotten amid 10-year sentence",
-   "published": "2026-11-18 11:48 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
    "title": "The dreamer who wants the world to read Nepali literature",
    "published": "2026-11-09 05:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Victoria state election: results at a glance",
+   "published": "2026-11-28 07:37 UTC"
   },
   {
    "region": "Oceania",
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Australia’s new gas reservation policy aims to keep supply secure and prices low. Will it work?",
    "published": "2026-11-27 04:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Has Australia been rigged for the rich?",
-   "published": "2026-11-27 04:22 UTC"
   },
   {
    "region": "Oceania",
